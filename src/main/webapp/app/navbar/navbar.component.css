@@ -1,0 +1,33 @@
+.navbar .nav-item {
+  margin-left: 0.5em;
+  border-radius: 10px;
+}
+
+.navbar .nav-item .nav-link {
+  padding: 1.5em;
+}
+
+.navbar a {
+  cursor: pointer;
+}
+
+.navbar .navbar-brand {
+  padding: 0.5em;
+  border-radius: 10px;
+}
+
+.navbar .navbar-brand:hover,
+.navbar .nav-item:hover,
+.navbar .nav-item.active {
+  transition: 0.5s ease;
+  background-color: #6c757d;
+}
+
+
+
+.navbar .navbar-brand:hover,
+.navbar .nav-item.active .nav-link,
+.navbar .nav-item:hover .nav-link {
+  transition: 0.5s ease;
+  color: white;
+}

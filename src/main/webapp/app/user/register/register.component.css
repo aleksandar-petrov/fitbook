@@ -1,0 +1,5 @@
+.card-signin .card-img-left {
+  width: 60%;
+  background: scroll center url('src/main/webapp/assets/static/images/register-animation.gif');
+  background-size: cover;
+}

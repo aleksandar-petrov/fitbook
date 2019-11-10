@@ -1,0 +1,106 @@
+<div class="container-fluid">
+  <div class="jumbotron">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 col-xl-9 mx-auto">
+          <div class="card card-signin flex-row my-5">
+            <div class="card-img-left d-none d-md-flex">
+            </div>
+            <div class="card-body">
+              <h5 class="card-title text-center">Register</h5>
+              <form class="form-signin" #resisterForm="ngForm">
+
+                <div class="form-label-group">
+                  <label for="inputFirstName">First name</label>
+                  <input type="text" id="inputFirstName" class="form-control"
+                         placeholder="First name" name="firstName" required autofocus
+                          [(ngModel)]="registerBindingModel.firstName">
+                </div>
+
+                <div class="form-label-group">
+                  <label for="inputLastName">Last name</label>
+                  <input type="text" id="inputLastName" class="form-control"
+                         placeholder="Last name" name="lastName" required
+                         [(ngModel)]="registerBindingModel.lastName">
+                </div>
+
+
+                <div class="form-label-group">
+                  <label for="genderInput">Gender</label>
+                  <select class="custom-select form-control" id="genderInput" name="gender" required
+                          [(ngModel)]="registerBindingModel.gender">
+                    <option selected value="">Select gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+
+
+                <div class="form-label-group">
+                  <label for="inputEmail">Username</label>
+                  <input type="text" id="inputUserame" class="form-control"
+                         placeholder="Username" name="username" required
+                         [(ngModel)]="registerBindingModel.username">
+                </div>
+
+                <div class="form-label-group">
+                  <label for="inputEmail">Email address</label>
+                  <input type="email" id="inputEmail" class="form-control"
+                         placeholder="Email address" name="email" required
+                         [(ngModel)]="registerBindingModel.email">
+                </div>
+
+                <div class="form-label-group">
+                  <label for="customFile" id="exercisePictureLabel">Profile picture</label>
+                  <div class="custom-file" id="customFileContainer">
+                    <input type="file" class="custom-file-input form-control"
+                           id="customFile" name="exercisePictureFile"
+                           (change)="handleFileInput($event.target.files)">
+                    <label class="custom-file-label" for="customFile"
+                           id="çhooseFileLabel" #chooseFileLabel>Choose
+                      file</label>
+                  </div>
+                </div>
+
+                <hr>
+
+                <div class="form-label-group">
+                  <label for="inputPassword">Password</label>
+                  <input type="password" id="inputPassword" class="form-control"
+                         name="password" placeholder="Password" required
+                         [(ngModel)]="registerBindingModel.password">
+                </div>
+
+                <div class="form-label-group">
+                  <label for="inputConfirmPassword">Confirm password</label>
+                  <input type="password" id="inputConfirmPassword" class="form-control"
+                         name="confirmPassword" placeholder="Confirm password" required
+                         [(ngModel)]="registerBindingModel.confirmPassword">
+                </div>
+
+                <button class="btn btn-lg btn-secondary btn-block text-uppercase"
+                        type="submit" (click)="onSubmit()">Register
+                </button>
+
+                <p>You already have a registration? Don't wait to get fit!</p>
+
+                <a routerLink="/signin" role="button">
+                  <button
+                    class="btn btn-lg btn-primary btn-block text-uppercase"
+                    type="button">Sign
+                    in
+                  </button>
+                </a>
+<!--                <hr class="my-4">-->
+<!--                <button class="btn btn-lg btn-facebook btn-block text-uppercase"-->
+<!--                        type="submit"><i class="fab fa-facebook-f mr-2"></i> Sign up with-->
+<!--                  Facebook-->
+<!--                </button>-->
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

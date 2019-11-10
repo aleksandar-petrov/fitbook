@@ -1,0 +1,25 @@
+svg {
+  display: inline-block;
+}
+
+svg * {
+  fill: none;
+  stroke: red;
+  stroke-opacity: 0.5;
+  pointer-events: all;
+}
+
+svg .is-focused {
+  fill: greenyellow;
+  fill-opacity: 0.4;
+}
+
+svg .major-muscle-group {
+  fill: red;
+  fill-opacity: 0.4;
+}
+
+svg .assisting-muscle-group {
+  fill: yellow;
+  fill-opacity: 0.4;
+}

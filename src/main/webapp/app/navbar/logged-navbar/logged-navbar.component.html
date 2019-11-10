@@ -1,0 +1,75 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <a class="navbar-brand" routerLink="/home">
+    <img src="assets/static/images/logo_icon.png" height="50" class="d-inline-block align-center" alt="">
+    FitBook
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/mydiets">My diet plans</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/myworkouts">My workout plans</a>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="exploreDropdown" data-toggle="dropdown">
+          Explore
+        </a>
+        <div class="dropdown-menu">
+          <h6 class="dropdown-header">Diet related</h6>
+          <a class="dropdown-item" routerLink="/foods/all">Foods</a>
+          <a class="dropdown-item" routerLink="/meals/all">Meals</a>
+          <h6 class="dropdown-header">Workout related</h6>
+          <a class="dropdown-item" routerLink="/exercises/all" routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">Exercises</a>
+          <a class="dropdown-item" href="#">Workouts</a>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="createDropdown" data-toggle="dropdown">
+          Create
+        </a>
+        <div class="dropdown-menu">
+          <h6 class="dropdown-header">Diet related</h6>
+          <a class="dropdown-item" href="#">Food</a>
+          <a class="dropdown-item" href="#">Meal</a>
+          <a class="dropdown-item" href="#">Diet plan</a>
+          <h6 class="dropdown-header">Workout related</h6>
+          <a class="dropdown-item" routerLink="exercises/create" routerLinkActive="active">Exercise</a>
+          <a class="dropdown-item" href="#">Workout</a>
+          <a class="dropdown-item" href="#">Workout plan</a>
+        </div>
+      </li>
+      <li class="nav-item d-lg-none">
+        <a class="nav-link" href="#">Edit Profile</a>
+      </li>
+      <li class="nav-item d-lg-none">
+        <a class="nav-link" style="cursor: pointer" (click)="onLogout()">Log Out</a>
+      </li>
+    </ul>
+
+    <div class="collapse navbar-collapse " id="navbar-list-4">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown dropleft" dropdown>
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img
+              src="{{profilePictureUrl}}"
+              width="60" height="60" class="rounded-circle">
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">Dashboard</a>
+            <a class="dropdown-item" href="#">Edit Profile</a>
+            <a class="dropdown-item" (click)="onLogout()">Log Out</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

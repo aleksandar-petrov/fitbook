@@ -1,0 +1,11 @@
+.card-signin.male-fitness-profile .card-img-left {
+  width: 80%;
+  background: scroll center url('src/main/webapp/assets/static/images/male-fitness-profile.gif');
+  background-size: cover;
+}
+
+.card-signin.female-fitness-profile .card-img-left {
+  width: 80%;
+  background: scroll center url('src/main/webapp/assets/static/images/female-fitness-profile.gif');
+  background-size: cover;
+}

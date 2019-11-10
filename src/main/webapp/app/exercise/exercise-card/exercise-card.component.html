@@ -1,0 +1,24 @@
+<div class="card d-inline-flex">
+  <div class="thumbnail">
+    <img class="card-img-top" src="{{exercise.pictureURL}}" alt="Card image cap"/>
+  </div>
+  <div class="card-body">
+    <h3 class="card-title">{{exercise.name}}</h3>
+    <hr/>
+    <h5 class="card-subtitle font-weight-light mb-3">Major Muscle Group:</h5>
+    <h5 class="card-subtitle"> {{exercise.majorMuscleGroup | getConstantViewName}} </h5>
+    <hr/>
+    <h5 class="card-subtitle font-weight-light mb-1">Assisting Muscle Groups:</h5>
+    <h6 class="card-subtitle mt-2">{{assistingMuscleGroups.join(", ")}}</h6>
+
+    <!--    <p class="card-text">{{exercise.description}}</p>-->
+    <hr class="mb-5"/>
+    <div class="buttons-wrapper left">
+      <a href="#" class="btn btn-sm btn-success">Add to workout</a>
+    </div>
+    <div class="buttons-wrapper right">
+      <a href="#" class="btn btn-sm btn-info">Details</a>
+    </div>
+  </div>
+</div>
+
