@@ -6,6 +6,7 @@ import {CreateExerciseComponent} from './exercise/create-exercise/create-exercis
 import {HomeComponent} from './home/home.component';
 import {RegisterComponent} from './user/register/register.component';
 import {SigninComponent} from './user/signin/signin.component';
+import {EditFitnessProfileComponent} from "./home/edit-fitness-profile/edit-fitness-profile.component";
 
 
 const appRoutes: Routes = [
@@ -15,6 +16,7 @@ const appRoutes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'signin', component: SigninComponent},
+  {path: 'fitness-profile/edit', component: EditFitnessProfileComponent},
 ];
 
 @NgModule({

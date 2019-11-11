@@ -11,6 +11,9 @@ export class FitnessProfileBindingModel {
     this.sportsExperience = '';
     this.activityLevel = '';
     this.weightGoal = '';
-    this.weightChangeRate = 'none';
+    this.weightChangeRate = '';
   }
+
+
+
 }

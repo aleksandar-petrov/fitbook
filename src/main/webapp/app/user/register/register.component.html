@@ -13,41 +13,80 @@
                 <div class="form-label-group">
                   <label for="inputFirstName">First name</label>
                   <input type="text" id="inputFirstName" class="form-control"
-                         placeholder="First name" name="firstName" required autofocus
-                          [(ngModel)]="registerBindingModel.firstName">
+                         placeholder="First name" name="firstName" #inputFirstName="ngModel" required autofocus
+                         pattern="([A-Z][A-Za-z0-9\. -]+)"
+                         [ngClass]="{'is-valid': inputFirstName.valid && inputFirstName.touched,
+                         'is-invalid': inputFirstName.invalid && inputFirstName.touched}"
+                         [(ngModel)]="registerBindingModel.firstName">
+                  <div class="valid-feedback"></div>
+                  <div class="invalid-feedback">
+                    First name is required and should start with capital letter.
+                  </div>
                 </div>
 
                 <div class="form-label-group">
                   <label for="inputLastName">Last name</label>
                   <input type="text" id="inputLastName" class="form-control"
-                         placeholder="Last name" name="lastName" required
+                         placeholder="Last name" name="lastName" #inputLastName="ngModel"
+                         required
+                         pattern="([A-Z][A-Za-z0-9\. -]+)"
+                         [ngClass]="{'is-valid': inputLastName.valid && inputLastName.touched,
+                         'is-invalid': inputLastName.invalid && inputLastName.touched}"
                          [(ngModel)]="registerBindingModel.lastName">
+                  <div class="valid-feedback"></div>
+                  <div class="invalid-feedback">
+                    Last name is required and should start with capital letter.
+                  </div>
                 </div>
 
 
                 <div class="form-label-group">
                   <label for="genderInput">Gender</label>
-                  <select class="custom-select form-control" id="genderInput" name="gender" required
+                  <select class="custom-select form-control" id="genderInput" name="gender" #inputGender="ngModel" required
+                          [ngClass]="{'is-valid': inputGender.valid && inputGender.touched,
+                         'is-invalid': inputGender.invalid && inputGender.touched}"
                           [(ngModel)]="registerBindingModel.gender">
                     <option selected value="">Select gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                   </select>
+                  <div class="valid-feedback"></div>
+                  <div class="invalid-feedback">
+                    Gender is required.
+                  </div>
                 </div>
 
 
                 <div class="form-label-group">
                   <label for="inputEmail">Username</label>
                   <input type="text" id="inputUserame" class="form-control"
-                         placeholder="Username" name="username" required
+                         placeholder="Username" name="username" #inputUsername="ngModel" required
+                         [ngClass]="{'is-valid': inputUsername.valid && inputUsername.touched && !usernameTaken,
+                         'is-invalid': inputUsername.invalid && inputUsername.touched || usernameTaken}"
+                         (focusout)="onUsernameFocusOut($event.target)"
                          [(ngModel)]="registerBindingModel.username">
+                  <div class="valid-feedback"></div>
+                  <div class="invalid-feedback" *ngIf="usernameTaken">
+                    Username is already taken.
+                  </div>
+                  <div class="invalid-feedback" *ngIf="!usernameTaken">
+                    Username is required.
+                  </div>
                 </div>
 
                 <div class="form-label-group">
                   <label for="inputEmail">Email address</label>
                   <input type="email" id="inputEmail" class="form-control"
-                         placeholder="Email address" name="email" required
+                         placeholder="Email address" name="email" #inputEmail="ngModel"
+                         required
+                         pattern="{{regexPattern}}"
+                         [ngClass]="{'is-valid': inputEmail.valid && inputEmail.touched,
+                         'is-invalid': inputEmail.invalid && inputEmail.touched}"
                          [(ngModel)]="registerBindingModel.email">
+                  <div class="valid-feedback"></div>
+                  <div class="invalid-feedback">
+                    Enter a valid email address.
+                  </div>
                 </div>
 
                 <div class="form-label-group">
@@ -67,19 +106,37 @@
                 <div class="form-label-group">
                   <label for="inputPassword">Password</label>
                   <input type="password" id="inputPassword" class="form-control"
-                         name="password" placeholder="Password" required
-                         [(ngModel)]="registerBindingModel.password">
+                         name="password" placeholder="Password" #inputPassword="ngModel"
+                         [minLength]="6"
+                         required
+                         [ngClass]="{'is-valid': inputPassword.valid && inputPassword.touched,
+                         'is-invalid': inputPassword.invalid && inputPassword.touched}"
+                         [(ngModel)]="registerBindingModel.password"
+                  (change)="onPasswordChange()">
+                  <div class="valid-feedback"></div>
+                  <div class="invalid-feedback">
+                    Please enter a password with at least 6 symbols.
+                  </div>
                 </div>
 
                 <div class="form-label-group">
                   <label for="inputConfirmPassword">Confirm password</label>
                   <input type="password" id="inputConfirmPassword" class="form-control"
-                         name="confirmPassword" placeholder="Confirm password" required
-                         [(ngModel)]="registerBindingModel.confirmPassword">
+                         name="confirmPassword" placeholder="Confirm password" #inputConfirmPassword="ngModel"
+                         required
+                         [ngClass]="{'is-valid': inputConfirmPassword.valid &&
+                         inputConfirmPassword.touched && passwordsMatch,
+                         'is-invalid': (inputConfirmPassword.invalid || !passwordsMatch) && inputConfirmPassword.touched}"
+                         [(ngModel)]="registerBindingModel.confirmPassword"
+                  (change)="onPasswordChange()">
+                  <div class="valid-feedback"></div>
+                  <div class="invalid-feedback">
+                    Passwords must match.
+                  </div>
                 </div>
 
                 <button class="btn btn-lg btn-secondary btn-block text-uppercase"
-                        type="submit" (click)="onSubmit()">Register
+                        type="submit" [disabled]="resisterForm.invalid" (click)="onSubmit()">Register
                 </button>
 
                 <p>You already have a registration? Don't wait to get fit!</p>
@@ -91,11 +148,6 @@
                     in
                   </button>
                 </a>
-<!--                <hr class="my-4">-->
-<!--                <button class="btn btn-lg btn-facebook btn-block text-uppercase"-->
-<!--                        type="submit"><i class="fab fa-facebook-f mr-2"></i> Sign up with-->
-<!--                  Facebook-->
-<!--                </button>-->
               </form>
             </div>
           </div>

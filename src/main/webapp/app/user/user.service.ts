@@ -29,7 +29,11 @@ export class UserService implements OnInit {
   }
 
   getUserById(id: string): Observable<UserModel> {
-    return this.http.get<UserModel>('http://localhost:8000/users/get/' + id);
+    return this.http.get<UserModel>('http://localhost:8000/users/id/' + id);
+  }
+
+  getUserByUsername(username: string): Observable<UserModel> {
+    return this.http.get<UserModel>('http://localhost:8000/users/username/' + username);
   }
 
   setFitnessProfileToLoggedInUser(fitnessProfileBindingModel: FitnessProfileBindingModel) {
@@ -41,6 +45,16 @@ export class UserService implements OnInit {
     return this.http.post('http://localhost:8000/users/fitness-profile/set/' + this.loggedUserId,
       fitnessProfileBindingModel, {headers: headers, observe: 'response'});
 
+  }
+
+  updateFitnessProfileOnLoggedInUser(fitnessProfileBindingModel: FitnessProfileBindingModel) {
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.put('http://localhost:8000/users/fitness-profile/edit/' + this.loggedUserId,
+      fitnessProfileBindingModel, {headers: headers, observe: 'response'});
   }
 
   loadLoggedUser() {

@@ -9,15 +9,19 @@ import softuni.fitbook.domain.models.service.UserServiceModel;
 import java.util.Set;
 
 public interface UserService extends UserDetailsService {
-    boolean createUser(UserServiceModel userServiceModel, MultipartFile file);
+  boolean createUser(UserServiceModel userServiceModel, MultipartFile file);
 
-    Set<UserServiceModel> getAll();
+  Set<UserServiceModel> getAll();
 
-    boolean promoteUser(String id);
+  boolean promoteUser(String id);
 
-    boolean demoteUser(String id);
+  boolean demoteUser(String id);
 
-    UserServiceModel getById(String id);
+  UserServiceModel getById(String id);
 
-    boolean setFitnessProfileToUser(String userId, FitnessProfileServiceModel model);
+  boolean setFitnessProfileToUser(String userId, FitnessProfileServiceModel model);
+
+  UserServiceModel getByUsername(String username);
+
+  boolean editFitnessProfileByUserId(String userId, FitnessProfileServiceModel model);
 }

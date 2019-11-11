@@ -3,7 +3,7 @@ import {
   HttpInterceptor,
   HttpRequest,
   HttpHandler,
-  HttpParams
+  HttpParams, HttpHeaders
 } from '@angular/common/http';
 import { take, exhaustMap } from 'rxjs/operators';
 
@@ -21,7 +21,7 @@ export class AuthInterceptorService implements HttpInterceptor {
           return next.handle(req);
         }
         const modifiedReq = req.clone({
-          params: new HttpParams().set('Authorization', user.token)
+          headers: new HttpHeaders().append("Authorization", user.token)
         });
         return next.handle(modifiedReq);
       })

@@ -4,6 +4,7 @@ package softuni.fitbook.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -53,6 +54,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration()
                 .applyPermitDefaultValues();
+        corsConfiguration.addAllowedMethod(HttpMethod.PUT);
         corsConfiguration.addExposedHeader(
                 "Authorization, x-xsrf-token, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, "
                         + "Content-Type, Access-Control-Request-Method, Custom-Filter-Header");

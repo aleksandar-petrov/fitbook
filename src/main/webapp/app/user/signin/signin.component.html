@@ -5,6 +5,7 @@
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
           <div class="card card-signin my-5">
             <div class="card-body">
+              <ngb-alert *ngIf="errorOccurred" (close)="errorOccurred = false" type="danger">Wrong username or password!</ngb-alert>
               <h5 class="card-title text-center">Sign In</h5>
               <form class="form-signin" #signinForm="ngForm">
                 <div class="form-label-group">

@@ -167,6 +167,92 @@ public class UserServiceImpl implements UserService {
   public UserServiceModel getById(String id) {
 
     User user = this.userRepository.findById(id).orElseThrow();
+
+    return this.getUserServiceModelFromUser(user);
+  }
+
+  @Override
+  public boolean setFitnessProfileToUser(String userId, FitnessProfileServiceModel model) {
+
+    try {
+
+
+      User user = this.userRepository.findById(userId).orElseThrow();
+
+      FitnessProfile fitnessProfile = this.modelMapper.map(model, FitnessProfile.class);
+
+      fitnessProfile = this.getFitnessProfileFromFitnessProfileServiceModelAndUserGender(fitnessProfile, model, user.getGender());
+
+      fitnessProfile = this.fitnessProfileRepository.save(fitnessProfile);
+
+      user.setFitnessProfile(fitnessProfile);
+
+      this.userRepository.save(user);
+
+    } catch (Exception ex) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public boolean editFitnessProfileByUserId(String userId, FitnessProfileServiceModel model) {
+    try {
+
+
+      User user = this.userRepository.findById(userId).orElseThrow();
+
+      FitnessProfile fitnessProfile = user.getFitnessProfile();
+
+      FitnessProfile updated = this.modelMapper.map(model, FitnessProfile.class);
+
+      updated = getFitnessProfileFromFitnessProfileServiceModelAndUserGender(updated, model, user.getGender());
+
+      updated.setId(fitnessProfile.getId());
+
+      this.fitnessProfileRepository.save(updated);
+
+    } catch (Exception ex) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public UserServiceModel getByUsername(String username) {
+    User user = this.userRepository.findByUsername(username).orElseThrow();
+    return getUserServiceModelFromUser(user);
+  }
+
+  private FitnessProfile getFitnessProfileFromFitnessProfileServiceModelAndUserGender(FitnessProfile fitnessProfile, FitnessProfileServiceModel model, Gender gender) {
+    fitnessProfile.setActivityLevel(EnumParser.
+      parseStringToEnum(ActivityLevel.class, model.getActivityLevel()));
+
+    fitnessProfile.setSportsExperience(
+      EnumParser.parseStringToEnum(SportsExperience.class, model.getSportsExperience()));
+
+    fitnessProfile.setWeightGoal(EnumParser.
+      parseStringToEnum(WeightGoal.class, model.getWeightGoal()));
+
+    if (fitnessProfile.getWeightGoal() == WeightGoal.MAINTAIN_WEIGHT) {
+      fitnessProfile.setWeightChangeRate(WeightChangeRate.NONE);
+    } else {
+      fitnessProfile.setWeightChangeRate(
+        EnumParser.parseStringToEnum(
+          WeightChangeRate.class, model.getWeightChangeRate()));
+    }
+
+
+    fitnessProfile.setCurrentCalories(
+      this.calculateCaloriesBasedOnFitnessProfileAndGender(fitnessProfile, gender));
+
+    return fitnessProfile;
+
+  }
+
+  private UserServiceModel getUserServiceModelFromUser(User user) {
     FitnessProfile userFitnessProfile = user.getFitnessProfile();
 
     UserServiceModel model = this.modelMapper.map(user, UserServiceModel.class);
@@ -197,56 +283,10 @@ public class UserServiceImpl implements UserService {
       model.setFitnessProfile(modelFitnessProfile);
     }
 
-
     return model;
   }
 
-  @Override
-  public boolean setFitnessProfileToUser(String userId, FitnessProfileServiceModel model) {
-
-    try {
-
-
-      User user = this.userRepository.findById(userId).orElseThrow();
-
-      FitnessProfile fitnessProfile = this.modelMapper.map(model, FitnessProfile.class);
-
-      fitnessProfile.setActivityLevel(EnumParser.
-        parseStringToEnum(ActivityLevel.class, model.getActivityLevel()));
-
-      fitnessProfile.setSportsExperience(
-        EnumParser.parseStringToEnum(SportsExperience.class, model.getSportsExperience()));
-
-      fitnessProfile.setWeightGoal(EnumParser.
-        parseStringToEnum(WeightGoal.class, model.getWeightGoal()));
-
-      if (fitnessProfile.getWeightGoal() == WeightGoal.MAINTAIN_WEIGHT) {
-        fitnessProfile.setWeightChangeRate(WeightChangeRate.NONE);
-      } else {
-        fitnessProfile.setWeightChangeRate(
-          EnumParser.parseStringToEnum(
-            WeightChangeRate.class, model.getWeightChangeRate()));
-      }
-
-
-      fitnessProfile.setCurrentCalories(
-        this.calculateCaloriesBasedOnFitnessProfile(fitnessProfile, user.getGender()));
-
-
-      fitnessProfile = this.fitnessProfileRepository.save(fitnessProfile);
-
-      user.setFitnessProfile(fitnessProfile);
-
-      this.userRepository.save(user);
-
-    } catch (Exception ex) {
-      return false;
-    }
-
-    return true;
-  }
-
-  private Integer calculateCaloriesBasedOnFitnessProfile(FitnessProfile fitnessProfile, Gender gender) {
+  private Integer calculateCaloriesBasedOnFitnessProfileAndGender(FitnessProfile fitnessProfile, Gender gender) {
 
     Double bmi;
 

@@ -5,21 +5,21 @@
     <h4 class="font-weight-light">This is your Fitness Profile!</h4>
     <h4 class="font-weight-light">You can use it to build your workout plans and diet plans for your personal
       needs.</h4>
-    <h4 class="font-weight-light">Dont't wait to get in the best shape of your life!</h4>
+    <h4 class="font-weight-light">Don't wait to get in the best shape of your life!</h4>
 
 
     <div class="container mt-5">
       <div class="row fitness-profile-wrapper col-10 text-center mx-auto">
-        <div class="info col-lg-5 justify-content-center mx-auto mb-3">
+        <div class="info col-lg-5 justify-content-center my-2 mb-3 mx-auto">
           <div class="profile-photo col-12 mt-3">
-            <img src="{{loggedUser.profilePictureURL}}" alt="Profile picture">
+            <img class="img-thumbnail" src="{{loggedUser.profilePictureURL}}" alt="Profile picture">
           </div>
           <div class="col-12 my-3">
             <h2 class="font-weight-light">{{loggedUser.firstName}} {{loggedUser.lastName}}</h2>
             <h3 class="font-weight-light">Age: {{loggedUser.fitnessProfile.age}}</h3>
           </div>
         </div>
-        <div class="card calories d-inline-block my-auto col-lg-5 mt-5">
+        <div class="card calories d-inline-block my-auto col-lg-5 mt-5 mx-auto">
           <div class="card-body">
             <h3 class="card-title text-white font-weight-light">Daily Calories Goal</h3>
             <div class="d-block">
@@ -105,5 +105,7 @@
         </div>
       </div>
     </div>
+
+    <button type="button" routerLink="/fitness-profile/edit" class="btn btn-info btn-lg mt-5">Edit Fitness Profile</button>
   </div>
 </div>

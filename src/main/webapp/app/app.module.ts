@@ -24,6 +24,7 @@ import {SigninComponent} from './user/signin/signin.component';
 import { CreateFitnessProfileComponent } from './home/create-fitness-profile/create-fitness-profile.component';
 import {AuthInterceptorService} from './auth/auth-interceptor.service';
 import { MyProfileComponent } from './home/my-profile/my-profile.component';
+import { EditFitnessProfileComponent } from './home/edit-fitness-profile/edit-fitness-profile.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { MyProfileComponent } from './home/my-profile/my-profile.component';
     RegisterComponent,
     SigninComponent,
     CreateFitnessProfileComponent,
-    MyProfileComponent
+    MyProfileComponent,
+    EditFitnessProfileComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, FontAwesomeModule, NgbModule, FormsModule, AppRoutingModule

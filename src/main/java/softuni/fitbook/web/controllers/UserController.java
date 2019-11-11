@@ -31,83 +31,98 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
-    private final UserService userService;
+  private final UserService userService;
 
-    private final ModelMapper modelMapper;
+  private final ModelMapper modelMapper;
 
-    @Autowired
-    public UserController(RoleRepository roleRepository, UserService userService, ModelMapper modelMapper) {
-        this.userService = userService;
-        this.modelMapper = modelMapper;
+  @Autowired
+  public UserController(RoleRepository roleRepository, UserService userService, ModelMapper modelMapper) {
+    this.userService = userService;
+    this.modelMapper = modelMapper;
+  }
+
+  @PostMapping("/register")
+  public ResponseEntity register(@RequestPart("user") UserRegisterBindingModel model, @RequestPart(value = "pictureFile", required = false) MultipartFile file) throws URISyntaxException {
+    if (!model.getPassword().equals(model.getConfirmPassword())) {
+      return ResponseEntity.badRequest().body("Error: Passwords do not match!");
     }
 
-    @PostMapping("/register")
-    public ResponseEntity register(@RequestPart("user") UserRegisterBindingModel model, @RequestPart(value = "pictureFile", required = false) MultipartFile file) throws URISyntaxException {
-        if (!model.getPassword().equals(model.getConfirmPassword())) {
-            return ResponseEntity.badRequest().body("Error: Passwords do not match!");
-        }
+    boolean result = this.userService
+      .createUser(this.modelMapper
+        .map(model, UserServiceModel.class), file);
 
-        boolean result = this.userService
-                .createUser(this.modelMapper
-                        .map(model, UserServiceModel.class), file);
+    return ResponseEntity.created(new URI("/users/register")).body(result);
+  }
 
-        return ResponseEntity.created(new URI("/users/register")).body(result);
+  @GetMapping(value = "/all")
+  public Set<AllUsersUserViewModel> all() {
+    Set<AllUsersUserViewModel> allUsers =
+      this.userService.getAll()
+        .stream()
+        .map(x -> {
+          AllUsersUserViewModel currentUserViewModel = this.modelMapper
+            .map(x, AllUsersUserViewModel.class);
+
+          currentUserViewModel.setRole(x.extractAuthority());
+
+          return currentUserViewModel;
+        })
+        .collect(Collectors.toCollection(LinkedHashSet::new));
+
+    return allUsers;
+  }
+
+  @PostMapping("/promote")
+  public ResponseEntity promoteUser(@RequestParam(name = "id") String id) {
+    boolean resultOfPromoting = this.userService.promoteUser(id);
+
+    if (resultOfPromoting) {
+      return ResponseEntity.ok().body("User promoted successfully!");
+    } else {
+      return ResponseEntity.badRequest().body("Failure promoting user!");
     }
+  }
 
-    @GetMapping(value = "/all")
-    public Set<AllUsersUserViewModel> all() {
-        Set<AllUsersUserViewModel> allUsers =
-                this.userService.getAll()
-                        .stream()
-                        .map(x -> {
-                            AllUsersUserViewModel currentUserViewModel = this.modelMapper
-                                    .map(x, AllUsersUserViewModel.class);
+  @PostMapping("/demote")
+  public ResponseEntity demoteUser(@RequestParam(name = "id") String id) {
+    boolean resultOfDemoting = this.userService.demoteUser(id);
 
-                            currentUserViewModel.setRole(x.extractAuthority());
-
-                            return currentUserViewModel;
-                        })
-                        .collect(Collectors.toCollection(LinkedHashSet::new));
-
-        return allUsers;
+    if (resultOfDemoting) {
+      return ResponseEntity.ok("User demoted successfully!");
+    } else {
+      return ResponseEntity.badRequest().body("Failure demoting user!");
     }
+  }
 
-    @PostMapping("/promote")
-    public ResponseEntity promoteUser(@RequestParam(name = "id") String id) {
-        boolean resultOfPromoting = this.userService.promoteUser(id);
+  @GetMapping(value = "/id/{id}")
+  public UserViewModel getUserById(@PathVariable(value = "id") String id) {
+    return this.modelMapper
+      .map(this.userService.getById(id), UserViewModel.class);
 
-        if (resultOfPromoting) {
-            return ResponseEntity.ok().body("User promoted successfully!");
-        } else {
-            return ResponseEntity.badRequest().body("Failure promoting user!");
-        }
-    }
 
-    @PostMapping("/demote")
-    public ResponseEntity demoteUser(@RequestParam(name = "id") String id) {
-        boolean resultOfDemoting = this.userService.demoteUser(id);
+  }
 
-        if (resultOfDemoting) {
-            return ResponseEntity.ok("User demoted successfully!");
-        } else {
-            return ResponseEntity.badRequest().body("Failure demoting user!");
-        }
-    }
+  @GetMapping(value = "/username/{username}")
+  public UserViewModel getUserByUsername(@PathVariable(value = "username") String username) {
+    return this.modelMapper
+      .map(this.userService.getByUsername(username), UserViewModel.class);
 
-    @GetMapping(value = "/get/{id}")
-    public UserViewModel getUserById(@PathVariable(value = "id") String id) {
-        UserViewModel asd = this.modelMapper
-                .map(this.userService.getById(id), UserViewModel.class);
 
-        return asd;
+  }
 
-    }
+  @PostMapping(value = "/fitness-profile/set/{userId}")
+  public ResponseEntity setFitnessProfileToUserById(@PathVariable(value = "userId") String userId, @RequestBody FitnessProfileBindingModel model) {
 
-    @PostMapping(value = "/fitness-profile/set/{userId}")
-    public ResponseEntity setFitnessProfileToUserById(@PathVariable(value = "userId") String userId, @RequestBody FitnessProfileBindingModel model) {
+    boolean result = this.userService.setFitnessProfileToUser(userId, this.modelMapper.map(model, FitnessProfileServiceModel.class));
 
-        boolean result = this.userService.setFitnessProfileToUser(userId, this.modelMapper.map(model, FitnessProfileServiceModel.class));
+    return ResponseEntity.ok(result);
+  }
 
-        return ResponseEntity.ok(result);
-    }
+  @PutMapping(value = "/fitness-profile/edit/{userId}")
+  public ResponseEntity editFitnessProfileByUserId(@PathVariable(value = "userId") String userId, @RequestBody FitnessProfileBindingModel model) {
+
+    boolean result = this.userService.editFitnessProfileByUserId(userId, this.modelMapper.map(model, FitnessProfileServiceModel.class));
+
+    return ResponseEntity.ok(result);
+  }
 }

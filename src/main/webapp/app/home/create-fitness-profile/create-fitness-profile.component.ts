@@ -35,7 +35,7 @@ export class CreateFitnessProfileComponent implements OnInit {
   onWeightGoalChange(eventTarget: any) {
 
     if (eventTarget.value === 'maintainWeight' || eventTarget.value === '') {
-      this.fitnessProfileBindingModel.weightChangeRate = 'none';
+      this.fitnessProfileBindingModel.weightChangeRate = '';
     }
   }
 

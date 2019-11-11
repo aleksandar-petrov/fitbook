@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from '../user.service';
 import {SigninBindingModel} from './signin-binding.model';
-import {HttpResponse} from '@angular/common/http';
+import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {AuthService} from '../../auth/auth.service';
 import {Router} from '@angular/router';
 
@@ -14,6 +14,7 @@ export class SigninComponent implements OnInit {
 
   signInBindingModel: SigninBindingModel;
   rememberMe = false;
+  errorOccurred = false;
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -26,6 +27,8 @@ export class SigninComponent implements OnInit {
     this.authService.signin(this.signInBindingModel).subscribe(data => {
       this.authService.handleAuthentication(data.headers.get('Authorization'), this.rememberMe);
       this.router.navigate(['/home']);
+    }, (error: HttpErrorResponse) => {
+      this.errorOccurred = true;
     });
   }
 
