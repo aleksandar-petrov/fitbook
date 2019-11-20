@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Exercise} from '../exercise.model';
 import {GetConstantViewNamePipe} from '../../get-constant-view-name.pipe';
 
@@ -10,6 +10,7 @@ import {GetConstantViewNamePipe} from '../../get-constant-view-name.pipe';
 export class ExerciseCardComponent implements OnInit {
 
   @Input() exercise: Exercise;
+  @Output() modalOpen: EventEmitter<any> = new EventEmitter();
 
   assistingMuscleGroups: string[];
 
@@ -21,4 +22,8 @@ export class ExerciseCardComponent implements OnInit {
     this.assistingMuscleGroups = this.exercise.assistingMuscleGroups.map(a => this.musclePipe.transform(a))
   }
 
+
+  addToWorkoutHandler(id: string) {
+    this.modalOpen.emit(id);
+  }
 }

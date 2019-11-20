@@ -55,6 +55,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
         CorsConfiguration corsConfiguration = new CorsConfiguration()
                 .applyPermitDefaultValues();
         corsConfiguration.addAllowedMethod(HttpMethod.PUT);
+        corsConfiguration.addAllowedMethod(HttpMethod.DELETE);
         corsConfiguration.addExposedHeader(
                 "Authorization, x-xsrf-token, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, "
                         + "Content-Type, Access-Control-Request-Method, Custom-Filter-Header");

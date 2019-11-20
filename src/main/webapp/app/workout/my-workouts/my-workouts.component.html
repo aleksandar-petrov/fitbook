@@ -1,0 +1,66 @@
+<div class="container-fluid">
+
+  <ng-template #createWorkoutModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Create Workout</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form #createWorkoutForm="ngForm">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputWorkoutName">Workout Name</label>
+            <input type="text" class="form-control" id="inputWorkoutName" name="name" #inputWorkoutName
+                   [(ngModel)]="workoutBindingModel.name">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputStatus">Status</label>
+            <select id="inputStatus" name="status" class="form-control" #inputWorkoutStatus
+                    [(ngModel)]="workoutBindingModel.isPublic">
+              <option [ngValue]="true" selected>Public</option>
+              <option [ngValue]="false">Private</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Save</button>
+    </div>
+  </ng-template>
+
+  <div class="jumbotron">
+    <img src="assets/static/images/logo.png" height="300px" class="d-inline-block align-center" alt="">
+    <h1 class="display-4">My Workouts</h1>
+    <div class="container pt-4">
+      <div class="row">
+        <div class="col-lg-4 mx-auto">
+          <h2>Workouts</h2>
+          <hr/>
+          <div class="list-group" *ngIf="workouts && workouts.length">
+            <button type="button" class="list-group-item list-group-item-action"
+                    [ngClass]="{'active': selectedWorkoutId === workout.id}"
+                    (click)="onWorkoutButtonClick(workout.id)"
+                    *ngFor="let workout of workouts">
+              {{workout.name}}
+            </button>
+          </div>
+
+          <h5 *ngIf="!workouts || !workouts.length">You don't have any created workouts.</h5>
+
+
+          <button type="button" class="btn btn-success mt-3" (click)="open(createWorkoutModal)">Create Workout</button>
+        </div>
+        <div class="col-lg-8 mx-auto">
+          <h2>Selected Workout</h2>
+          <hr/>
+          <router-outlet (deactivate)="onRouterOutletDeactivate()" (activate)="onRouterOutletActivate()"></router-outlet>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

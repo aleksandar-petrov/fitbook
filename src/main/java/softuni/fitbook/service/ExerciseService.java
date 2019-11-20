@@ -12,4 +12,6 @@ public interface ExerciseService {
 
     ExerciseServiceModel createExercise(ExerciseCreateServiceModel model, MultipartFile pictureFile);
 
+    ExerciseServiceModel getExerciseById(String id);
+
 }

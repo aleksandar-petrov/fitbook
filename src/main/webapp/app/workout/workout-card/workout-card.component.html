@@ -1,0 +1,43 @@
+<div class="card d-inline-flex">
+    <div class="card-body">
+        <h3 class="card-title">{{workout.name}}</h3>
+        <hr/>
+        <h4 class="font-weight-light pb-2">Creator: <a class="card-link" routerLink="/profile/{{workout.creator.username}}">{{workout.creator.username}}</a></h4>
+        <hr/>
+        <div class="table-wrapper pb-5 pr-3 pl-1">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr *ngIf="workout.exercises && !workout.exercises.length">
+                    <td colspan="5" class="py-auto"><h5>No added exercises in this workout.</h5></td>
+                </tr>
+                <tr *ngIf="workout.exercises && workout.exercises.length">
+                    <th scope="col" style="width: 10%">Order</th>
+                    <th scope="col" style="width: 30%">Exercise</th>
+                    <th scope="col" style="width: 20%">Reps</th>
+                    <th scope="col" style="width: 20%">Sets</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr *ngFor="let exercise of workout.exercises">
+                    <td class="align-middle">{{exercise.orderIndex}}</td>
+                    <td class="align-middle">{{exercise.exercise.name}}</td>
+                    <td class="align-middle">{{exercise.reps}}</td>
+                    <td class="align-middle">{{exercise.sets}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+            <hr class="mb-5"/>
+            <div class="buttons-wrapper left">
+                <button type="button" class="btn btn-sm btn-success" (click)="copyToMyWorkoutsHandler(workout.id)">Copy to
+                    My Workouts
+                </button>
+            </div>
+            <div class="buttons-wrapper right">
+                <a routerLink="/exercises/details/{{workout.id}}" class="btn btn-sm btn-info">Details</a>
+            </div>
+
+    </div>
+</div>
+

@@ -39,28 +39,6 @@ export class AuthService {
     return this.http.post("http://localhost:8000/users/signin", signinBindingModel, {headers: headers, observe: "response"});
   }
 
-  // signup(email: string, password: string) {
-  //   return this.http
-  //     .post<AuthResponseData>(
-  //       'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyDb0xTaRAoxyCgvaDF3kk5VYOsTwB_3o7Y',
-  //       {
-  //         email: email,
-  //         password: password,
-  //         returnSecureToken: true
-  //       }
-  //     )
-  //     .pipe(
-  //       catchError(this.handleError),
-  //       tap(resData => {
-  //         this.handleAuthentication(
-  //           resData.email,
-  //           resData.localId,
-  //           resData.idToken,
-  //           +resData.expiresIn
-  //         );
-  //       })
-  //     );
-  // }
 
   autoLogin() {
     const userData: {
@@ -92,6 +70,12 @@ export class AuthService {
       const expirationDuration =
         new Date(userData._tokenExpirationDate).getTime() -
         new Date().getTime();
+
+      if (new Date(userData._tokenExpirationDate) < new Date()) {
+        this.logout();
+        return;
+      }
+
       this.autoLogout(expirationDuration);
     }
   }
@@ -123,8 +107,9 @@ export class AuthService {
     const tokenExpiresInMS = payload.exp;
     const pictureUrl = payload.profilePictureUrl;
 
-
     const expirationDate = new Date(new Date().getTime() + tokenExpiresInMS);
+
+
     const user = new UserAuthModel(userId, userRole, rememberMe, token, expirationDate);
     this.user.next(user);
     this.autoLogout(tokenExpiresInMS);

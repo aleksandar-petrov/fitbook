@@ -21,8 +21,8 @@
                          required
                          pattern="^[1-9][0-9]*"
                          min="1"
-                         [ngClass]="{'is-valid': inputWeight.valid,
-                         'is-invalid': inputWeight.invalid}"
+                         [ngClass]="{'is-valid': inputWeight.valid && inputWeight.touched,
+                         'is-invalid': inputWeight.invalid && inputWeight.touched}"
                          [(ngModel)]="fitnessProfileBindingModel.weight">
                   <div class="valid-feedback"></div>
                   <div class="invalid-feedback">
@@ -38,8 +38,8 @@
                          required
                          pattern="^[1-9][0-9]*"
                          min="1"
-                         [ngClass]="{'is-valid': inputHeight.valid,
-                         'is-invalid': inputHeight.invalid}"
+                         [ngClass]="{'is-valid': inputHeight.valid && inputHeight.touched,
+                         'is-invalid': inputHeight.invalid && inputHeight.touched}"
                          [(ngModel)]="fitnessProfileBindingModel.height">
                   <div class="valid-feedback"></div>
                   <div class="invalid-feedback">
@@ -55,8 +55,8 @@
                          required
                          pattern="^[1-9][0-9]*"
                          min="1"
-                         [ngClass]="{'is-valid': inputAge.valid,
-                         'is-invalid': inputAge.invalid}"
+                         [ngClass]="{'is-valid': inputAge.valid && inputAge.touched,
+                         'is-invalid': inputAge.invalid && inputAge.touched}"
                          [(ngModel)]="fitnessProfileBindingModel.age">
                   <div class="valid-feedback"></div>
                   <div class="invalid-feedback">
@@ -68,8 +68,8 @@
                   <label for="inputExperience">Sports Experience</label>
                   <select class="custom-select form-control" id="inputExperience" #inputExperience="ngModel"
                           name="inputExperience" required
-                          [ngClass]="{'is-valid': inputExperience.valid,
-                         'is-invalid': inputExperience.invalid}"
+                          [ngClass]="{'is-valid': inputExperience.valid && inputExperience.touched,
+                         'is-invalid': inputExperience.invalid && inputExperience.touched}"
                           [(ngModel)]="fitnessProfileBindingModel.sportsExperience">
                     <option value="beginner">Beginner</option>
                     <option value="intermediate">Intermediate</option>
@@ -85,8 +85,8 @@
                   <label for="inputActivity">Level of Daily Activity</label>
                   <select class="custom-select form-control" id="inputActivity" #activityLevel="ngModel"
                           name="inputActivity" required
-                          [ngClass]="{'is-valid': activityLevel.valid,
-                         'is-invalid': activityLevel.invalid}"
+                          [ngClass]="{'is-valid': activityLevel.valid && activityLevel.touched,
+                         'is-invalid': activityLevel.invalid && activityLevel.touched}"
                           [(ngModel)]="fitnessProfileBindingModel.activityLevel">
                     <option value="little">Desk job, Little to no exercise</option>
                     <option value="light">Light exercise (1–3 days per week)</option>
@@ -106,8 +106,8 @@
                   <label for="inputWeightGoal">Weight Goal</label>
                   <select class="custom-select form-control" id="inputWeightGoal" #weightGoal="ngModel"
                           name="inputWeightGoal" required
-                          [ngClass]="{'is-valid': weightGoal.valid,
-                         'is-invalid': weightGoal.invalid}"
+                          [ngClass]="{'is-valid': weightGoal.valid && weightGoal.touched,
+                         'is-invalid': weightGoal.invalid && weightGoal.touched}"
                           [(ngModel)]="fitnessProfileBindingModel.weightGoal"
                           (change)="onWeightGoalChange($event.target)">
                     <option value="maintainWeight">To maintain your weight</option>
@@ -126,8 +126,8 @@
                           name="inputLostGainedWeight"
                           [required]="fitnessProfileBindingModel.weightGoal !=='maintainWeight'"
                           [disabled]="fitnessProfileBindingModel.weightGoal==='maintainWeight'"
-                          [ngClass]="{'is-valid': weightChangeRate.valid,
-                         'is-invalid': weightChangeRate.invalid}"
+                          [ngClass]="{'is-valid': weightChangeRate.valid && weightChangeRate.touched,
+                         'is-invalid': weightChangeRate.invalid && weightChangeRate.touched}"
                           [(ngModel)]="fitnessProfileBindingModel.weightChangeRate">
                     <option *ngIf="fitnessProfileBindingModel.weightGoal === 'maintainWeight' " value="none">None
                     </option>

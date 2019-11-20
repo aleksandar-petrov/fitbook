@@ -11,6 +11,7 @@ import softuni.fitbook.domain.models.view.exercise.AllExercisesExerciseViewModel
 import softuni.fitbook.service.ExerciseService;
 
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,18 +29,25 @@ public class ExerciseController {
     }
 
     @GetMapping(value = "/all", produces = "application/json")
-    public Set<AllExercisesExerciseViewModel> allWatches() {
+    public List<AllExercisesExerciseViewModel> getAllExercises() {
         return this
                 .exerciseService
                 .getAllExercises()
                 .stream()
                 .map(e -> this.modelMapper
                         .map(e, AllExercisesExerciseViewModel.class))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping(value = "/details/{id}", produces = "application/json")
+    public AllExercisesExerciseViewModel exerciseDetailsById(@PathVariable(value = "id") String id) {
+
+        return this.modelMapper.map(this.exerciseService.getExerciseById(id), AllExercisesExerciseViewModel.class);
+
     }
 
     @PostMapping("/create")
-    public ResponseEntity createExercise(@RequestPart("exerciseBindingModel") ExerciseCreateBindingModel model, @RequestPart("file") MultipartFile file) throws URISyntaxException {
+    public ResponseEntity createExercise(@RequestPart("exerciseBindingModel") ExerciseCreateBindingModel model, @RequestPart("file") MultipartFile file) {
 
         this.exerciseService.createExercise(this.modelMapper.map(model, ExerciseCreateServiceModel.class), file);
 

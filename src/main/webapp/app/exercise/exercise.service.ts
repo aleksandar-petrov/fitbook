@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 import {Exercise} from './exercise.model';
-import {ExerciseBindingModel} from './exercise-binding.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +26,10 @@ export class ExerciseService {
 
   fetchAllExercises() {
     return this.http.get("http://localhost:8000/exercises/all");
+  }
+
+  getExerciseById(exerciseId: string) {
+    return this.http.get("http://localhost:8000/exercises/details/" + exerciseId);
   }
 
   getExercises() {

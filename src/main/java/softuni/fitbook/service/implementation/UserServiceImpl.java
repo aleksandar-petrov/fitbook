@@ -68,25 +68,28 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public boolean createUser(UserServiceModel userServiceModel, MultipartFile file) {
-    User userEntity = this.modelMapper.map(userServiceModel, User.class);
+    User userEntity = modelMapper.map(userServiceModel, User.class);
+    UserProfile userProfileEntity = modelMapper.map(userServiceModel, UserProfile.class);
 
-    userEntity.setGender(Gender.valueOf(userServiceModel.getGender().toUpperCase()));
+    userEntity.setUserProfile(userProfileEntity);
 
-    userEntity.setPassword(this.bCryptPasswordEncoder.encode(userEntity.getPassword()));
+    userEntity.getUserProfile().setGender(Gender.valueOf(userServiceModel.getGender().toUpperCase()));
 
-    if (this.userRepository.findAll().isEmpty()) {
-      userEntity.setAuthorities(this.getAuthorities(Constants.AUTHORITY_ADMIN));
+    userEntity.setPassword(bCryptPasswordEncoder.encode(userEntity.getPassword()));
+
+    if (userRepository.findAll().isEmpty()) {
+      userEntity.setAuthorities(getAuthorities(Constants.AUTHORITY_ADMIN));
     } else {
-      userEntity.setAuthorities(this.getAuthorities(Constants.AUTHORITY_USER));
+      userEntity.setAuthorities(getAuthorities(Constants.AUTHORITY_USER));
     }
-
+    System.out.println();
     try {
       userEntity = this.userRepository.saveAndFlush(userEntity);
       String uploadedFileUrl = this.fileUploader.getUploadedFileUrl("users", userEntity.getId(), file);
-      userEntity.setProfilePictureURL(uploadedFileUrl);
+      userEntity.getUserProfile().setProfilePictureURL(uploadedFileUrl);
       this.userRepository.saveAndFlush(userEntity);
     } catch (Exception ignored) {
-      //TODO: Fix this when discover exception type.
+
       return false;
     }
 
@@ -168,7 +171,7 @@ public class UserServiceImpl implements UserService {
 
     User user = this.userRepository.findById(id).orElseThrow();
 
-    return this.getUserServiceModelFromUser(user);
+    return getUserServiceModelFromUser(user);
   }
 
   @Override
@@ -181,11 +184,11 @@ public class UserServiceImpl implements UserService {
 
       FitnessProfile fitnessProfile = this.modelMapper.map(model, FitnessProfile.class);
 
-      fitnessProfile = this.getFitnessProfileFromFitnessProfileServiceModelAndUserGender(fitnessProfile, model, user.getGender());
+      fitnessProfile = this.getFitnessProfileFromFitnessProfileServiceModelAndUserGender(fitnessProfile, model, user.getUserProfile().getGender());
 
       fitnessProfile = this.fitnessProfileRepository.save(fitnessProfile);
 
-      user.setFitnessProfile(fitnessProfile);
+      user.getUserProfile().setFitnessProfile(fitnessProfile);
 
       this.userRepository.save(user);
 
@@ -203,11 +206,11 @@ public class UserServiceImpl implements UserService {
 
       User user = this.userRepository.findById(userId).orElseThrow();
 
-      FitnessProfile fitnessProfile = user.getFitnessProfile();
+      FitnessProfile fitnessProfile = user.getUserProfile().getFitnessProfile();
 
       FitnessProfile updated = this.modelMapper.map(model, FitnessProfile.class);
 
-      updated = getFitnessProfileFromFitnessProfileServiceModelAndUserGender(updated, model, user.getGender());
+      updated = getFitnessProfileFromFitnessProfileServiceModelAndUserGender(updated, model, user.getUserProfile().getGender());
 
       updated.setId(fitnessProfile.getId());
 
@@ -253,11 +256,15 @@ public class UserServiceImpl implements UserService {
   }
 
   private UserServiceModel getUserServiceModelFromUser(User user) {
-    FitnessProfile userFitnessProfile = user.getFitnessProfile();
+    FitnessProfile userFitnessProfile = user.getUserProfile().getFitnessProfile();
 
-    UserServiceModel model = this.modelMapper.map(user, UserServiceModel.class);
+    UserServiceModel model = modelMapper.map(user.getUserProfile(), UserServiceModel.class);
 
-    model.setGender(EnumParser.parseEnumToString(user.getGender()));
+    model.setEmail(user.getEmail());
+    model.setId(user.getId());
+    model.setUsername(user.getUsername());
+
+    model.setGender(EnumParser.parseEnumToString(user.getUserProfile().getGender()));
 
     if (userFitnessProfile != null) {
       FitnessProfileServiceModel modelFitnessProfile =

@@ -9,11 +9,23 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/mydiets">My diet plans</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="dietsDropdown" data-toggle="dropdown">
+          Diets
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" routerLink="/my-workouts" routerLinkActive="active">My meals</a>
+          <a class="dropdown-item" href="#">My diet plans</a>
+        </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/myworkouts">My workout plans</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="workoutDropdown" data-toggle="dropdown">
+          Workouts
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" routerLink="/my-workouts" routerLinkActive="active">My workouts</a>
+          <a class="dropdown-item" href="#">My workout plans</a>
+        </div>
       </li>
 
       <li class="nav-item dropdown">
@@ -27,7 +39,7 @@
           <h6 class="dropdown-header">Workout related</h6>
           <a class="dropdown-item" routerLink="/exercises/all" routerLinkActive="active"
              [routerLinkActiveOptions]="{exact: true}">Exercises</a>
-          <a class="dropdown-item" href="#">Workouts</a>
+          <a class="dropdown-item" routerLink="/workouts/all" routerLinkActive="active">Workouts</a>
         </div>
       </li>
 
@@ -38,12 +50,8 @@
         <div class="dropdown-menu">
           <h6 class="dropdown-header">Diet related</h6>
           <a class="dropdown-item" href="#">Food</a>
-          <a class="dropdown-item" href="#">Meal</a>
-          <a class="dropdown-item" href="#">Diet plan</a>
           <h6 class="dropdown-header">Workout related</h6>
           <a class="dropdown-item" routerLink="exercises/create" routerLinkActive="active">Exercise</a>
-          <a class="dropdown-item" href="#">Workout</a>
-          <a class="dropdown-item" href="#">Workout plan</a>
         </div>
       </li>
       <li class="nav-item d-lg-none">

@@ -1,0 +1,25 @@
+.selected-workout {
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.cdk-drop-list-dragging .cdk-drag {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-animating {
+    transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag:hover {
+    cursor: grab;
+}
+
+.cdk-drop-list-dragging:hover .cdk-drag:hover {
+    cursor: grabbing;
+}
+
+.chart {
+    background: white;
+    border: 2px solid black;
+}

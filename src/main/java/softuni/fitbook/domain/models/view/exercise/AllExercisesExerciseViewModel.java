@@ -4,59 +4,69 @@ import java.util.Set;
 
 public class AllExercisesExerciseViewModel {
 
-    private String name;
-    private String description;
-    private String pictureURL;
-    private String youtubeURL;
-    private String majorMuscleGroup;
-    private Set<String> assistingMuscleGroups;
+  private String id;
+  private String name;
+  private String instructions;
+  private String pictureURL;
+  private String youtubeURL;
+  private String majorMuscleGroup;
+  private Set<String> assistingMuscleGroups;
 
-    public String getName() {
-        return name;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getPictureURL() {
-        return pictureURL;
-    }
 
-    public void setPictureURL(String pictureURL) {
-        this.pictureURL = pictureURL;
-    }
+  public String getInstructions() {
+    return instructions;
+  }
 
-    public String getYoutubeURL() {
-        return youtubeURL;
-    }
+  public void setInstructions(String instructions) {
+    this.instructions = instructions;
+  }
 
-    public void setYoutubeURL(String youtubeURL) {
-        this.youtubeURL = youtubeURL;
-    }
+  public String getPictureURL() {
+    return pictureURL;
+  }
 
-    public String getMajorMuscleGroup() {
-        return majorMuscleGroup;
-    }
+  public void setPictureURL(String pictureURL) {
+    this.pictureURL = pictureURL;
+  }
 
-    public void setMajorMuscleGroup(String majorMuscleGroup) {
-        this.majorMuscleGroup = majorMuscleGroup;
-    }
+  public String getYoutubeURL() {
+    return youtubeURL;
+  }
 
-    public Set<String> getAssistingMuscleGroups() {
-        return assistingMuscleGroups;
-    }
+  public void setYoutubeURL(String youtubeURL) {
+    this.youtubeURL = youtubeURL;
+  }
 
-    public void setAssistingMuscleGroups(Set<String> assistingMuscleGroups) {
-        this.assistingMuscleGroups = assistingMuscleGroups;
-    }
+  public String getMajorMuscleGroup() {
+    return majorMuscleGroup;
+  }
+
+  public void setMajorMuscleGroup(String majorMuscleGroup) {
+    this.majorMuscleGroup = majorMuscleGroup;
+  }
+
+  public Set<String> getAssistingMuscleGroups() {
+    return assistingMuscleGroups;
+  }
+
+  public void setAssistingMuscleGroups(Set<String> assistingMuscleGroups) {
+    this.assistingMuscleGroups = assistingMuscleGroups;
+  }
 
 }

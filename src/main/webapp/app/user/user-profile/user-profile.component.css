@@ -1,0 +1,54 @@
+.fitness-profile-wrapper {
+
+}
+
+.center-cropped {
+    object-fit: none; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
+}
+
+.fitness-profile-wrapper img {
+    border-radius: 50%;
+    width: 300px;
+    height: 300px;
+}
+
+.fitness-profile-wrapper .info {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+.card {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.calories {
+    background: linear-gradient(348deg, rgba(255, 255, 255, 0.5) 0%, rgba(37, 206, 209, 1) 66%);
+}
+
+.sports-experience {
+    background: linear-gradient(348deg, rgba(20, 72, 0, 1) 0%, rgba(84, 209, 37, 1) 70%);
+}
+
+.height {
+    background: linear-gradient(349deg, rgba(0, 34, 72, 1) 0%, rgba(37, 93, 209, 1) 70%);
+}
+
+.weight {
+    background: linear-gradient(349deg, rgba(184, 161, 0, 1) 0%, rgba(255, 222, 0, 1) 70%);
+}
+
+.activity {
+    background: linear-gradient(349deg, rgba(129, 20, 20, 1) 0%, rgba(255, 0, 0, 1) 70%);
+}
+
+.weight-goal {
+    background: linear-gradient(349deg, rgba(124,20,129,1) 0%, rgba(216,7,226,1) 70%);
+}
+
+.weight-change-rate {
+    background: linear-gradient(349deg, rgba(100,143,113,1) 0%, rgba(136,181,150,1) 70%);
+}
+

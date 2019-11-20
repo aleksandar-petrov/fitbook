@@ -1,10 +1,5 @@
 package softuni.fitbook.domain.models.view.user;
 
-import softuni.fitbook.domain.entities.ActivityLevel;
-import softuni.fitbook.domain.entities.SportsExperience;
-import softuni.fitbook.domain.entities.WeightChangeRate;
-import softuni.fitbook.domain.entities.WeightGoal;
-
 public class UserFitnessProfileViewModel {
     private Integer weight;
     private Integer height;
