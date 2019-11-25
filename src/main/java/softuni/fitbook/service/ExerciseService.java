@@ -1,6 +1,7 @@
 package softuni.fitbook.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import softuni.fitbook.domain.entities.Exercise;
 import softuni.fitbook.domain.models.service.exercise.ExerciseCreateServiceModel;
 import softuni.fitbook.domain.models.service.exercise.ExerciseServiceModel;
 
@@ -13,5 +14,7 @@ public interface ExerciseService {
     ExerciseServiceModel createExercise(ExerciseCreateServiceModel model, MultipartFile pictureFile);
 
     ExerciseServiceModel getExerciseById(String id);
+
+    ExerciseServiceModel getExerciseServiceModelFromExercise(Exercise exercise);
 
 }

@@ -1,6 +1,6 @@
 export class ExerciseBindingModel {
   name: string;
-  description: string;
+  instructions: string;
   youtubeURL: string;
   majorMuscleGroup: string;
   assistingMuscleGroups: string[];

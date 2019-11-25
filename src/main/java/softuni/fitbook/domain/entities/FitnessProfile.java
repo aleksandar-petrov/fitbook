@@ -13,7 +13,7 @@ public class FitnessProfile extends BaseEntity {
     private ActivityLevel activityLevel;
     private WeightGoal weightGoal;
     private WeightChangeRate weightChangeRate;
-    private Integer currentCalories;
+    private NutritionGoal nutritionGoal;
 
     public FitnessProfile() {
     }
@@ -85,12 +85,13 @@ public class FitnessProfile extends BaseEntity {
         this.weightChangeRate = weightChangeRate;
     }
 
-    @Column(name = "current_calories")
-    public Integer getCurrentCalories() {
-        return currentCalories;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "nutrition_goal_id", referencedColumnName = "id")
+    public NutritionGoal getNutritionGoal() {
+        return nutritionGoal;
     }
 
-    public void setCurrentCalories(Integer currentCalories) {
-        this.currentCalories = currentCalories;
+    public void setNutritionGoal(NutritionGoal nutritionGoal) {
+        this.nutritionGoal = nutritionGoal;
     }
 }

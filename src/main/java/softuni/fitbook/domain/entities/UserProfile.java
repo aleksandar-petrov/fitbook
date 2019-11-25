@@ -19,7 +19,7 @@ public class UserProfile extends BaseEntity {
 
     private List<Workout> workouts;
 
-//    private User user;
+    private List<WorkoutPlan> workoutPlans;
 
     @Column(name = "first_name")
     public String getFirstName() {
@@ -80,4 +80,16 @@ public class UserProfile extends BaseEntity {
         this.workouts = workouts;
     }
 
+    @OneToMany(
+            mappedBy = "userProfile",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    public List<WorkoutPlan> getWorkoutPlans() {
+        return workoutPlans;
+    }
+
+    public void setWorkoutPlans(List<WorkoutPlan> workoutPlans) {
+        this.workoutPlans = workoutPlans;
+    }
 }

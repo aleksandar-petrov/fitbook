@@ -13,19 +13,46 @@ export class MyProfileComponent implements OnInit {
   loggedUser: UserModel;
   loggedUserFitnessProfile: FitnessProfileModel;
   loggedUserFirstName: string;
+  macroNutrientsData: any[];
+  activeEntries: any[];
 
   constructor(private userService: UserService) {
   }
 
   ngOnInit() {
+
+    this.loggedUser = new UserModel();
+    this.loggedUserFitnessProfile = new FitnessProfileModel();
+
     this.userService.getLoggedInUserObservable().subscribe(user => {
       console.log(user);
       if (user) {
         this.loggedUser = user;
         this.loggedUserFirstName = user.firstName;
         this.loggedUserFitnessProfile = user.fitnessProfile;
+        this.makeChartDataForMacroNutrients();
       }
     });
   }
 
+  makeChartDataForMacroNutrients() {
+    this.macroNutrientsData = [
+      {
+        "name": "Protein",
+        "value": this.loggedUserFitnessProfile.nutritionGoal.gramsOfProtein
+      },
+      {
+        "name": "Carbohydrates",
+        "value": this.loggedUserFitnessProfile.nutritionGoal.gramsOfCarbohydrates
+      },
+      {
+        "name": "Fats",
+        "value": this.loggedUserFitnessProfile.nutritionGoal.gramsOfFats
+      },
+    ]
+  }
+
+  onSelectHandler(event: any) {
+    this.activeEntries.push(event);
+  }
 }

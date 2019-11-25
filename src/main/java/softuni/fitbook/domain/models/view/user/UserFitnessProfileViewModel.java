@@ -1,5 +1,7 @@
 package softuni.fitbook.domain.models.view.user;
 
+import softuni.fitbook.domain.entities.NutritionGoal;
+
 public class UserFitnessProfileViewModel {
     private Integer weight;
     private Integer height;
@@ -8,7 +10,7 @@ public class UserFitnessProfileViewModel {
     private String activityLevel;
     private String weightGoal;
     private String weightChangeRate;
-    private Integer currentCalories;
+    private NutritionGoalViewModel nutritionGoal;
 
     public UserFitnessProfileViewModel() {
     }
@@ -69,11 +71,12 @@ public class UserFitnessProfileViewModel {
         this.weightChangeRate = weightChangeRate;
     }
 
-    public Integer getCurrentCalories() {
-        return currentCalories;
+    public NutritionGoalViewModel getNutritionGoal() {
+        return nutritionGoal;
     }
 
-    public void setCurrentCalories(Integer currentCalories) {
-        this.currentCalories = currentCalories;
+    public void setNutritionGoal(NutritionGoalViewModel nutritionGoal) {
+        this.nutritionGoal = nutritionGoal;
     }
+
 }

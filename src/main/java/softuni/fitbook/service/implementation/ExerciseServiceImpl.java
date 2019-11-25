@@ -85,7 +85,7 @@ public class ExerciseServiceImpl implements ExerciseService {
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    private ExerciseServiceModel getExerciseServiceModelFromExercise(Exercise exercise) {
+    public ExerciseServiceModel getExerciseServiceModelFromExercise(Exercise exercise) {
         ExerciseServiceModel model = this.modelMapper.map(exercise, ExerciseServiceModel.class);
         String majorMuscleGroup =
                 EnumParser.parseEnumToString(exercise.getMajorMuscleGroup());

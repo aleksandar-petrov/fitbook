@@ -4,16 +4,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import softuni.fitbook.domain.entities.Exercise;
-import softuni.fitbook.domain.entities.User;
-import softuni.fitbook.domain.entities.Workout;
-import softuni.fitbook.domain.entities.WorkoutExercise;
+import softuni.fitbook.domain.entities.*;
 import softuni.fitbook.domain.models.service.CreatorServiceModel;
 import softuni.fitbook.domain.models.service.workout.*;
-import softuni.fitbook.repository.ExerciseRepository;
-import softuni.fitbook.repository.UserRepository;
-import softuni.fitbook.repository.WorkoutExercisesRepository;
-import softuni.fitbook.repository.WorkoutRepository;
+import softuni.fitbook.repository.*;
+import softuni.fitbook.service.ExerciseService;
 import softuni.fitbook.service.WorkoutService;
 
 import javax.transaction.Transactional;
@@ -28,15 +23,19 @@ public class WorkoutServiceImpl implements WorkoutService {
     private final WorkoutRepository workoutRepository;
     private final UserRepository userRepository;
     private final WorkoutExercisesRepository workoutExercisesRepository;
+    private final WorkoutPlanWorkoutRepository workoutPlanWorkoutRepository;
     private final ExerciseRepository exerciseRepository;
+    private final ExerciseService exerciseService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public WorkoutServiceImpl(WorkoutRepository workoutRepository, UserRepository userRepository, WorkoutExercisesRepository workoutExercisesRepository, ExerciseRepository exerciseRepository, ModelMapper modelMapper) {
+    public WorkoutServiceImpl(WorkoutRepository workoutRepository, UserRepository userRepository, WorkoutExercisesRepository workoutExercisesRepository, WorkoutPlanWorkoutRepository workoutPlanWorkoutRepository, ExerciseRepository exerciseRepository, ExerciseService exerciseService, ModelMapper modelMapper) {
         this.workoutRepository = workoutRepository;
         this.userRepository = userRepository;
         this.workoutExercisesRepository = workoutExercisesRepository;
+        this.workoutPlanWorkoutRepository = workoutPlanWorkoutRepository;
         this.exerciseRepository = exerciseRepository;
+        this.exerciseService = exerciseService;
         this.modelMapper = modelMapper;
     }
 
@@ -46,7 +45,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         Workout workout = modelMapper.map(model, Workout.class);
 
-        User user = this.userRepository.findByUsername(username).orElseThrow(
+        User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("No such user.")
         );
 
@@ -96,12 +95,12 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public List<WorkoutServiceModel> getAllWorkoutsByUsername(String username) {
-        User user = this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No such user"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No such user"));
 
 
         return user.getUserProfile().getWorkouts()
                 .stream()
-                .map(w -> modelMapper.map(w, WorkoutServiceModel.class))
+                .map(this::mapWorkoutToWorkoutServiceModel)
                 .collect(Collectors.toList());
 
     }
@@ -119,13 +118,13 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         workout.getExercises().remove(workoutExercise);
 
-        this.workoutRepository.save(workout);
+        workoutRepository.save(workout);
 
-        this.workoutExercisesRepository.delete(workoutExercise);
+        workoutExercisesRepository.delete(workoutExercise);
 
         Workout updated = getWorkoutWithRearrangedWorkoutExerciseOrderIndexes(workout);
 
-        this.workoutRepository.save(updated);
+        workoutRepository.save(updated);
 
         return modelMapper.map(workout, WorkoutServiceModel.class);
 
@@ -149,7 +148,15 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     @Transactional
     public void deleteWorkoutById(String workoutId) {
-        this.workoutRepository.deleteById(workoutId);
+
+        workoutPlanWorkoutRepository.findAllByWorkoutId(workoutId)
+                .forEach(wpw -> {
+                    wpw.setWorkout(null);
+                    wpw.setWorkoutPlan(null);
+                    workoutPlanWorkoutRepository.deleteById(wpw.getId());
+                });
+
+        workoutRepository.deleteById(workoutId);
     }
 
     @Override
@@ -159,8 +166,6 @@ public class WorkoutServiceImpl implements WorkoutService {
         Workout editedWorkout = modelMapper.map(model, Workout.class);
 
         Workout oldWorkout = workoutRepository.findById(workoutId).orElseThrow(() -> new IllegalArgumentException("No such workout with given ID."));
-
-
 
 
         List<WorkoutExercise> oldExercises = oldWorkout.getExercises();
@@ -187,19 +192,11 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public List<WorkoutServiceModel> getAllPublicWorkouts() {
-        List<WorkoutServiceModel> collect = this.workoutRepository.findAllPublicNotCopiedNotEmpty()
+
+        return this.workoutRepository.findAllPublicNotCopiedNotEmpty()
                 .stream()
-                .map(w -> {
-
-                    WorkoutServiceModel model = modelMapper.map(w, WorkoutServiceModel.class);
-                    CreatorServiceModel creator = modelMapper.map(userRepository.findByUserProfileId(w.getUserProfile().getId()).orElseThrow(() -> new IllegalArgumentException("No such user with given User Profile ID.")), CreatorServiceModel.class);
-                    model.setCreator(creator);
-                    model.getExercises().sort(Comparator.comparing(WorkoutExerciseServiceModel::getOrderIndex));
-                    return model;
-                })
+                .map(this::mapWorkoutToWorkoutServiceModel)
                 .collect(Collectors.toList());
-
-        return collect;
     }
 
     @Override
@@ -218,7 +215,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
 
-    private Workout getWorkoutCopy(Workout source) {
+    public Workout getWorkoutCopy(Workout source) {
 
         Workout workout = new Workout();
         workout.setName(source.getName() + " - Copy");
@@ -241,6 +238,38 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         return workout;
 
+    }
 
+    @Override
+    public WorkoutServiceModel getWorkoutById(String id) {
+
+        return mapWorkoutToWorkoutServiceModel(workoutRepository
+                .findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such workout with given ID.")));
+
+    }
+
+    public WorkoutServiceModel mapWorkoutToWorkoutServiceModel(Workout workout) {
+
+        WorkoutServiceModel model = modelMapper.map(workout, WorkoutServiceModel.class);
+        CreatorServiceModel creator = modelMapper.map(userRepository.findByUserProfileId(workout.getUserProfile().getId()).orElseThrow(() -> new IllegalArgumentException("No such user with given User Profile ID.")), CreatorServiceModel.class);
+        model.setCreator(creator);
+
+        model.setExercises(workout.getExercises()
+                .stream()
+                .map(this::mapWorkoutExerciseToWorkoutExerciseServiceModel)
+                .collect(Collectors.toList()));
+
+        model.getExercises().sort(Comparator.comparing(WorkoutExerciseServiceModel::getOrderIndex));
+        return model;
+
+    }
+
+    private WorkoutExerciseServiceModel mapWorkoutExerciseToWorkoutExerciseServiceModel(WorkoutExercise workoutExercise) {
+
+        WorkoutExerciseServiceModel model = modelMapper.map(workoutExercise, WorkoutExerciseServiceModel.class);
+        model.setExercise(exerciseService.getExerciseServiceModelFromExercise(workoutExercise.getExercise()));
+
+        return model;
     }
 }

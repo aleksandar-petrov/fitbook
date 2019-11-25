@@ -23,6 +23,7 @@ export class SelectedWorkoutComponent implements OnInit {
 
     editMode = false;
     exercisesSets: any[];
+    customColors: any[];
 
 
     constructor(private route: ActivatedRoute,
@@ -68,7 +69,6 @@ export class SelectedWorkoutComponent implements OnInit {
             if (workouts) {
                 this.selectedWorkout = workouts.find(w => w.id === this.workoutId);
 
-                console.log(this.selectedWorkout.isPublic);
                 this.selectedWorkout
                     .exercises
                     .sort((e1, e2) => e1.orderIndex - e2.orderIndex);
@@ -84,7 +84,7 @@ export class SelectedWorkoutComponent implements OnInit {
 
         const exercisesSets = {};
 
-        const exerciseSetsArray = [];
+
 
         workoutExercises.forEach(e => {
 
@@ -103,16 +103,48 @@ export class SelectedWorkoutComponent implements OnInit {
             });
         });
 
+        const colors = ['#f68d5c',
+            '#0dc8f3',
+            '#6f2ac2',
+            '#84e26b',
+            '#86974b',
+            '#fa1483',
+            '#c2118b',
+            '#d79aaf',
+            '#f2f0c1',
+            '#0ccbb7',
+            '#e88ef8',
+            '#ccf3f1',
+            '#d1fc9e',
+            '#dbb005',
+            '#2b352b',
+            '#781037',
+            '#636e8d'];
+
+        const exerciseSetsArray = [];
+        const muscleGroupColorsArray = [];
+
         for (const exercisesSetsKey in exercisesSets) {
             const exercise = {
-                name: this.constantViewPipe.transform(exercisesSetsKey),
+                name: this.constantViewPipe.transform(exercisesSetsKey).toUpperCase(),
                 value: exercisesSets[exercisesSetsKey]
             };
 
+            const muscleGroupColor = {
+                name: this.constantViewPipe.transform(exercisesSetsKey).toUpperCase(),
+                value: colors.pop()
+            };
+
             exerciseSetsArray.push(exercise);
+            muscleGroupColorsArray.push(muscleGroupColor);
+
+            exerciseSetsArray.push(exercise);
+
+
         }
 
         this.exercisesSets = exerciseSetsArray;
+        this.customColors = muscleGroupColorsArray;
     }
 
     onWorkoutExerciseDeleteHandler(workoutId: string, exerciseId: string) {
@@ -135,7 +167,7 @@ export class SelectedWorkoutComponent implements OnInit {
             this.calculateExercisesSets();
         });
 
-        this.router.navigate(['./'], {relativeTo: this.route})
+        this.router.navigate(['./'], {relativeTo: this.route});
     }
 
     onWorkoutDeleteHandler(workoutId: string) {

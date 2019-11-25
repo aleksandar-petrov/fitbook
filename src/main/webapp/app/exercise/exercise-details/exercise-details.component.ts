@@ -38,7 +38,7 @@ export class ExerciseDetailsComponent implements OnInit {
             if (params['id']) {
                 this.exerciseService.getExerciseById(params['id']).subscribe((exercise: Exercise) => {
                     this.selectedExercise = exercise;
-                    this.youtubeVideoId = exercise.youtubeURL.split('?v=')[1];
+                    this.youtubeVideoId = this.getYoutubeIdFromUrl(exercise.youtubeURL);
                     this.workoutExerciseBindingModel.exerciseId = exercise.id;
                 });
             }
@@ -53,6 +53,11 @@ export class ExerciseDetailsComponent implements OnInit {
             this.userWorkouts = workouts;
             this.selectedWorkoutId = this.userWorkouts[0].id;
         })
+    }
+
+    getYoutubeIdFromUrl(url: string) {
+        const regexp = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?[\w\?‌​=]*)?/g;
+        return regexp.exec(url)[1];
     }
 
     open(content) {

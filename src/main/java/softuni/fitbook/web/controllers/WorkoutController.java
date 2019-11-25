@@ -79,23 +79,25 @@ public class WorkoutController {
 
     }
 
-    @GetMapping("/all")
+    @GetMapping("/public/all")
     public List<WorkoutViewModel> getAllPublicWorkouts() {
 
-        List<WorkoutViewModel> collect = workoutService.getAllPublicWorkouts()
+        return workoutService.getAllPublicWorkouts()
                 .stream()
                 .map(w -> modelMapper.map(w, WorkoutViewModel.class))
                 .collect(Collectors.toList());
+    }
 
-        return collect;
+    @GetMapping("/{id}")
+    public WorkoutViewModel getWorkoutById(@PathVariable(value = "id") String id) {
+
+        return modelMapper.map(workoutService.getWorkoutById(id), WorkoutViewModel.class);
     }
 
     @PostMapping("/copy/{workoutId}")
     public WorkoutViewModel createWorkout(@PathVariable(value = "workoutId") String workoutId, Principal principal) {
 
         return modelMapper.map(workoutService.copyWorkoutToLoggedUserWorkouts(workoutId, principal.getName()), WorkoutViewModel.class);
-
-
     }
 
 }

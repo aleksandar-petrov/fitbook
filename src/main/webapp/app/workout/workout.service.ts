@@ -22,25 +22,29 @@ export class WorkoutService {
 
     addWorkoutExerciseToWorkout(workoutExerciseBindingModel: WorkoutExerciseBindingModel, workoutId: string) {
 
-
         return this.http.post('http://localhost:8000/workouts/add-exercise/' + workoutId, workoutExerciseBindingModel);
     }
 
 
     fetchAllPublicWorkouts() {
-        return this.http.get('http://localhost:8000/workouts/all');
+
+        return this.http.get('http://localhost:8000/workouts/public/all');
+    }
+
+    fetchPublicWorkoutById(id: string) {
+
+        return this.http.get('http://localhost:8000/workouts/' + id);
     }
 
     getLoggedInUserWorkouts() {
+
         return this.http.get('http://localhost:8000/workouts/my/');
     }
 
 
     deleteWorkoutExerciseFromWorkout(workoutId: string, exerciseId: string) {
 
-
         const params = new HttpParams().append('exerciseId', exerciseId);
-
         return this.http.delete('http://localhost:8000/workouts/delete-exercise/' + workoutId, {params: params});
     }
 
@@ -50,10 +54,12 @@ export class WorkoutService {
     }
 
     editWorkoutById(workoutId: string, workoutBindingModel: Workout) {
+
         return this.http.put('http://localhost:8000/workouts/edit/' + workoutId, workoutBindingModel);
     }
 
     copyWorkoutToLoggedUserWorkouts(workoutId: string) {
+
         return this.http.post('http://localhost:8000/workouts/copy/' + workoutId, null);
     }
 

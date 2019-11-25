@@ -1,0 +1,22 @@
+table {
+    position: relative;
+}
+
+.order-index-workout {
+    position: absolute;
+    top: 7px;
+    left: 0;
+
+    border-radius: 50%;
+    width: 36px;
+    line-height: 36px;
+    padding: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.modal-body {
+    max-height: 300px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}

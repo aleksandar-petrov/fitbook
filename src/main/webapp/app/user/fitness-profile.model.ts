@@ -1,14 +1,17 @@
+import {NutritionGoal} from "./nutrition-goal.model";
+
 export class FitnessProfileModel {
-  constructor(
-    public weight: number,
-    public height: number,
-    public age: number,
-    public sportsExperience: string,
-    public activityLevel: string,
-    public weightGoal: string,
-    public weightChangeRate: string,
-    public currentCalories: number
-  ) {
-  }
+    weight: number;
+    height: number;
+    age: number;
+    sportsExperience: string;
+    activityLevel: string;
+    weightGoal: string;
+    weightChangeRate: string;
+    nutritionGoal: NutritionGoal;
+
+    constructor() {
+      this.nutritionGoal = new NutritionGoal();
+    }
 
 }

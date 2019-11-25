@@ -104,8 +104,9 @@ public class UserController {
 
   @GetMapping(value = "/username/{username}")
   public UserViewModel getUserByUsername(@PathVariable(value = "username") String username) {
-    return this.modelMapper
-      .map(this.userService.getByUsername(username), UserViewModel.class);
+    UserViewModel map = this.modelMapper
+            .map(this.userService.getByUsername(username), UserViewModel.class);
+    return map;
 
 
   }

@@ -12,8 +12,12 @@
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="inputWorkoutName">Workout Name</label>
-            <input type="text" class="form-control" id="inputWorkoutName" name="name" #inputWorkoutName
+            <input type="text" class="form-control" id="inputWorkoutName" name="name" #inputWorkoutName="ngModel"
+                   required
+                   [ngClass]="{'is-valid': inputWorkoutName.valid && inputWorkoutName.touched,
+                               'is-invalid': inputWorkoutName.invalid && inputWorkoutName.touched}"
                    [(ngModel)]="workoutBindingModel.name">
+
           </div>
           <div class="form-group col-md-6">
             <label for="inputStatus">Status</label>
@@ -27,7 +31,7 @@
       </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Save</button>
+      <button type="button" [disabled]="createWorkoutForm.invalid" class="btn btn-outline-dark" (click)="modal.close()">Save</button>
     </div>
   </ng-template>
 

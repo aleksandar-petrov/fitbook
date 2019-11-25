@@ -11,9 +11,7 @@ import softuni.fitbook.config.Constants;
 import softuni.fitbook.domain.entities.*;
 import softuni.fitbook.domain.models.service.FitnessProfileServiceModel;
 import softuni.fitbook.domain.models.service.UserServiceModel;
-import softuni.fitbook.repository.FitnessProfileRepository;
-import softuni.fitbook.repository.RoleRepository;
-import softuni.fitbook.repository.UserRepository;
+import softuni.fitbook.repository.*;
 import softuni.fitbook.service.UserService;
 import softuni.fitbook.utils.EnumParser;
 import softuni.fitbook.utils.FileUploader;
@@ -24,296 +22,338 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  private final RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-  private final FitnessProfileRepository fitnessProfileRepository;
+    private final UserProfileRepository userProfileRepository;
 
-  private final ModelMapper modelMapper;
+    private final NutritionGoalRepository nutritionGoalRepository;
 
-  private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final FitnessProfileRepository fitnessProfileRepository;
 
-  private final FileUploader fileUploader;
+    private final ModelMapper modelMapper;
 
-  @Autowired
-  public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, FitnessProfileRepository fitnessProfileRepository, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPasswordEncoder, FileUploader fileUploader) {
-    this.userRepository = userRepository;
-    this.roleRepository = roleRepository;
-    this.fitnessProfileRepository = fitnessProfileRepository;
-    this.modelMapper = modelMapper;
-    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    this.fileUploader = fileUploader;
-  }
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-  private Set<UserRole> getAuthorities(String authority) {
-    Set<UserRole> userAuthorities = new HashSet<>();
+    private final FileUploader fileUploader;
 
-    userAuthorities.add(this.roleRepository.getByAuthority(authority));
-
-    return userAuthorities;
-  }
-
-  private String getUserAuthority(String userId) {
-    return this
-      .userRepository
-      .findById(userId)
-      .get()
-      .getAuthorities()
-      .stream()
-      .findFirst()
-      .get()
-      .getAuthority();
-  }
-
-  @Override
-  public boolean createUser(UserServiceModel userServiceModel, MultipartFile file) {
-    User userEntity = modelMapper.map(userServiceModel, User.class);
-    UserProfile userProfileEntity = modelMapper.map(userServiceModel, UserProfile.class);
-
-    userEntity.setUserProfile(userProfileEntity);
-
-    userEntity.getUserProfile().setGender(Gender.valueOf(userServiceModel.getGender().toUpperCase()));
-
-    userEntity.setPassword(bCryptPasswordEncoder.encode(userEntity.getPassword()));
-
-    if (userRepository.findAll().isEmpty()) {
-      userEntity.setAuthorities(getAuthorities(Constants.AUTHORITY_ADMIN));
-    } else {
-      userEntity.setAuthorities(getAuthorities(Constants.AUTHORITY_USER));
-    }
-    System.out.println();
-    try {
-      userEntity = this.userRepository.saveAndFlush(userEntity);
-      String uploadedFileUrl = this.fileUploader.getUploadedFileUrl("users", userEntity.getId(), file);
-      userEntity.getUserProfile().setProfilePictureURL(uploadedFileUrl);
-      this.userRepository.saveAndFlush(userEntity);
-    } catch (Exception ignored) {
-
-      return false;
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserProfileRepository userProfileRepository, NutritionGoalRepository nutritionGoalRepository, FitnessProfileRepository fitnessProfileRepository, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPasswordEncoder, FileUploader fileUploader) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.userProfileRepository = userProfileRepository;
+        this.nutritionGoalRepository = nutritionGoalRepository;
+        this.fitnessProfileRepository = fitnessProfileRepository;
+        this.modelMapper = modelMapper;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.fileUploader = fileUploader;
     }
 
-    return true;
-  }
+    private Set<UserRole> getAuthorities(String authority) {
+        Set<UserRole> userAuthorities = new HashSet<>();
 
-  @Override
-  public Set<UserServiceModel> getAll() {
-    return this.userRepository
-      .findAll()
-      .stream()
-      .map(x -> this.modelMapper.map(x, UserServiceModel.class))
-      .collect(Collectors.toUnmodifiableSet());
-  }
+        userAuthorities.add(this.roleRepository.getByAuthority(authority));
 
-  @Override
-  public boolean promoteUser(String id) {
-    User user = this.userRepository
-      .findById(id)
-      .orElse(null);
-
-    if (user == null) return false;
-
-    String userAuthority = this.getUserAuthority(user.getId());
-
-    switch (userAuthority) {
-      case "USER":
-        user.setAuthorities(this.getAuthorities("ROLE_MODERATOR"));
-        break;
-      case "MODERATOR":
-        user.setAuthorities(this.getAuthorities("ROLE_ADMIN"));
-        break;
-      default:
-        throw new IllegalArgumentException("There is no role, higher than ADMIN");
+        return userAuthorities;
     }
 
-    this.userRepository.save(user);
-    return true;
-  }
-
-  @Override
-  public boolean demoteUser(String id) {
-    User user = this.userRepository
-      .findById(id)
-      .orElse(null);
-
-    if (user == null) return false;
-
-    String userAuthority = this.getUserAuthority(user.getId());
-
-    switch (userAuthority) {
-      case "ADMIN":
-        user.setAuthorities(this.getAuthorities("MODERATOR"));
-        break;
-      case "MODERATOR":
-        user.setAuthorities(this.getAuthorities("USER"));
-        break;
-      default:
-        throw new IllegalArgumentException("There is no role, lower than USER");
+    private String getUserAuthority(String userId) {
+        return this
+                .userRepository
+                .findById(userId)
+                .get()
+                .getAuthorities()
+                .stream()
+                .findFirst()
+                .get()
+                .getAuthority();
     }
 
-    this.userRepository.save(user);
-    return true;
-  }
+    @Override
+    public boolean createUser(UserServiceModel userServiceModel, MultipartFile file) {
+        User userEntity = modelMapper.map(userServiceModel, User.class);
+        UserProfile userProfileEntity = modelMapper.map(userServiceModel, UserProfile.class);
 
-  @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User user = this.userRepository
-      .findByUsername(username)
-      .orElse(null);
+        userEntity.setUserProfile(userProfileEntity);
 
-    if (user == null) throw new UsernameNotFoundException("No such user.");
+        userEntity.getUserProfile().setGender(Gender.valueOf(userServiceModel.getGender().toUpperCase()));
 
-    return user;
-  }
+        userEntity.setPassword(bCryptPasswordEncoder.encode(userEntity.getPassword()));
 
-  @Override
-  public UserServiceModel getById(String id) {
+        if (userRepository.findAll().isEmpty()) {
+            userEntity.setAuthorities(getAuthorities(Constants.AUTHORITY_ADMIN));
+        } else {
+            userEntity.setAuthorities(getAuthorities(Constants.AUTHORITY_USER));
+        }
+        System.out.println();
+        try {
+            userEntity = this.userRepository.saveAndFlush(userEntity);
+            String uploadedFileUrl = this.fileUploader.getUploadedFileUrl("users", userEntity.getId(), file);
+            userEntity.getUserProfile().setProfilePictureURL(uploadedFileUrl);
+            this.userRepository.saveAndFlush(userEntity);
+        } catch (Exception ignored) {
 
-    User user = this.userRepository.findById(id).orElseThrow();
+            return false;
+        }
 
-    return getUserServiceModelFromUser(user);
-  }
-
-  @Override
-  public boolean setFitnessProfileToUser(String userId, FitnessProfileServiceModel model) {
-
-    try {
-
-
-      User user = this.userRepository.findById(userId).orElseThrow();
-
-      FitnessProfile fitnessProfile = this.modelMapper.map(model, FitnessProfile.class);
-
-      fitnessProfile = this.getFitnessProfileFromFitnessProfileServiceModelAndUserGender(fitnessProfile, model, user.getUserProfile().getGender());
-
-      fitnessProfile = this.fitnessProfileRepository.save(fitnessProfile);
-
-      user.getUserProfile().setFitnessProfile(fitnessProfile);
-
-      this.userRepository.save(user);
-
-    } catch (Exception ex) {
-      return false;
+        return true;
     }
 
-    return true;
-  }
-
-  @Override
-  public boolean editFitnessProfileByUserId(String userId, FitnessProfileServiceModel model) {
-    try {
-
-
-      User user = this.userRepository.findById(userId).orElseThrow();
-
-      FitnessProfile fitnessProfile = user.getUserProfile().getFitnessProfile();
-
-      FitnessProfile updated = this.modelMapper.map(model, FitnessProfile.class);
-
-      updated = getFitnessProfileFromFitnessProfileServiceModelAndUserGender(updated, model, user.getUserProfile().getGender());
-
-      updated.setId(fitnessProfile.getId());
-
-      this.fitnessProfileRepository.save(updated);
-
-    } catch (Exception ex) {
-      return false;
+    @Override
+    public Set<UserServiceModel> getAll() {
+        return this.userRepository
+                .findAll()
+                .stream()
+                .map(x -> this.modelMapper.map(x, UserServiceModel.class))
+                .collect(Collectors.toUnmodifiableSet());
     }
 
-    return true;
-  }
+    @Override
+    public boolean promoteUser(String id) {
+        User user = this.userRepository
+                .findById(id)
+                .orElse(null);
 
-  @Override
-  public UserServiceModel getByUsername(String username) {
-    User user = this.userRepository.findByUsername(username).orElseThrow();
-    return getUserServiceModelFromUser(user);
-  }
+        if (user == null) return false;
 
-  private FitnessProfile getFitnessProfileFromFitnessProfileServiceModelAndUserGender(FitnessProfile fitnessProfile, FitnessProfileServiceModel model, Gender gender) {
-    fitnessProfile.setActivityLevel(EnumParser.
-      parseStringToEnum(ActivityLevel.class, model.getActivityLevel()));
+        String userAuthority = this.getUserAuthority(user.getId());
 
-    fitnessProfile.setSportsExperience(
-      EnumParser.parseStringToEnum(SportsExperience.class, model.getSportsExperience()));
+        switch (userAuthority) {
+            case "USER":
+                user.setAuthorities(this.getAuthorities("ROLE_MODERATOR"));
+                break;
+            case "MODERATOR":
+                user.setAuthorities(this.getAuthorities("ROLE_ADMIN"));
+                break;
+            default:
+                throw new IllegalArgumentException("There is no role, higher than ADMIN");
+        }
 
-    fitnessProfile.setWeightGoal(EnumParser.
-      parseStringToEnum(WeightGoal.class, model.getWeightGoal()));
-
-    if (fitnessProfile.getWeightGoal() == WeightGoal.MAINTAIN_WEIGHT) {
-      fitnessProfile.setWeightChangeRate(WeightChangeRate.NONE);
-    } else {
-      fitnessProfile.setWeightChangeRate(
-        EnumParser.parseStringToEnum(
-          WeightChangeRate.class, model.getWeightChangeRate()));
+        this.userRepository.save(user);
+        return true;
     }
 
+    @Override
+    public boolean demoteUser(String id) {
+        User user = this.userRepository
+                .findById(id)
+                .orElse(null);
 
-    fitnessProfile.setCurrentCalories(
-      this.calculateCaloriesBasedOnFitnessProfileAndGender(fitnessProfile, gender));
+        if (user == null) return false;
 
-    return fitnessProfile;
+        String userAuthority = this.getUserAuthority(user.getId());
 
-  }
+        switch (userAuthority) {
+            case "ADMIN":
+                user.setAuthorities(this.getAuthorities("MODERATOR"));
+                break;
+            case "MODERATOR":
+                user.setAuthorities(this.getAuthorities("USER"));
+                break;
+            default:
+                throw new IllegalArgumentException("There is no role, lower than USER");
+        }
 
-  private UserServiceModel getUserServiceModelFromUser(User user) {
-    FitnessProfile userFitnessProfile = user.getUserProfile().getFitnessProfile();
-
-    UserServiceModel model = modelMapper.map(user.getUserProfile(), UserServiceModel.class);
-
-    model.setEmail(user.getEmail());
-    model.setId(user.getId());
-    model.setUsername(user.getUsername());
-
-    model.setGender(EnumParser.parseEnumToString(user.getUserProfile().getGender()));
-
-    if (userFitnessProfile != null) {
-      FitnessProfileServiceModel modelFitnessProfile =
-        model.getFitnessProfile();
-      modelFitnessProfile
-        .setActivityLevel(
-          EnumParser.parseEnumToString(
-            userFitnessProfile.getActivityLevel()));
-      modelFitnessProfile
-        .setSportsExperience(
-          EnumParser.parseEnumToString(
-            userFitnessProfile.getSportsExperience()));
-      modelFitnessProfile
-        .setWeightGoal(
-          EnumParser.parseEnumToString(
-            userFitnessProfile.getWeightGoal()));
-
-      modelFitnessProfile
-        .setWeightChangeRate(
-          EnumParser.parseEnumToString(
-            userFitnessProfile.getWeightChangeRate()));
-
-      model.setFitnessProfile(modelFitnessProfile);
+        this.userRepository.save(user);
+        return true;
     }
 
-    return model;
-  }
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = this.userRepository
+                .findByUsername(username)
+                .orElse(null);
 
-  private Integer calculateCaloriesBasedOnFitnessProfileAndGender(FitnessProfile fitnessProfile, Gender gender) {
+        if (user == null) throw new UsernameNotFoundException("No such user.");
 
-    Double bmi;
-
-    if (gender == Gender.MALE) {
-      bmi = 88.362 + (13.397 * fitnessProfile.getWeight()) +
-        (4.799 * fitnessProfile.getHeight()) - (5.677 * fitnessProfile.getAge());
-    } else {
-      bmi = 447.593 + (9.247 * fitnessProfile.getWeight()) +
-        (3.098 * fitnessProfile.getHeight()) - (4.330 * fitnessProfile.getAge());
+        return user;
     }
 
-    int calories = (int) (bmi * fitnessProfile.getActivityLevel().getActivityLevelIndex());
+    @Override
+    public UserServiceModel getById(String id) {
 
-    if (fitnessProfile.getWeightGoal() == WeightGoal.LOSE_WEIGHT) {
-      calories -= (int) (fitnessProfile.getWeightChangeRate().getRateInKg() * 1100);
-    } else if (fitnessProfile.getWeightGoal() == WeightGoal.GAIN_WEIGHT) {
-      calories += (int) (fitnessProfile.getWeightChangeRate().getRateInKg() * 1100);
+        User user = this.userRepository.findById(id).orElseThrow();
+
+        return getUserServiceModelFromUser(user);
     }
 
+    @Override
+    public boolean setFitnessProfileToUser(String userId, FitnessProfileServiceModel model) {
 
-    return calories;
-  }
+        try {
+
+
+            User user = userRepository.findById(userId).orElseThrow();
+
+            FitnessProfile fitnessProfile = modelMapper.map(model, FitnessProfile.class);
+
+            fitnessProfile = getFitnessProfileFromFitnessProfileServiceModelAndUserGender(fitnessProfile, model, user.getUserProfile().getGender());
+
+            NutritionGoal nutritionGoal = getNutritionGoalBasedOnFitnessProfileAndGender(fitnessProfile, user.getUserProfile().getGender());
+
+            fitnessProfile.setNutritionGoal(nutritionGoal);
+
+
+            fitnessProfile = fitnessProfileRepository.save(fitnessProfile);
+
+            user.getUserProfile().setFitnessProfile(fitnessProfile);
+
+            userProfileRepository.save(user.getUserProfile());
+
+
+        } catch (Exception ex) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean editFitnessProfileByUserId(String userId, FitnessProfileServiceModel model) {
+        try {
+
+
+            User user = this.userRepository.findById(userId).orElseThrow();
+
+            FitnessProfile fitnessProfile = user.getUserProfile().getFitnessProfile();
+
+            FitnessProfile updated = this.modelMapper.map(model, FitnessProfile.class);
+
+            updated = getFitnessProfileFromFitnessProfileServiceModelAndUserGender(updated, model, user.getUserProfile().getGender());
+
+            updated.setId(fitnessProfile.getId());
+
+            NutritionGoal nutritionGoal = getNutritionGoalBasedOnFitnessProfileAndGender
+                    (updated, user.getUserProfile().getGender());
+
+            nutritionGoal.setId(fitnessProfile.getNutritionGoal().getId());
+
+            updated.setNutritionGoal(nutritionGoal);
+
+            this.fitnessProfileRepository.save(updated);
+
+        } catch (Exception ex) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public UserServiceModel getByUsername(String username) {
+        User user = this.userRepository.findByUsername(username).orElseThrow();
+        return getUserServiceModelFromUser(user);
+    }
+
+    private FitnessProfile getFitnessProfileFromFitnessProfileServiceModelAndUserGender(FitnessProfile fitnessProfile, FitnessProfileServiceModel model, Gender gender) {
+        fitnessProfile.setActivityLevel(EnumParser.
+                parseStringToEnum(ActivityLevel.class, model.getActivityLevel()));
+
+        fitnessProfile.setSportsExperience(
+                EnumParser.parseStringToEnum(SportsExperience.class, model.getSportsExperience()));
+
+        fitnessProfile.setWeightGoal(EnumParser.
+                parseStringToEnum(WeightGoal.class, model.getWeightGoal()));
+
+        if (fitnessProfile.getWeightGoal() == WeightGoal.MAINTAIN_WEIGHT) {
+            fitnessProfile.setWeightChangeRate(WeightChangeRate.NONE);
+        } else {
+            fitnessProfile.setWeightChangeRate(
+                    EnumParser.parseStringToEnum(
+                            WeightChangeRate.class, model.getWeightChangeRate()));
+        }
+
+        return fitnessProfile;
+
+    }
+
+    private NutritionGoal getNutritionGoalBasedOnFitnessProfileAndGender(FitnessProfile fitnessProfile, Gender gender) {
+
+        Integer calories = calculateCaloriesBasedOnFitnessProfileAndGender(fitnessProfile, gender);
+
+        NutritionGoal nutritionGoal = new NutritionGoal();
+
+        Integer protein = (int) (fitnessProfile.getWeight() * 1.8);
+        Double fatsPercentage;
+        if (gender == Gender.MALE) {
+            fatsPercentage = 0.2;
+        } else {
+            fatsPercentage = 0.3;
+        }
+
+        Integer fats = (int) (fatsPercentage * calories / 9);
+
+        Integer carbohydrates = (calories - (protein * 4 + fats * 9)) / 4;
+
+        nutritionGoal.setCalories(calories);
+        nutritionGoal.setGramsOfProtein(protein);
+        nutritionGoal.setGramsOfCarbohydrates(carbohydrates);
+        nutritionGoal.setGramsOfFats(fats);
+
+
+        return nutritionGoal;
+    }
+
+    private UserServiceModel getUserServiceModelFromUser(User user) {
+        FitnessProfile userFitnessProfile = user.getUserProfile().getFitnessProfile();
+
+        UserServiceModel model = modelMapper.map(user.getUserProfile(), UserServiceModel.class);
+
+        model.setEmail(user.getEmail());
+        model.setId(user.getId());
+        model.setUsername(user.getUsername());
+
+        model.setGender(EnumParser.parseEnumToString(user.getUserProfile().getGender()));
+
+        if (userFitnessProfile != null) {
+            FitnessProfileServiceModel modelFitnessProfile =
+                    model.getFitnessProfile();
+            modelFitnessProfile
+                    .setActivityLevel(
+                            EnumParser.parseEnumToString(
+                                    userFitnessProfile.getActivityLevel()));
+            modelFitnessProfile
+                    .setSportsExperience(
+                            EnumParser.parseEnumToString(
+                                    userFitnessProfile.getSportsExperience()));
+            modelFitnessProfile
+                    .setWeightGoal(
+                            EnumParser.parseEnumToString(
+                                    userFitnessProfile.getWeightGoal()));
+
+            modelFitnessProfile
+                    .setWeightChangeRate(
+                            EnumParser.parseEnumToString(
+                                    userFitnessProfile.getWeightChangeRate()));
+
+            model.setFitnessProfile(modelFitnessProfile);
+        }
+
+        return model;
+    }
+
+    private Integer calculateCaloriesBasedOnFitnessProfileAndGender(FitnessProfile fitnessProfile, Gender gender) {
+
+        Double bmi;
+
+        if (gender == Gender.MALE) {
+            bmi = 88.362 + (13.397 * fitnessProfile.getWeight()) +
+                    (4.799 * fitnessProfile.getHeight()) - (5.677 * fitnessProfile.getAge());
+        } else {
+            bmi = 447.593 + (9.247 * fitnessProfile.getWeight()) +
+                    (3.098 * fitnessProfile.getHeight()) - (4.330 * fitnessProfile.getAge());
+        }
+
+        int calories = (int) (bmi * fitnessProfile.getActivityLevel().getActivityLevelIndex());
+
+        if (fitnessProfile.getWeightGoal() == WeightGoal.LOSE_WEIGHT) {
+            calories -= (int) (fitnessProfile.getWeightChangeRate().getRateInKg() * 1100);
+        } else if (fitnessProfile.getWeightGoal() == WeightGoal.GAIN_WEIGHT) {
+            calories += (int) (fitnessProfile.getWeightChangeRate().getRateInKg() * 1100);
+        }
+
+
+        return calories;
+    }
 }

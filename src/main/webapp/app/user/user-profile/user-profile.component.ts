@@ -13,23 +13,42 @@ export class UserProfileComponent implements OnInit {
     username: string;
     user: UserModel;
     userFitnessProfile: FitnessProfileModel;
+    macroNutrientsData: ({ name: string; value: any } | { name: string; value: any } | { name: string; value: any })[];
 
     constructor(private route: ActivatedRoute, private userService: UserService) {
     }
 
     ngOnInit() {
+
         this.route.params.subscribe((params: Params) => {
             if (params['username']) {
                 this.username = params['username'];
                 this.userService.getUserByUsername(this.username).subscribe((user: UserModel) => {
                   this.user = user;
                   this.userFitnessProfile = user.fitnessProfile;
+                  console.log(user.fitnessProfile);
+
+                  this.makeChartDataForMacroNutrients();
                 })
             }
         })
+    }
 
-
-
+    makeChartDataForMacroNutrients() {
+        this.macroNutrientsData = [
+            {
+                "name": "Protein",
+                "value": this.userFitnessProfile.nutritionGoal.gramsOfProtein
+            },
+            {
+                "name": "Carbohydrates",
+                "value": this.userFitnessProfile.nutritionGoal.gramsOfCarbohydrates
+            },
+            {
+                "name": "Fats",
+                "value": this.userFitnessProfile.nutritionGoal.gramsOfFats
+            },
+        ]
     }
 
 }

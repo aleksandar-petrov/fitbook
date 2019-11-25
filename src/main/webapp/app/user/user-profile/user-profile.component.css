@@ -26,6 +26,18 @@
 
 .calories {
     background: linear-gradient(348deg, rgba(255, 255, 255, 0.5) 0%, rgba(37, 206, 209, 1) 66%);
+    border-radius: 30px;
+}
+.chart-container {
+    height: 350px;
+    position: relative;
+}
+
+.macros {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .sports-experience {
@@ -51,4 +63,5 @@
 .weight-change-rate {
     background: linear-gradient(349deg, rgba(100,143,113,1) 0%, rgba(136,181,150,1) 70%);
 }
+
 

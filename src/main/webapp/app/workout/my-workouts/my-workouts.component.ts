@@ -5,7 +5,8 @@ import {WorkoutBindingModel} from "../workout-binding-model";
 import {WorkoutService} from "../workout.service";
 import {UserService} from "../../user/user.service";
 import {AuthService} from "../../auth/auth.service";
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Params, Router, RouterEvent} from "@angular/router";
+import {filter} from "rxjs/operators";
 
 @Component({
   selector: 'app-my-workouts',
@@ -23,6 +24,12 @@ export class MyWorkoutsComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.router.events.pipe(
+        filter((event: RouterEvent) => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.fetchWorkouts();
+    });
 
     this.setSelectedWorkoutIdFromParams();
     this.fetchWorkouts();
@@ -65,5 +72,6 @@ export class MyWorkoutsComponent implements OnInit {
 
   onRouterOutletActivate() {
     this.setSelectedWorkoutIdFromParams();
+    this.fetchWorkouts();
   }
 }

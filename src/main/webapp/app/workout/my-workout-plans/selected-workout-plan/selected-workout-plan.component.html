@@ -1,0 +1,233 @@
+<div class="selected-workout-plan">
+
+    <ng-template #addWorkoutToWorkoutPlanModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title2">Add Workout To Workout Plan</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form *ngIf="selectedWorkoutForModal" #addWorkoutToWorkoutPlanForm="ngForm">
+
+                <div class="form-group col-6">
+                    <label for="inputStatus">Workout</label>
+                    <select id="inputWorkoutId" name="workoutId" class="form-control" #inputWorkoutId
+                            (change)="setSelectedWorkoutForModal()"
+                            [(ngModel)]="selectedWorkoutIdForModal">
+                        <option [ngValue]="workout.id"
+                                *ngFor="let workout of loggedUserWorkouts">{{workout.name}}</option>
+                    </select>
+                </div>
+
+                <hr/>
+
+                <h5 class="text-center">{{selectedWorkoutForModal.name}}</h5>
+
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr *ngIf="selectedWorkoutForModal.exercises && !selectedWorkoutForModal.exercises.length">
+                        <td colspan="5" class="py-auto text-center"><h5>No added exercises in this workout.</h5></td>
+                    </tr>
+                    <tr *ngIf="selectedWorkoutForModal.exercises && selectedWorkoutForModal.exercises.length">
+                        <th scope="col" style="width: 10%">Order</th>
+                        <th scope="col" style="width: 30%">Exercise</th>
+                        <th scope="col" style="width: 20%">Reps</th>
+                        <th scope="col" style="width: 20%">Sets</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr *ngFor="let exercise of selectedWorkoutForModal.exercises">
+                        <td class="align-middle">{{exercise.orderIndex}}</td>
+                        <td class="align-middle">{{exercise.exercise.name}}</td>
+                        <td class="align-middle">{{exercise.reps}}</td>
+                        <td class="align-middle">{{exercise.sets}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+
+            <h3 *ngIf="!selectedWorkoutForModal" class="text-center">You don't have any workouts.</h3>
+        </div>
+        <div class="modal-footer">
+            <button type="button" [disabled]="!selectedWorkoutForModal" class="btn btn-outline-dark" (click)="modal.close()">Add to Workout Plan</button>
+        </div>
+    </ng-template>
+
+    <ng-template #showWorkoutsSetsModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Sets per Muscle Group</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="row align-middle">
+                <ngx-charts-bar-horizontal
+                        [view]="[800, muscleGroupSets.length < 8 ? 200 : 400]"
+                        [animations]="true"
+                        [xAxis]="true"
+                        [yAxis]="true"
+                        [results]="muscleGroupSets"
+                        legendTitle="Muscle Groups"
+                        [legend]="true"
+                        [showDataLabel]="false"
+                        [showXAxisLabel]="false"
+                        [showGridLines]="true"
+                        [showYAxisLabel]="false"
+                        [gradient]="true"
+                        [noBarWhenZero]="true"
+                        [roundDomains]="true"
+                        [roundEdges]="true"
+                        [tooltipDisabled]="false"
+                        [trimYAxisTicks]="false"
+                        [customColors]="customColors"
+                >
+
+                </ngx-charts-bar-horizontal>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Close</button>
+        </div>
+    </ng-template>
+
+
+    <h2 *ngIf="!editMode" class="pt-3 font-weight-light">{{selectedWorkoutPlan.name}}</h2>
+    <div class="py-3 mx-auto col-5"  *ngIf="editMode"><input type="text" value="{{editWorkoutPlanBindingModel.name}}" class="form-control form-control-lg text-center"
+                                                             id="inputName"
+                                                             name="inputName" #inputName="ngModel"
+                                                             required
+                                                             [ngClass]="{'is-valid': inputName.valid && inputName.touched,
+                         'is-invalid': inputName.invalid && inputName.touched}" [(ngModel)]="editWorkoutPlanBindingModel.name"></div>
+    <h4 class="pb-3 font-weight-light" *ngIf="!editMode && !selectedWorkoutPlan.isCopied">
+        ({{selectedWorkoutPlan.isPublic ? 'Public' : 'Private'}})</h4>
+    <h4 class="pb-3 font-weight-light" *ngIf="selectedWorkoutPlan.isCopied">(Copy)</h4>
+    <div *ngIf="editMode && !selectedWorkoutPlan.isCopied" class="pb-3 col-3 mx-auto">
+        <select id="inputStatus" name="status" class="form-control" #inputWorkoutStatus
+                [(ngModel)]="editWorkoutPlanBindingModel.isPublic">
+            <option [ngValue]="true">Public</option>
+            <option [ngValue]="false">Private</option>
+        </select>
+    </div>
+    <button *ngIf="!editMode" type="button" routerLink="/workout-plans/details/{{workoutPlanId}}"
+            class="btn btn-dark mb-2"><i class="fas fa-share-alt"></i></button>
+
+
+    <h5 *ngIf="!selectedWorkoutPlan.workouts || !selectedWorkoutPlan.workouts.length">No added workouts in this workout
+        plan.</h5>
+
+
+    <div class="workouts-container col-10 mx-auto" *ngIf="!editMode">
+        <table class="table table-striped table-hover mb-4" *ngFor="let workout of selectedWorkoutPlan.workouts">
+            <h4 class="order-index-workout font-weight-bold font-italic">{{workout.orderIndex}}</h4>
+            <thead>
+            <tr>
+                <th colspan="5" class="py-auto"><h5><a
+                        routerLink="/my-workouts/{{workout.workout.id}}">{{workout.workout.name}}</a></h5></th>
+            </tr>
+            <tr *ngIf="workout.workout.exercises && !workout.workout.exercises.length">
+                <td colspan="5" class="py-auto"><h5>No added exercises in this workout.</h5></td>
+            </tr>
+            <tr *ngIf="workout.workout.exercises && workout.workout.exercises.length">
+                <th scope="col" style="width: 10%">Order</th>
+                <th scope="col" style="width: 30%">Exercise name</th>
+                <th scope="col" style="width: 20%">Reps</th>
+                <th scope="col" style="width: 20%">Sets</th>
+                <th scope="col" style="width: 20%;"></th>
+
+            </tr>
+            </thead>
+            <tbody *ngIf="!editMode && workout.workout.exercises && workout.workout.exercises.length">
+
+            <tr *ngFor="let exercise of workout.workout.exercises">
+                <td class="align-middle">{{exercise.orderIndex}}</td>
+                <td class="align-middle">{{exercise.exercise.name}}</td>
+                <td class="align-middle">{{exercise.reps}}</td>
+                <td class="align-middle">{{exercise.sets}}</td>
+                <td>
+                    <button type="button" routerLink="/exercises/details/{{exercise.exercise.id}}"
+                            class="btn btn-primary mr-2"><i class="far fa-eye"></i></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="workouts-container col-10 mx-auto" cdkDropList (cdkDropListDropped)="onDrop($event)" *ngIf="editMode">
+        <table cdkDrag class="table table-striped table-hover mb-4"
+               *ngFor="let workout of editWorkoutPlanBindingModel.workouts">
+            <h4 class="order-index-workout font-weight-bold font-italic">{{workout.orderIndex}}</h4>
+            <thead>
+            <tr>
+                <th colspan="5" class="py-auto"><h5 class="d-inline-block">{{workout.workout.name}}</h5>
+                    <button type="button" (click)="onWorkoutDeleteHandler(workout.id, workout.orderIndex)"
+                            class="btn btn-danger delete-btn ml-3"><i class="far fa-trash-alt"></i></button>
+                </th>
+
+            </tr>
+            <tr *ngIf="workout.workout.exercises && !workout.workout.exercises.length">
+                <td colspan="5" class="py-auto"><h5>No added exercises in this workout.</h5></td>
+            </tr>
+            <tr *ngIf="workout.workout.exercises && workout.workout.exercises.length">
+                <th scope="col" style="width: 10%">Order</th>
+                <th scope="col" style="width: 30%">Exercise name</th>
+                <th scope="col" style="width: 20%">Reps</th>
+                <th scope="col" style="width: 20%">Sets</th>
+                <th scope="col" style="width: 20%;"></th>
+
+            </tr>
+            </thead>
+            <tbody *ngIf="workout.workout.exercises && workout.workout.exercises.length">
+
+            <tr *ngFor="let exercise of workout.workout.exercises">
+                <td class="align-middle">{{exercise.orderIndex}}</td>
+                <td class="align-middle">{{exercise.exercise.name}}</td>
+                <td class="align-middle">{{exercise.reps}}</td>
+                <td class="align-middle">{{exercise.sets}}</td>
+                <td>
+                    <button type="button" routerLink="/exercises/details/{{exercise.exercise.id}}"
+                            class="btn btn-primary mr-2"><i class="far fa-eye"></i></button>
+                </td>
+            </tr>
+            </tbody>
+            <tr *cdkDragPreview class="text-center">
+            </tr>
+        </table>
+
+    </div>
+
+
+    <div class="workout-actions" *ngIf="!editMode">
+
+        <button *ngIf="selectedWorkoutPlan.workouts && selectedWorkoutPlan.workouts.length" type="button"
+                class="btn btn-secondary my-3 mx-2" (click)="open(showWorkoutsSetsModal)">Show Sets per Muscle Group
+        </button>
+
+        <button type="link" class="btn btn-primary my-3 mx-2"
+                (click)="openAddWorkoutModal(addWorkoutToWorkoutPlanModal)">Add Workout
+        </button>
+
+        <button type="button"
+                class="btn btn-success my-3 mx-2" routerLink="./" [queryParams]="{'edit': 1}">Edit
+        </button>
+
+        <button type="button" (click)="onWorkoutPlanDeleteHandler()" class="btn btn-danger my-3 mx-2">
+            Delete
+        </button>
+    </div>
+
+
+    <div class="workout-actions-edit" *ngIf="editMode">
+        <button type="link" [disabled]="editForm.invalid" class="btn btn-success my-3 mx-2" (click)="onSaveHandler()">
+            Save
+        </button>
+        <button type="link" class="btn btn-danger my-3 mx-2" routerLink="./">Cancel</button>
+    </div>
+
+
+</div>
+
+
+
