@@ -1,6 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-
 import {AppComponent} from './app.component';
 import {NavbarComponent} from './navbar/navbar.component';
 import {HomeComponent} from './home/home.component';
@@ -31,21 +30,22 @@ import {SelectedWorkoutComponent} from './workout/my-workouts/selected-workout/s
 import {ExerciseDetailsComponent} from './exercise/exercise-details/exercise-details.component';
 import {SafePipe} from "./safe.pipe";
 import {NgxYoutubePlayerModule} from "ngx-youtube-player";
-import { EditSelectedWorkoutComponent } from './workout/my-workouts/edit-selected-workout/edit-selected-workout.component';
+import {EditSelectedWorkoutComponent} from './workout/my-workouts/edit-selected-workout/edit-selected-workout.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
-import { AllWorkoutsComponent } from './workout/all-workouts/all-workouts.component';
-import { WorkoutCardComponent } from './workout/workout-card/workout-card.component';
-import { UserProfileComponent } from './user/user-profile/user-profile.component';
+import {AllWorkoutsComponent} from './workout/all-workouts/all-workouts.component';
+import {WorkoutCardComponent} from './workout/workout-card/workout-card.component';
+import {UserProfileComponent} from './user/user-profile/user-profile.component';
 import {NgxChartsModule, PieChartModule} from "@swimlane/ngx-charts";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import { WorkoutDetailsComponent } from './workout/workout-details/workout-details.component';
-import { MyWorkoutPlansComponent } from './workout/my-workout-plans/my-workout-plans.component';
-import { NoSelectedWorkoutPlanComponent } from './workout/my-workout-plans/no-selected-workout-plan/no-selected-workout-plan.component';
-import { SelectedWorkoutPlanComponent } from './workout/my-workout-plans/selected-workout-plan/selected-workout-plan.component';
-import { AllWorkoutPlansComponent } from './workout/all-workout-plans/all-workout-plans.component';
-import { WorkoutPlanDetailsComponent } from './workout/workout-plan-details/workout-plan-details.component';
-import { WorkoutPlanCardComponent } from './workout/workout-plan-card/workout-plan-card.component';
-import { SearchFoodComponent } from './food/search-food/search-food.component';
+import {WorkoutDetailsComponent} from './workout/workout-details/workout-details.component';
+import {MyWorkoutPlansComponent} from './workout/my-workout-plans/my-workout-plans.component';
+import {NoSelectedWorkoutPlanComponent} from './workout/my-workout-plans/no-selected-workout-plan/no-selected-workout-plan.component';
+import {SelectedWorkoutPlanComponent} from './workout/my-workout-plans/selected-workout-plan/selected-workout-plan.component';
+import {AllWorkoutPlansComponent} from './workout/all-workout-plans/all-workout-plans.component';
+import {WorkoutPlanDetailsComponent} from './workout/workout-plan-details/workout-plan-details.component';
+import {WorkoutPlanCardComponent} from './workout/workout-plan-card/workout-plan-card.component';
+import {SearchFoodComponent} from './food/search-food/search-food.component';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 
 @NgModule({
     declarations: [
@@ -83,7 +83,8 @@ import { SearchFoodComponent } from './food/search-food/search-food.component';
         AllWorkoutPlansComponent,
         WorkoutPlanDetailsComponent,
         WorkoutPlanCardComponent,
-        SearchFoodComponent
+        SearchFoodComponent,
+        AdminPanelComponent
     ],
     imports: [
         BrowserModule,

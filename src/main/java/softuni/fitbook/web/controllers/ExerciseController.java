@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/exercises")
+@RequestMapping("api/exercises")
 public class ExerciseController {
 
     private final ExerciseService exerciseService;
@@ -28,30 +28,29 @@ public class ExerciseController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping(value = "/all", produces = "application/json")
+    @GetMapping(value = "/all")
     public List<AllExercisesExerciseViewModel> getAllExercises() {
-        return this
-                .exerciseService
+        return exerciseService
                 .getAllExercises()
                 .stream()
-                .map(e -> this.modelMapper
+                .map(e -> modelMapper
                         .map(e, AllExercisesExerciseViewModel.class))
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(value = "/details/{id}", produces = "application/json")
+    @GetMapping(value = "/details/{id}")
     public AllExercisesExerciseViewModel exerciseDetailsById(@PathVariable(value = "id") String id) {
 
-        return this.modelMapper.map(this.exerciseService.getExerciseById(id), AllExercisesExerciseViewModel.class);
+        return modelMapper.map(exerciseService.getExerciseById(id), AllExercisesExerciseViewModel.class);
 
     }
 
     @PostMapping("/create")
-    public ResponseEntity createExercise(@RequestPart("exerciseBindingModel") ExerciseCreateBindingModel model, @RequestPart("file") MultipartFile file) {
+    public AllExercisesExerciseViewModel createExercise(@RequestPart("exerciseBindingModel") ExerciseCreateBindingModel model, @RequestPart("file") MultipartFile file) {
 
-        this.exerciseService.createExercise(this.modelMapper.map(model, ExerciseCreateServiceModel.class), file);
+        return modelMapper.map(
+                exerciseService.createExercise(modelMapper.map(model, ExerciseCreateServiceModel.class), file), AllExercisesExerciseViewModel.class);
 
-        return ResponseEntity.ok().build();
     }
 
 }

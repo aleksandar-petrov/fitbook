@@ -9,14 +9,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import softuni.fitbook.config.Constants;
 import softuni.fitbook.domain.entities.*;
-import softuni.fitbook.domain.models.service.FitnessProfileServiceModel;
-import softuni.fitbook.domain.models.service.UserServiceModel;
+import softuni.fitbook.domain.models.service.user.AllUsersUserServiceModel;
+import softuni.fitbook.domain.models.service.user.FitnessProfileServiceModel;
+import softuni.fitbook.domain.models.service.user.UserServiceModel;
 import softuni.fitbook.repository.*;
 import softuni.fitbook.service.UserService;
-import softuni.fitbook.utils.EnumParser;
-import softuni.fitbook.utils.FileUploader;
+import softuni.fitbook.service.EnumParserService;
+import softuni.fitbook.service.FileUploaderService;
+import softuni.fitbook.web.errors.exceptions.NotFoundException;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,10 +39,10 @@ public class UserServiceImpl implements UserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private final FileUploader fileUploader;
+    private final FileUploaderService fileUploaderService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserProfileRepository userProfileRepository, NutritionGoalRepository nutritionGoalRepository, FitnessProfileRepository fitnessProfileRepository, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPasswordEncoder, FileUploader fileUploader) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserProfileRepository userProfileRepository, NutritionGoalRepository nutritionGoalRepository, FitnessProfileRepository fitnessProfileRepository, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPasswordEncoder, FileUploaderService fileUploaderService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userProfileRepository = userProfileRepository;
@@ -47,7 +50,7 @@ public class UserServiceImpl implements UserService {
         this.fitnessProfileRepository = fitnessProfileRepository;
         this.modelMapper = modelMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.fileUploader = fileUploader;
+        this.fileUploaderService = fileUploaderService;
     }
 
     private Set<UserRole> getAuthorities(String authority) {
@@ -82,14 +85,14 @@ public class UserServiceImpl implements UserService {
         userEntity.setPassword(bCryptPasswordEncoder.encode(userEntity.getPassword()));
 
         if (userRepository.findAll().isEmpty()) {
-            userEntity.setAuthorities(getAuthorities(Constants.AUTHORITY_ADMIN));
+            userEntity.setAuthorities(getAuthorities(Constants.AUTHORITY_ROOT_ADMIN));
         } else {
             userEntity.setAuthorities(getAuthorities(Constants.AUTHORITY_USER));
         }
         System.out.println();
         try {
             userEntity = this.userRepository.saveAndFlush(userEntity);
-            String uploadedFileUrl = this.fileUploader.getUploadedFileUrl("users", userEntity.getId(), file);
+            String uploadedFileUrl = this.fileUploaderService.getUploadedFileUrl("users", userEntity.getId(), file);
             userEntity.getUserProfile().setProfilePictureURL(uploadedFileUrl);
             this.userRepository.saveAndFlush(userEntity);
         } catch (Exception ignored) {
@@ -101,71 +104,82 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<UserServiceModel> getAll() {
+    public List<AllUsersUserServiceModel> getAll() {
         return this.userRepository
                 .findAll()
                 .stream()
-                .map(x -> this.modelMapper.map(x, UserServiceModel.class))
-                .collect(Collectors.toUnmodifiableSet());
+                .map(this::mapUserToAllUsersUserServiceModel)
+                .collect(Collectors.toList());
+    }
+
+    private AllUsersUserServiceModel mapUserToAllUsersUserServiceModel(User user) {
+
+        AllUsersUserServiceModel model = modelMapper.map(user, AllUsersUserServiceModel.class);
+        model.setRole(extractAuthority(user.getAuthorities()));
+
+        return model;
+
     }
 
     @Override
-    public boolean promoteUser(String id) {
-        User user = this.userRepository
+    public AllUsersUserServiceModel promoteUser(String id) {
+        User user = userRepository
                 .findById(id)
-                .orElse(null);
+                .orElseThrow(() -> new NotFoundException("No such user with given ID."));
 
-        if (user == null) return false;
 
-        String userAuthority = this.getUserAuthority(user.getId());
+        String userAuthority = getUserAuthority(user.getId());
 
         switch (userAuthority) {
-            case "USER":
-                user.setAuthorities(this.getAuthorities("ROLE_MODERATOR"));
+            case Constants.AUTHORITY_USER:
+                user.setAuthorities(getAuthorities(Constants.AUTHORITY_MODERATOR));
                 break;
-            case "MODERATOR":
-                user.setAuthorities(this.getAuthorities("ROLE_ADMIN"));
+            case Constants.AUTHORITY_MODERATOR:
+                user.setAuthorities(getAuthorities(Constants.AUTHORITY_ADMIN));
                 break;
             default:
-                throw new IllegalArgumentException("There is no role, higher than ADMIN");
+                throw new IllegalArgumentException("There is no role higher than ADMIN");
         }
 
-        this.userRepository.save(user);
-        return true;
+        user = userRepository.save(user);
+
+        return mapUserToAllUsersUserServiceModel(user);
+
     }
 
     @Override
-    public boolean demoteUser(String id) {
-        User user = this.userRepository
+    public AllUsersUserServiceModel demoteUser(String id) {
+        User user = userRepository
                 .findById(id)
-                .orElse(null);
+                .orElseThrow(() -> new NotFoundException("No such user with given ID."));
 
-        if (user == null) return false;
-
-        String userAuthority = this.getUserAuthority(user.getId());
+        String userAuthority = getUserAuthority(user.getId());
 
         switch (userAuthority) {
-            case "ADMIN":
-                user.setAuthorities(this.getAuthorities("MODERATOR"));
+            case Constants.AUTHORITY_ROOT_ADMIN:
+                throw new IllegalArgumentException("ROOT ADMIN cannot be demoted.");
+            case Constants.AUTHORITY_ADMIN:
+                user.setAuthorities(getAuthorities(Constants.AUTHORITY_MODERATOR));
                 break;
-            case "MODERATOR":
-                user.setAuthorities(this.getAuthorities("USER"));
+            case Constants.AUTHORITY_MODERATOR:
+                user.setAuthorities(getAuthorities(Constants.AUTHORITY_USER));
                 break;
             default:
-                throw new IllegalArgumentException("There is no role, lower than USER");
+                throw new IllegalArgumentException("There is no role lower than USER");
         }
 
-        this.userRepository.save(user);
-        return true;
+        user = userRepository.save(user);
+
+        return mapUserToAllUsersUserServiceModel(user);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = this.userRepository
+        User user = userRepository
                 .findByUsername(username)
                 .orElse(null);
 
-        if (user == null) throw new UsernameNotFoundException("No such user.");
+        if (user == null) throw new NotFoundException("No such user.");
 
         return user;
     }
@@ -173,7 +187,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserServiceModel getById(String id) {
 
-        User user = this.userRepository.findById(id).orElseThrow();
+        User user = userRepository.findById(id).orElseThrow();
 
         return getUserServiceModelFromUser(user);
     }
@@ -214,11 +228,11 @@ public class UserServiceImpl implements UserService {
         try {
 
 
-            User user = this.userRepository.findById(userId).orElseThrow();
+            User user = userRepository.findById(userId).orElseThrow();
 
             FitnessProfile fitnessProfile = user.getUserProfile().getFitnessProfile();
 
-            FitnessProfile updated = this.modelMapper.map(model, FitnessProfile.class);
+            FitnessProfile updated = modelMapper.map(model, FitnessProfile.class);
 
             updated = getFitnessProfileFromFitnessProfileServiceModelAndUserGender(updated, model, user.getUserProfile().getGender());
 
@@ -231,7 +245,7 @@ public class UserServiceImpl implements UserService {
 
             updated.setNutritionGoal(nutritionGoal);
 
-            this.fitnessProfileRepository.save(updated);
+            fitnessProfileRepository.save(updated);
 
         } catch (Exception ex) {
             return false;
@@ -242,25 +256,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserServiceModel getByUsername(String username) {
-        User user = this.userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow();
         return getUserServiceModelFromUser(user);
     }
 
     private FitnessProfile getFitnessProfileFromFitnessProfileServiceModelAndUserGender(FitnessProfile fitnessProfile, FitnessProfileServiceModel model, Gender gender) {
-        fitnessProfile.setActivityLevel(EnumParser.
+        fitnessProfile.setActivityLevel(EnumParserService.
                 parseStringToEnum(ActivityLevel.class, model.getActivityLevel()));
 
         fitnessProfile.setSportsExperience(
-                EnumParser.parseStringToEnum(SportsExperience.class, model.getSportsExperience()));
+                EnumParserService.parseStringToEnum(SportsExperience.class, model.getSportsExperience()));
 
-        fitnessProfile.setWeightGoal(EnumParser.
+        fitnessProfile.setWeightGoal(EnumParserService.
                 parseStringToEnum(WeightGoal.class, model.getWeightGoal()));
 
         if (fitnessProfile.getWeightGoal() == WeightGoal.MAINTAIN_WEIGHT) {
             fitnessProfile.setWeightChangeRate(WeightChangeRate.NONE);
         } else {
             fitnessProfile.setWeightChangeRate(
-                    EnumParser.parseStringToEnum(
+                    EnumParserService.parseStringToEnum(
                             WeightChangeRate.class, model.getWeightChangeRate()));
         }
 
@@ -304,27 +318,27 @@ public class UserServiceImpl implements UserService {
         model.setId(user.getId());
         model.setUsername(user.getUsername());
 
-        model.setGender(EnumParser.parseEnumToString(user.getUserProfile().getGender()));
+        model.setGender(EnumParserService.parseEnumToString(user.getUserProfile().getGender()));
 
         if (userFitnessProfile != null) {
             FitnessProfileServiceModel modelFitnessProfile =
                     model.getFitnessProfile();
             modelFitnessProfile
                     .setActivityLevel(
-                            EnumParser.parseEnumToString(
+                            EnumParserService.parseEnumToString(
                                     userFitnessProfile.getActivityLevel()));
             modelFitnessProfile
                     .setSportsExperience(
-                            EnumParser.parseEnumToString(
+                            EnumParserService.parseEnumToString(
                                     userFitnessProfile.getSportsExperience()));
             modelFitnessProfile
                     .setWeightGoal(
-                            EnumParser.parseEnumToString(
+                            EnumParserService.parseEnumToString(
                                     userFitnessProfile.getWeightGoal()));
 
             modelFitnessProfile
                     .setWeightChangeRate(
-                            EnumParser.parseEnumToString(
+                            EnumParserService.parseEnumToString(
                                     userFitnessProfile.getWeightChangeRate()));
 
             model.setFitnessProfile(modelFitnessProfile);
@@ -355,5 +369,13 @@ public class UserServiceImpl implements UserService {
 
 
         return calories;
+    }
+
+    public String extractAuthority(Set<UserRole> authorities) {
+        return authorities
+                .stream()
+                .findFirst()
+                .orElse(null)
+                .getAuthority();
     }
 }

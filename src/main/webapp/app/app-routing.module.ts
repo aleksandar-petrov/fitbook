@@ -21,6 +21,7 @@ import {SelectedWorkoutPlanComponent} from "./workout/my-workout-plans/selected-
 import {AllWorkoutPlansComponent} from "./workout/all-workout-plans/all-workout-plans.component";
 import {WorkoutPlanDetailsComponent} from "./workout/workout-plan-details/workout-plan-details.component";
 import {SearchFoodComponent} from "./food/search-food/search-food.component";
+import {AdminPanelComponent} from "./admin-panel/admin-panel.component";
 
 
 const appRoutes: Routes = [
@@ -47,8 +48,9 @@ const appRoutes: Routes = [
     {path: 'workouts/details/:id', component: WorkoutDetailsComponent},
     {path: 'workout-plans/all', component: AllWorkoutPlansComponent},
     {path: 'workout-plans/details/:id', component: WorkoutPlanDetailsComponent},
-    {path: 'foods/search', component: SearchFoodComponent},
-    {path: 'profile/:username', component: UserProfileComponent}
+    {path: 'foods/create', component: SearchFoodComponent},
+    {path: 'profile/:username', component: UserProfileComponent},
+    {path: 'admin-panel', component: AdminPanelComponent}
 ];
 
 @NgModule({

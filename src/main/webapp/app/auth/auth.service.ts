@@ -27,7 +27,7 @@ export class AuthService {
 
   register(formData: FormData) {
 
-    return this.http.post("http://localhost:8000/users/register", formData);
+    return this.http.post("http://localhost:8000/api/users/register", formData);
   }
 
   signin(signinBindingModel: SigninBindingModel) {
@@ -36,8 +36,9 @@ export class AuthService {
       'Content-Type':  'application/json',
     });
 
-    return this.http.post("http://localhost:8000/users/signin", signinBindingModel, {headers: headers, observe: "response"});
+    return this.http.post("http://localhost:8000/api/users/signin", signinBindingModel, {headers: headers, observe: "response"});
   }
+
 
 
   autoLogin() {

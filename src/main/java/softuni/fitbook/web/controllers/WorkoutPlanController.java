@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/workout-plans/")
+@RequestMapping(value = "api/workout-plans/")
 public class WorkoutPlanController {
 
     private final WorkoutPlanService workoutPlanService;

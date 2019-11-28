@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/workouts")
+@RequestMapping("api/workouts")
 public class WorkoutController {
 
     private final WorkoutService workoutService;

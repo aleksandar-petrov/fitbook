@@ -5,11 +5,12 @@ import softuni.fitbook.domain.entities.Exercise;
 import softuni.fitbook.domain.models.service.exercise.ExerciseCreateServiceModel;
 import softuni.fitbook.domain.models.service.exercise.ExerciseServiceModel;
 
+import java.util.List;
 import java.util.Set;
 
 public interface ExerciseService {
 
-    Set<ExerciseServiceModel> getAllExercises();
+    List<ExerciseServiceModel> getAllExercises();
 
     ExerciseServiceModel createExercise(ExerciseCreateServiceModel model, MultipartFile pictureFile);
 

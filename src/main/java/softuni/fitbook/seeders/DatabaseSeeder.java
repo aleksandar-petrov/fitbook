@@ -42,10 +42,6 @@ public class DatabaseSeeder {
 
         seedRolesTable();
 
-//        for (int i = 0; i < 5; i++) {
-//            seedExercises();
-//        }
-
     }
 
 
@@ -80,6 +76,8 @@ public class DatabaseSeeder {
         List<UserRole> allRoles = this.roleRepository.findAll();
 
         if (allRoles.size() == 0) {
+            UserRole rootAdmin = new UserRole();
+            rootAdmin.setAuthority(Constants.AUTHORITY_ROOT_ADMIN);
             UserRole admin = new UserRole();
             admin.setAuthority(Constants.AUTHORITY_ADMIN);
             UserRole moderator = new UserRole();

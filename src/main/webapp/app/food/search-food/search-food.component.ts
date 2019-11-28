@@ -1,7 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FoodService} from "../food.service";
 import {Food} from "../food.model";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {FoodBindingModel} from "../food-binding.model";
+import {Exercise} from "../../exercise/exercise.model";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-search-food',
@@ -15,12 +18,16 @@ export class SearchFoodComponent implements OnInit {
 
     selectedFoodForModal: Food;
 
+    foodBindingModel: FoodBindingModel;
+    pictureFile: File;
+    @ViewChild('chooseFileLabel', {static: false}) chooseFileLabelRef: ElementRef;
+
     page: number = 1;
     pageSize: number = 6;
     macroNutrientsData: any[];
 
 
-    constructor(private foodService: FoodService, private modalService: NgbModal) {
+    constructor(private foodService: FoodService, private modalService: NgbModal, private router: Router) {
     }
 
     ngOnInit() {
@@ -50,6 +57,7 @@ export class SearchFoodComponent implements OnInit {
 
         this.foodService.fetchFoodDetailsByFoodId(foodId).subscribe((resp: any) => {
             this.selectedFoodForModal = new Food();
+            this.foodBindingModel = new FoodBindingModel();
 
             this.selectedFoodForModal.description = resp.description;
 
@@ -58,23 +66,48 @@ export class SearchFoodComponent implements OnInit {
             for (const foodNutrient of foodNutrients) {
 
                 switch (foodNutrient.nutrient.id) {
-                    case 1003: this.selectedFoodForModal.proteinPerHundred = foodNutrient.amount; break;
-                    case 1005: this.selectedFoodForModal.carbohydratesPerHundred = foodNutrient.amount; break;
-                    case 1004: this.selectedFoodForModal.fatsPerHundred = foodNutrient.amount; break;
+                    case 1003:
+                        this.selectedFoodForModal.proteinPerHundred = Math.round(foodNutrient.amount);
+                        break;
+                    case 1005:
+                        this.selectedFoodForModal.carbohydratesPerHundred = Math.round(foodNutrient.amount);
+                        break;
+                    case 1004:
+                        this.selectedFoodForModal.fatsPerHundred = Math.round(foodNutrient.amount);
+                        break;
                 }
 
             }
 
             this.makeChartDataForMacroNutrients();
 
-            this.selectedFoodForModal.calories = Math.round((4 * this.selectedFoodForModal.proteinPerHundred +
-                4 * this.selectedFoodForModal.carbohydratesPerHundred + 9 * this.selectedFoodForModal.fatsPerHundred) * 100) / 100
+            this.selectedFoodForModal.caloriesPerHundred = Math.round((4 * this.selectedFoodForModal.proteinPerHundred +
+                4 * this.selectedFoodForModal.carbohydratesPerHundred + 9 * this.selectedFoodForModal.fatsPerHundred) * 100) / 100;
 
+
+            this.foodBindingModel = {
+                name: '',
+                description: this.selectedFoodForModal.description,
+                proteinPerHundred: this.selectedFoodForModal.proteinPerHundred,
+                carbohydratesPerHundred: this.selectedFoodForModal.carbohydratesPerHundred,
+                fatsPerHundred: this.selectedFoodForModal.fatsPerHundred
+            }
         });
 
-        this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'}).result.then((result) => {
+        this.modalService.open(content, {
+            ariaLabelledBy: 'modal-basic-title',
+            size: 'lg',
+            windowClass: 'modal-edit'
+        }).result.then((result) => {
         }, (reason) => {
         });
+    }
+
+    handleFileInput(files: FileList) {
+
+        this.pictureFile = files[0];
+        this.chooseFileLabelRef.nativeElement.innerHTML = this.pictureFile.name;
+
     }
 
     makeChartDataForMacroNutrients() {
@@ -92,6 +125,19 @@ export class SearchFoodComponent implements OnInit {
                 "value": this.selectedFoodForModal.fatsPerHundred,
             },
         ]
+    }
+
+    onSubmit() {
+
+        const formData = new FormData();
+        const foodBlob = new Blob([JSON.stringify(this.foodBindingModel)], {type: 'application/json'});
+
+        formData.append('foodBindingModel', foodBlob);
+        formData.append('file', this.pictureFile);
+
+        this.foodService.createFood(formData)
+            .subscribe((food: Food) => {
+                this.router.navigate(['/foods/details/' + food.id])});
     }
 
 }

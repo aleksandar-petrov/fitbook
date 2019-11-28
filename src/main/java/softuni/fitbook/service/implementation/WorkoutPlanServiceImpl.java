@@ -15,6 +15,7 @@ import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanWorkoutServi
 import softuni.fitbook.repository.*;
 import softuni.fitbook.service.WorkoutPlanService;
 import softuni.fitbook.service.WorkoutService;
+import softuni.fitbook.web.errors.exceptions.NotFoundException;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
 
         User user = this.userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException("No such user with given username."));
 
         WorkoutPlan workoutPlan = modelMapper.map(model, WorkoutPlan.class);
 
@@ -67,7 +68,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
 
         User user = this.userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException("No such user with given username."));
 
 
         Workout workout = user.getUserProfile()
@@ -75,14 +76,14 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
                 .stream()
                 .filter(w -> w.getId().equals(workoutId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No such workout with given ID."));
+                .orElseThrow(() -> new NotFoundException("No such workout with given ID."));
 
         WorkoutPlan workoutPlan = user.getUserProfile()
                 .getWorkoutPlans()
                 .stream()
                 .filter(wp -> wp.getId().equals(workoutPlanId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No such workout plan with given ID."));
+                .orElseThrow(() -> new NotFoundException("No such workout plan with given ID."));
 
         WorkoutPlanWorkout workoutPlanWorkout = new WorkoutPlanWorkout();
         workoutPlanWorkout.setOrderIndex(workoutPlan.getWorkouts().size() + 1);
@@ -103,7 +104,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
 
         User user = this.userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException("No such user with given username."));
 
         return user.getUserProfile().getWorkoutPlans()
                 .stream()
@@ -116,20 +117,20 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
 
         User user = this.userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException("No such user with given username."));
 
         WorkoutPlan workoutPlan = user.getUserProfile()
                 .getWorkoutPlans()
                 .stream()
                 .filter(wp -> wp.getId().equals(workoutPlanId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No such workout plan with given ID."));
+                .orElseThrow(() -> new NotFoundException("No such workout plan with given ID."));
 
         WorkoutPlanWorkout workout = workoutPlan.getWorkouts()
                 .stream()
                 .filter(w -> w.getId().equals(workoutId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No such workout with given ID."));
+                .orElseThrow(() -> new NotFoundException("No such workout with given ID."));
 
         workoutPlan.getWorkouts().remove(workout);
 
@@ -145,14 +146,14 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
 
         User user = this.userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException("No such user with given username."));
 
         WorkoutPlan workoutPlan = user.getUserProfile()
                 .getWorkoutPlans()
                 .stream()
                 .filter(wp -> wp.getId().equals(workoutPlanId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No such workout plan with given ID."));
+                .orElseThrow(() -> new NotFoundException("No such workout plan with given ID."));
 
         workoutPlan.getWorkouts().forEach(w -> {
             w.setWorkout(null);
@@ -172,13 +173,13 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
 
         WorkoutPlan oldWorkoutPlan = userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("No such user with given username."))
+                .orElseThrow(() -> new NotFoundException("No such user with given username."))
                 .getUserProfile()
                 .getWorkoutPlans()
                 .stream()
                 .filter(wp -> wp.getId().equals(workoutPlanId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No such workout plan with given ID."));
+                .orElseThrow(() -> new NotFoundException("No such workout plan with given ID."));
 
         WorkoutPlan editedWorkoutPlan = modelMapper.map(model, WorkoutPlan.class);
 
@@ -234,10 +235,10 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
 
         User user = this.userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException("No such user with given username."));
 
         WorkoutPlan workoutPlan = workoutPlanRepository.findById(workoutPlanId)
-                .orElseThrow(() -> new IllegalArgumentException("No such workout plan with given ID."));
+                .orElseThrow(() -> new NotFoundException("No such workout plan with given ID."));
 
         WorkoutPlan copy = new WorkoutPlan();
 
@@ -281,7 +282,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
     public WorkoutPlanServiceModel getWorkoutPlanById(String id) {
         return mapWorkoutPlanToWorkoutPlanServiceModel(workoutPlanRepository
                 .findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No such workout plan with given ID.")));
+                .orElseThrow(() -> new NotFoundException("No such workout plan with given ID.")));
     }
 
 

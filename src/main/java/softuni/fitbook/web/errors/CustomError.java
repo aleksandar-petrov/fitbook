@@ -1,6 +1,7 @@
 package softuni.fitbook.web.errors;
 
 public class CustomError {
+
     private int code;
 
     private String message;

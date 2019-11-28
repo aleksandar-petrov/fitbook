@@ -1,9 +1,7 @@
 package softuni.fitbook.service.implementation;
 
-import com.google.common.base.CaseFormat;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import softuni.fitbook.domain.entities.Exercise;
@@ -12,13 +10,11 @@ import softuni.fitbook.domain.models.service.exercise.ExerciseCreateServiceModel
 import softuni.fitbook.domain.models.service.exercise.ExerciseServiceModel;
 import softuni.fitbook.repository.ExerciseRepository;
 import softuni.fitbook.service.ExerciseService;
-import softuni.fitbook.utils.EnumParser;
-import softuni.fitbook.utils.FileUploader;
-import softuni.fitbook.utils.implementation.FileUploaderImpl;
+import softuni.fitbook.service.EnumParserService;
+import softuni.fitbook.service.FileUploaderService;
 
-import java.io.IOException;
 import java.util.LinkedHashSet;
-import java.util.Optional;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,54 +23,54 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
     private final ModelMapper modelMapper;
-    private final FileUploader fileUploader;
+    private final FileUploaderService fileUploaderService;
 
     @Autowired
-    public ExerciseServiceImpl(ExerciseRepository exerciseRepository, ModelMapper modelMapper, FileUploader fileUploader) {
+    public ExerciseServiceImpl(ExerciseRepository exerciseRepository, ModelMapper modelMapper, FileUploaderService fileUploaderService) {
         this.exerciseRepository = exerciseRepository;
         this.modelMapper = modelMapper;
-        this.fileUploader = fileUploader;
+        this.fileUploaderService = fileUploaderService;
     }
 
     public ExerciseServiceModel getExerciseById(String id) {
 
         Exercise exercise = this.exerciseRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No such exercise found with given ID."));
 
-        return this.getExerciseServiceModelFromExercise(exercise);
+        return getExerciseServiceModelFromExercise(exercise);
     }
 
     @Override
-    public Set<ExerciseServiceModel> getAllExercises() {
-        return this.exerciseRepository.findAll()
+    public List<ExerciseServiceModel> getAllExercises() {
+        return exerciseRepository.findAll()
                 .stream()
                 .map(this::getExerciseServiceModelFromExercise)
-                .collect(Collectors.toCollection(LinkedHashSet::new));
+                .collect(Collectors.toList());
     }
 
     @Override
     public ExerciseServiceModel createExercise(ExerciseCreateServiceModel model, MultipartFile pictureFile) {
 
-        Exercise exercise = this.modelMapper.map(model, Exercise.class);
+        Exercise exercise = modelMapper.map(model, Exercise.class);
 
         exercise.setMajorMuscleGroup(
-                this.getMuscleGroupEnum(model.getMajorMuscleGroup()));
+                getMuscleGroupEnum(model.getMajorMuscleGroup()));
         exercise.setAssistingMuscleGroups(
-                this.getAssistingMuscleGroups(model.getAssistingMuscleGroups()));
+                getAssistingMuscleGroups(model.getAssistingMuscleGroups()));
 
-        exercise = this.exerciseRepository.saveAndFlush(exercise);
+        exercise = exerciseRepository.saveAndFlush(exercise);
 
         exercise.setPictureURL(
-                this.fileUploader.getUploadedFileUrl("exercise", exercise.getId(), pictureFile));
+                fileUploaderService.getUploadedFileUrl("exercise", exercise.getId(), pictureFile));
 
-        this.exerciseRepository.save(exercise);
+        exerciseRepository.save(exercise);
 
 
-        return this.modelMapper.map(exercise, ExerciseServiceModel.class);
+        return modelMapper.map(exercise, ExerciseServiceModel.class);
     }
 
     private Muscle getMuscleGroupEnum(String camelCaseString) {
 
-        return EnumParser.parseStringToEnum(Muscle.class, camelCaseString);
+        return EnumParserService.parseStringToEnum(Muscle.class, camelCaseString);
 
     }
 
@@ -86,14 +82,14 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     public ExerciseServiceModel getExerciseServiceModelFromExercise(Exercise exercise) {
-        ExerciseServiceModel model = this.modelMapper.map(exercise, ExerciseServiceModel.class);
+        ExerciseServiceModel model = modelMapper.map(exercise, ExerciseServiceModel.class);
         String majorMuscleGroup =
-                EnumParser.parseEnumToString(exercise.getMajorMuscleGroup());
+                EnumParserService.parseEnumToString(exercise.getMajorMuscleGroup());
         model.setMajorMuscleGroup(majorMuscleGroup);
 
         Set<String> assistingMuscleGroups = exercise.getAssistingMuscleGroups()
                 .stream()
-                .map(EnumParser::parseEnumToString)
+                .map(EnumParserService::parseEnumToString)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
         model.setAssistingMuscleGroups(assistingMuscleGroups);
 

@@ -3,19 +3,20 @@ package softuni.fitbook.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
-import softuni.fitbook.domain.models.service.FitnessProfileServiceModel;
-import softuni.fitbook.domain.models.service.UserServiceModel;
+import softuni.fitbook.domain.models.service.user.AllUsersUserServiceModel;
+import softuni.fitbook.domain.models.service.user.FitnessProfileServiceModel;
+import softuni.fitbook.domain.models.service.user.UserServiceModel;
 
-import java.util.Set;
+import java.util.List;
 
 public interface UserService extends UserDetailsService {
   boolean createUser(UserServiceModel userServiceModel, MultipartFile file);
 
-  Set<UserServiceModel> getAll();
+  List<AllUsersUserServiceModel> getAll();
 
-  boolean promoteUser(String id);
+  AllUsersUserServiceModel promoteUser(String id);
 
-  boolean demoteUser(String id);
+  AllUsersUserServiceModel demoteUser(String id);
 
   UserServiceModel getById(String id);
 

@@ -1,7 +1,5 @@
 package softuni.fitbook.domain.models.view.user;
 
-import softuni.fitbook.domain.entities.NutritionGoal;
-
 public class UserFitnessProfileViewModel {
     private Integer weight;
     private Integer height;

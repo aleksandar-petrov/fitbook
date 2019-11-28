@@ -24,3 +24,36 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.card-signin.create-food .card-img-left {
+    width: 60%;
+    background: scroll center url('src/main/webapp/assets/static/images/createfoodgif.gif');
+    background-size: cover;
+}
+
+.card-body {
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.macro-container label {
+    position: relative;
+}
+
+.macro-container label::after {
+    content: 'g';
+    display: block;
+    position: absolute;
+    right: -130px;
+    transition: all .05s ease-in-out;
+    z-index: 100;
+}
+
+.card-signin {
+    border-radius: 0;
+}

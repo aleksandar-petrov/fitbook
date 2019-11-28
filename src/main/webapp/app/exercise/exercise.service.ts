@@ -20,16 +20,16 @@ export class ExerciseService {
 
   createExercise(formData: FormData) {
 
-    return this.http.post("http://localhost:8000/exercises/create", formData);
+    return this.http.post("http://localhost:8000/api/exercises/create", formData);
   }
 
 
   fetchAllExercises() {
-    return this.http.get("http://localhost:8000/exercises/all");
+    return this.http.get("http://localhost:8000/api/exercises/all");
   }
 
   getExerciseById(exerciseId: string) {
-    return this.http.get("http://localhost:8000/exercises/details/" + exerciseId);
+    return this.http.get("http://localhost:8000/api/exercises/details/" + exerciseId);
   }
 
   getExercises() {

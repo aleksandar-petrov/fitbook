@@ -4,6 +4,7 @@ import {ExerciseService} from '../exercise.service';
 import {Router} from '@angular/router';
 import {SelectedMuscleGroupsModel} from '../selected-muscle-groups.model';
 import {Title} from '@angular/platform-browser';
+import {Exercise} from "../exercise.model";
 
 @Component({
   selector: 'app-create-exercise',
@@ -72,9 +73,9 @@ export class CreateExerciseComponent implements OnInit {
     formData.append('file', this.pictureFile);
 
     this.exerciseService.createExercise(formData)
-      .subscribe(data => {
+      .subscribe((exercise: Exercise) => {
         this.loading = false;
-        this.router.navigate(['/exercises/all'])});
+        this.router.navigate(['/exercises/details/' + exercise.id])});
 
 
   }

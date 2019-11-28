@@ -10,6 +10,7 @@ import softuni.fitbook.domain.models.service.workout.*;
 import softuni.fitbook.repository.*;
 import softuni.fitbook.service.ExerciseService;
 import softuni.fitbook.service.WorkoutService;
+import softuni.fitbook.web.errors.exceptions.NotFoundException;
 
 import javax.transaction.Transactional;
 import java.util.Comparator;
@@ -46,7 +47,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         Workout workout = modelMapper.map(model, Workout.class);
 
         User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new UsernameNotFoundException("No such user.")
+                () -> new NotFoundException("No such user.")
         );
 
         workout.setUserProfile(user.getUserProfile());
@@ -65,7 +66,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         Optional<Exercise> exerciseOptional = exerciseRepository.findById(model.getExerciseId());
 
         if (exerciseOptional.isEmpty()) {
-            throw new IllegalArgumentException("No such exercise with provided ID.");
+            throw new NotFoundException("No such exercise with provided ID.");
         }
 
         Exercise exercise = exerciseOptional.get();
@@ -77,7 +78,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         Optional<Workout> workoutOptional = workoutRepository.findById(workoutId);
 
         if (workoutOptional.isEmpty()) {
-            throw new IllegalArgumentException("No such workout with provided ID.");
+            throw new NotFoundException("No such workout with provided ID.");
         }
 
         Workout workout = workoutOptional.get();
@@ -95,7 +96,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public List<WorkoutServiceModel> getAllWorkoutsByUsername(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No such user"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("No such user"));
 
 
         return user.getUserProfile().getWorkouts()
@@ -108,13 +109,13 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     @Transactional
     public WorkoutServiceModel deleteWorkoutExerciseFromWorkout(String workoutId, String exerciseId) {
-        Workout workout = this.workoutRepository.findById(workoutId).orElseThrow(() -> new IllegalArgumentException("No such workout with given ID."));
+        Workout workout = this.workoutRepository.findById(workoutId).orElseThrow(() -> new NotFoundException("No such workout with given ID."));
 
         WorkoutExercise workoutExercise = workout.getExercises()
                 .stream()
                 .filter(e -> e.getId().equals(exerciseId))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No such workout exercise with given ID."));
+                .orElseThrow(() -> new NotFoundException("No such workout exercise with given ID."));
 
         workout.getExercises().remove(workoutExercise);
 
@@ -165,7 +166,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         Workout editedWorkout = modelMapper.map(model, Workout.class);
 
-        Workout oldWorkout = workoutRepository.findById(workoutId).orElseThrow(() -> new IllegalArgumentException("No such workout with given ID."));
+        Workout oldWorkout = workoutRepository.findById(workoutId).orElseThrow(() -> new NotFoundException("No such workout with given ID."));
 
 
         List<WorkoutExercise> oldExercises = oldWorkout.getExercises();
@@ -202,9 +203,9 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public WorkoutServiceModel copyWorkoutToLoggedUserWorkouts(String workoutId, String username) {
 
-        User user = this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No such user"));
+        User user = this.userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("No such user"));
 
-        Workout workout = workoutRepository.findById(workoutId).orElseThrow(() -> new IllegalArgumentException("No such workout with given ID."));
+        Workout workout = workoutRepository.findById(workoutId).orElseThrow(() -> new NotFoundException("No such workout with given ID."));
 
         Workout copy = getWorkoutCopy(workout);
         copy.setUserProfile(user.getUserProfile());
@@ -245,14 +246,14 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         return mapWorkoutToWorkoutServiceModel(workoutRepository
                 .findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No such workout with given ID.")));
+                .orElseThrow(() -> new NotFoundException("No such workout with given ID.")));
 
     }
 
     public WorkoutServiceModel mapWorkoutToWorkoutServiceModel(Workout workout) {
 
         WorkoutServiceModel model = modelMapper.map(workout, WorkoutServiceModel.class);
-        CreatorServiceModel creator = modelMapper.map(userRepository.findByUserProfileId(workout.getUserProfile().getId()).orElseThrow(() -> new IllegalArgumentException("No such user with given User Profile ID.")), CreatorServiceModel.class);
+        CreatorServiceModel creator = modelMapper.map(userRepository.findByUserProfileId(workout.getUserProfile().getId()).orElseThrow(() -> new NotFoundException("No such user with given User Profile ID.")), CreatorServiceModel.class);
         model.setCreator(creator);
 
         model.setExercises(workout.getExercises()
