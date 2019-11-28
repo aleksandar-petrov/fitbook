@@ -1,0 +1,77 @@
+<div class="container-fluid">
+
+
+
+
+
+    <div class="jumbotron">
+        <div class="container">
+
+            <img src="assets/static/images/logo.png" height="300px" class="align-center" alt="">
+            <h1 class="display-4">Admin Panel</h1>
+        </div>
+
+
+        <div class="row justify-content-center">
+        </div>
+
+
+        <hr class="my-4">
+        <div class="container justify-content-center pb-0">
+            <ng-template [ngIf]="users.length > 0" [ngIfElse]="noSuchUsers">
+
+
+                <div class="results-container col-10 mx-auto py-2">
+                    <h2 class="font-weight-bold text-center py-4">All Users</h2>
+                    <table class="table table-striped table-hover mb-4">
+                        <thead>
+                        <tr>
+                            <th scope="col" style="width: 10%">Order</th>
+                            <th scope="col" style="width: 50%">Username</th>
+                            <th scope="col" style="width: 40%">Actions</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr *ngFor="let user of users| slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
+                            <td class="align-middle">{{i + 1 + (page - 1) * pageSize}}</td>
+                            <td class="align-middle">{{user.username}}</td>
+                            <td>
+                                <button type="button" *ngIf="user.role !== 'ROLE_ROOT_ADMIN'"
+                                        class="btn btn-success mr-2" (click)="onPromoteHandler(user.id)">
+                                    Promote
+                                </button>
+                                <button type="button" *ngIf="user.role === 'ROLE_ROOT_ADMIN'"
+                                        class="btn btn-success mr-2" style="visibility: hidden">
+                                    Promote
+                                </button>
+                                <button type="button" *ngIf="user.role !== 'ROLE_USER'"
+                                        class="btn btn-danger mr-2" (click)="onDemoteHandler(user.id)">
+                                    Demote
+                                </button>
+                                <button type="button" *ngIf="user.role === 'ROLE_USER'"
+                                        class="btn btn-success mr-2" style="visibility: hidden">
+                                    Demote
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ngb-pagination class="d-inline-block mt-5" [(page)]="page"
+                                [pageSize]="pageSize"
+                                [collectionSize]="users.length"></ngb-pagination>
+            </ng-template>
+
+            <ng-template #noSuchUsers>
+                <h5>There are no foods with given description.</h5>
+            </ng-template>
+
+        </div>
+
+
+    </div>
+
+
+</div>
