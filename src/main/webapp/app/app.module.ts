@@ -38,14 +38,21 @@ import {UserProfileComponent} from './user/user-profile/user-profile.component';
 import {NgxChartsModule, PieChartModule} from "@swimlane/ngx-charts";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {WorkoutDetailsComponent} from './workout/workout-details/workout-details.component';
-import {MyWorkoutPlansComponent} from './workout/my-workout-plans/my-workout-plans.component';
-import {NoSelectedWorkoutPlanComponent} from './workout/my-workout-plans/no-selected-workout-plan/no-selected-workout-plan.component';
-import {SelectedWorkoutPlanComponent} from './workout/my-workout-plans/selected-workout-plan/selected-workout-plan.component';
-import {AllWorkoutPlansComponent} from './workout/all-workout-plans/all-workout-plans.component';
-import {WorkoutPlanDetailsComponent} from './workout/workout-plan-details/workout-plan-details.component';
-import {WorkoutPlanCardComponent} from './workout/workout-plan-card/workout-plan-card.component';
+import {MyWorkoutPlansComponent} from './workoutPlan/my-workout-plans/my-workout-plans.component';
+import {NoSelectedWorkoutPlanComponent} from './workoutPlan/my-workout-plans/no-selected-workout-plan/no-selected-workout-plan.component';
+import {SelectedWorkoutPlanComponent} from './workoutPlan/my-workout-plans/selected-workout-plan/selected-workout-plan.component';
+import {AllWorkoutPlansComponent} from './workoutPlan/all-workout-plans/all-workout-plans.component';
+import {WorkoutPlanDetailsComponent} from './workoutPlan/workout-plan-details/workout-plan-details.component';
+import {WorkoutPlanCardComponent} from './workoutPlan/workout-plan-card/workout-plan-card.component';
 import {SearchFoodComponent} from './food/search-food/search-food.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { FoodDetailsComponent } from './food/food-details/food-details.component';
+import { AllMealsComponent } from './meal/all-meals/all-meals.component';
+import { MyMealsComponent } from './meal/my-meals/my-meals.component';
+import { MealCardComponent } from './meal/meal-card/meal-card.component';
+import { MealDetailsComponent } from './meal/meal-details/meal-details.component';
+import { AllFoodsComponent } from './food/all-foods/all-foods.component';
+import { FoodCardComponent } from './food/food-card/food-card.component';
 
 @NgModule({
     declarations: [
@@ -84,7 +91,14 @@ import { AdminPanelComponent } from './admin-panel/admin-panel.component';
         WorkoutPlanDetailsComponent,
         WorkoutPlanCardComponent,
         SearchFoodComponent,
-        AdminPanelComponent
+        AdminPanelComponent,
+        FoodDetailsComponent,
+        AllMealsComponent,
+        MyMealsComponent,
+        MealCardComponent,
+        MealDetailsComponent,
+        AllFoodsComponent,
+        FoodCardComponent
     ],
     imports: [
         BrowserModule,

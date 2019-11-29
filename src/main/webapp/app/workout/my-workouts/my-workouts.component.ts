@@ -45,7 +45,7 @@ export class MyWorkoutsComponent implements OnInit {
 
   open(content) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.workoutService.createExercise(this.workoutBindingModel)
+      this.workoutService.createWorkout(this.workoutBindingModel)
         .subscribe((workout: Workout) => {
           this.fetchWorkouts();
           this.router.navigate(['my-workouts/' + workout.id])

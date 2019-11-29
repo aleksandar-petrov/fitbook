@@ -137,6 +137,7 @@ export class SearchFoodComponent implements OnInit {
 
         this.foodService.createFood(formData)
             .subscribe((food: Food) => {
+                this.modalService.dismissAll();
                 this.router.navigate(['/foods/details/' + food.id])});
     }
 

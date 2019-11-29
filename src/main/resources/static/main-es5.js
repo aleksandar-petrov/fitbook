@@ -1546,7 +1546,7 @@
                         })
                     };
                 }
-                ExerciseService.prototype.createExercise = function (formData) {
+                ExerciseService.prototype.createWorkout = function (formData) {
                     return this.http.post("http://localhost:8000/exercises/create", formData);
                 };
                 ExerciseService.prototype.fetchAllExercises = function () {
@@ -4202,7 +4202,7 @@
                 function WorkoutService(http) {
                     this.http = http;
                 }
-                WorkoutService.prototype.createExercise = function (workoutCreateModel) {
+                WorkoutService.prototype.createWorkout = function (workoutCreateModel) {
                     return this.http.post('http://localhost:8000/workouts/create', workoutCreateModel);
                 };
                 WorkoutService.prototype.addWorkoutExerciseToWorkout = function (workoutExerciseBindingModel, workoutId) {
@@ -4211,7 +4211,7 @@
                 WorkoutService.prototype.fetchAllPublicWorkouts = function () {
                     return this.http.get('http://localhost:8000/workouts/public/all');
                 };
-                WorkoutService.prototype.fetchPublicWorkoutById = function (id) {
+                WorkoutService.prototype.fetchWorkoutById = function (id) {
                     return this.http.get('http://localhost:8000/workouts/' + id);
                 };
                 WorkoutService.prototype.getLoggedInUserWorkouts = function () {

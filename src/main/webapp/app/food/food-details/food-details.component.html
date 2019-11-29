@@ -1,0 +1,111 @@
+<div class="container-fluid">
+
+    <ng-template #createMealFoodModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Add Food to Meal</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form #createMealFoodForm="ngForm">
+                <h5>{{selectedFood.name}}</h5>
+                <div class="form-row">
+                    <div class="form-group col-3">
+                        <label for="inputServing">Serving</label>
+                        <input type="number" class="form-control" id="inputServing" name="inputServing"
+                               #inputServing="ngModel"
+                               required
+                               pattern="^[1-9][0-9]*"
+                               min="1"
+                               [ngClass]="{'is-valid': inputServing.valid && inputServing.touched,
+                         'is-invalid': inputServing.invalid && inputServing.touched}"
+                               [(ngModel)]="workoutExerciseBindingModel.reps">
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">
+                            Serving should be a positive number.
+                        </div>
+                    </div>
+
+                    <div class="form-group col-6">
+                        <label for="inputStatus">Workout</label>
+                        <select id="inputStatus" name="status" class="form-control" #inputWorkoutId
+                                [(ngModel)]="selectedMealId">
+                            <!--                            <option [ngValue]="meal.id"-->
+                            <!--                                    *ngFor="let meal of userMeals">{{meal.name}}</option>-->
+                        </select>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" [disabled]="createMealFoodForm.invalid" class="btn btn-outline-dark"
+                    (click)="modal.close()">Add to Workout
+            </button>
+        </div>
+    </ng-template>
+
+
+    <div class="jumbotron">
+        <img src="assets/static/images/logo.png" height="300px" class="d-inline-block align-center" alt="">
+        <h1 class="display-4">Food Details</h1>
+        <hr class="my-2"/>
+        <div class="container pt-4">
+            <div class="row">
+                <div class="food-container col-lg-9 mx-auto">
+                    <div class="food-intro mt-4">
+                        <img src="{{selectedFood.pictureUrl}}" height="300px"
+                             class="d-block mx-auto img-thumbnail" alt="Exercise picture">
+                        <h2 class="display-4 d-block mx-auto font-weight-bolder">{{selectedFood.name}}</h2>
+                    </div>
+
+                    <hr class="my-4"/>
+
+                    <div class="description col-12 my-3">
+                        <h4 class="mb-4">{{selectedFood.description}}</h4>
+                    </div>
+
+
+                    <hr/>
+
+                    <h3 class="text-center">Nutrition per 100 g</h3>
+                    <h3 class="text-center font-weight-light">Calories: {{selectedFood.caloriesPerHundred}}</h3>
+                    <div class="chart-container row align-middle">
+                        <ngx-charts-pie-chart
+                                [results]="macroNutrientsData"
+                                [animations]="true"
+                                [trimLabels]="false"
+                                [doughnut]="true"
+                        >
+
+                        </ngx-charts-pie-chart>
+
+                        <div class="macros text-center mx-auto">
+                            <h5 class="font-weight-light ">
+                                Protein: {{this.selectedFood.proteinPerHundred}}g.</h5>
+                            <h5 class="font-weight-light ">
+                                Carbohydrates: {{this.selectedFood.carbohydratesPerHundred}}g.</h5>
+                            <h5 class="font-weight-light ">Fats: {{this.selectedFood.fatsPerHundred}}
+                                g.</h5>
+                            <span class="display-5 opacity-5"><i
+                                    class="fas fa-utensils fa-lg"></i></span>
+                        </div>
+
+                        <div class="buttons col-12 mx-auto p-3">
+                            <button type="button" class="btn btn-sm btn-success" (click)="open(createMealFoodModal)">
+                                Add to meal
+                            </button>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

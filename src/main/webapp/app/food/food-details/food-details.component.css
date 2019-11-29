@@ -1,0 +1,28 @@
+.food-container {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.food-container .food-intro img {
+    border-radius: 40px;
+}
+
+.food-intro img {
+    max-height: 300px;
+}
+
+.calories {
+    background: linear-gradient(348deg, rgba(255, 255, 255, 0.5) 0%, rgba(37, 206, 209, 1) 66%);
+    border-radius: 30px;
+}
+.chart-container {
+    height: 350px;
+    position: relative;
+}
+
+.macros {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

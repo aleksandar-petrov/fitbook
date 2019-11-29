@@ -363,6 +363,7 @@
                                         <label for="youtubeVideoUrl">YouTube Video URL</label>
                                         <input type="url" class="form-control is-valid" id="youtubeVideoUrl"
                                                name="youtubeVideoUrl" #youtubeVideoUrl="ngModel"
+                                               required
                                                placeholder="Enter YouTube Video URL"
                                                pattern="http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?[\w\?‌​=]*)?"
                                                [ngClass]="{'is-valid': youtubeVideoUrl.valid && youtubeVideoUrl.touched,

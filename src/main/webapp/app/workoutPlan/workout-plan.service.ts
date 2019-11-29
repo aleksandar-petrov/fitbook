@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {WorkoutBindingModel} from './workout-binding-model';
+import {WorkoutBindingModel} from '../workout/workout-binding-model';
 import {WorkoutExerciseBindingModel} from '../exercise/all-exercises/workout-exercise-binding.model';
-import {Workout} from "./workout.model";
+import {Workout} from "../workout/workout.model";
 import {WorkoutPlanBindingModel} from "./workout-plan-binding-model";
 import {WorkoutPlan} from "./workout-plan.model";
 

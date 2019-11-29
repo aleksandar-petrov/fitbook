@@ -1,4 +1,4 @@
-import {Creator} from "./creator-model";
+import {Creator} from "../creator-model";
 import {WorkoutPlanWorkout} from "./workout-plan-workout.model";
 
 export class WorkoutPlan {

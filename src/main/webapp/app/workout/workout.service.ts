@@ -15,7 +15,7 @@ export class WorkoutService {
 
     }
 
-    createExercise(workoutCreateModel: WorkoutBindingModel) {
+    createWorkout(workoutCreateModel: WorkoutBindingModel) {
 
         return this.http.post('http://localhost:8000/api/workouts/create', workoutCreateModel);
     }
@@ -31,7 +31,7 @@ export class WorkoutService {
         return this.http.get('http://localhost:8000/api/workouts/public/all');
     }
 
-    fetchPublicWorkoutById(id: string) {
+    fetchWorkoutById(id: string) {
 
         return this.http.get('http://localhost:8000/api/workouts/' + id);
     }

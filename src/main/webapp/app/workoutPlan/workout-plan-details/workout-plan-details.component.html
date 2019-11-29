@@ -96,32 +96,38 @@
                         </tbody>
                     </table>
 
-                    <h3 class="mx-auto font-weight-light">Sets per Muscle Group</h3>
+                    <ng-template [ngIf]="workoutPlan.workouts && workoutPlan.workouts.length">
 
-                    <div class="chart-container row align-middle my-4">
-                        <ngx-charts-bar-horizontal
-                                [view]="[800, exercisesSets.length < 8 ? 250 : 500]"
-                                [animations]="true"
-                                [xAxis]="true"
-                                [yAxis]="true"
-                                [results]="exercisesSets"
-                                legendTitle="Muscle Groups"
-                                [legend]="true"
-                                [showDataLabel]="false"
-                                [showXAxisLabel]="false"
-                                [showGridLines]="true"
-                                [showYAxisLabel]="false"
-                                [gradient]="true"
-                                [noBarWhenZero]="true"
-                                [roundDomains]="true"
-                                [roundEdges]="true"
-                                [tooltipDisabled]="false"
-                                [trimYAxisTicks]="false"
-                                [customColors]="customColors"
-                        >
+                        <h3 class="mx-auto font-weight-light">Sets per Muscle Group</h3>
 
-                        </ngx-charts-bar-horizontal>
-                    </div>
+                        <div class="chart-container row align-middle my-4">
+                            <ngx-charts-bar-horizontal
+                                    [view]="[800, exercisesSets.length < 8 ? 250 : 500]"
+                                    [animations]="true"
+                                    [xAxis]="true"
+                                    [yAxis]="true"
+                                    [results]="exercisesSets"
+                                    legendTitle="Muscle Groups"
+                                    [legend]="true"
+                                    [showDataLabel]="false"
+                                    [showXAxisLabel]="false"
+                                    [showGridLines]="true"
+                                    [showYAxisLabel]="false"
+                                    [gradient]="true"
+                                    [noBarWhenZero]="true"
+                                    [roundDomains]="true"
+                                    [roundEdges]="true"
+                                    [tooltipDisabled]="false"
+                                    [trimYAxisTicks]="false"
+                                    [customColors]="customColors"
+                            >
+
+                            </ngx-charts-bar-horizontal>
+
+                        </div>
+                    </ng-template>
+
+                    <h3 *ngIf="workoutPlan && !workoutPlan.workouts.length">No added workouts.</h3>
 
                     <div class="buttons col-12 mx-auto p-3">
                         <button type="button" class="btn btn-sm btn-success" (click)="open(copyWorkoutModal)">

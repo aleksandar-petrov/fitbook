@@ -38,7 +38,7 @@ export class WorkoutDetailsComponent implements OnInit {
     }
 
     fetchWorkoutDetails(): void {
-        this.workoutService.fetchPublicWorkoutById(this.workoutId).subscribe((workout: Workout) => {
+        this.workoutService.fetchWorkoutById(this.workoutId).subscribe((workout: Workout) => {
             if (workout) {
                 this.workout = workout;
                 console.log(workout);

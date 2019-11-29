@@ -57,10 +57,10 @@
 
     <div class="collapse navbar-collapse " id="navbar-list-4">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item" routerLinkActive="active">
+        <li class="nav-item" routerLinkActive="active" *ngIf="userRole !== 'ROLE_USER'">
           <a class="nav-link" routerLink="/exercises/create">Create Exercise</a>
         </li>
-        <li class="nav-item" routerLinkActive="active">
+        <li class="nav-item" routerLinkActive="active" *ngIf="userRole === 'ROLE_ADMIN' || userRole === 'ROLE_ROOT_ADMIN'">
           <a class="nav-link" routerLink="/admin-panel">Admin Panel</a>
         </li>
         <li class="nav-item dropdown dropleft" dropdown>

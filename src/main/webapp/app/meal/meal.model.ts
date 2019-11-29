@@ -1,10 +1,10 @@
-import {WorkoutExercise} from "./workout-exercise.model";
 import {Creator} from "../creator-model";
+import {MealFood} from "./meal-food.model";
 
-export class Workout {
+export class Meal {
     id: string;
     name: string;
-    exercises: WorkoutExercise[];
+    foods: MealFood[];
     isPublic: boolean;
     creator: Creator;
     isCopied: boolean;

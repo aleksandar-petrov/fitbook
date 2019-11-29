@@ -21,6 +21,10 @@ public class UserProfile extends BaseEntity {
 
     private List<WorkoutPlan> workoutPlans;
 
+    private List<Meal> meals;
+
+    private List<DietPlan> dietPlans;
+
     @Column(name = "first_name")
     public String getFirstName() {
         return firstName;
@@ -91,5 +95,31 @@ public class UserProfile extends BaseEntity {
 
     public void setWorkoutPlans(List<WorkoutPlan> workoutPlans) {
         this.workoutPlans = workoutPlans;
+    }
+
+    @OneToMany(
+            mappedBy = "userProfile",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    public List<Meal> getMeals() {
+        return meals;
+    }
+
+    public void setMeals(List<Meal> meals) {
+        this.meals = meals;
+    }
+
+    @OneToMany(
+            mappedBy = "userProfile",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    public List<DietPlan> getDietPlans() {
+        return dietPlans;
+    }
+
+    public void setDietPlans(List<DietPlan> dietPlans) {
+        this.dietPlans = dietPlans;
     }
 }

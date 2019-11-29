@@ -8,132 +8,116 @@ import {UserAuthModel} from './user-auth.model';
 import {SigninBindingModel} from '../user/signin/signin-binding.model';
 
 export interface AuthResponseData {
-  kind: string;
-  idToken: string;
-  email: string;
-  refreshToken: string;
-  expiresIn: string;
-  localId: string;
-  registered?: boolean;
+    kind: string;
+    idToken: string;
+    email: string;
+    refreshToken: string;
+    expiresIn: string;
+    localId: string;
+    registered?: boolean;
 }
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-  user = new BehaviorSubject<UserAuthModel>(null);
-  private tokenExpirationTimer: any;
+    user = new BehaviorSubject<UserAuthModel>(null);
+    private tokenExpirationTimer: any;
 
-  constructor(private http: HttpClient, private router: Router) {
-  }
-
-  register(formData: FormData) {
-
-    return this.http.post("http://localhost:8000/api/users/register", formData);
-  }
-
-  signin(signinBindingModel: SigninBindingModel) {
-
-    const headers = new HttpHeaders({
-      'Content-Type':  'application/json',
-    });
-
-    return this.http.post("http://localhost:8000/api/users/signin", signinBindingModel, {headers: headers, observe: "response"});
-  }
-
-
-
-  autoLogin() {
-    const userData: {
-      userId: string,
-      role: string,
-      rememberMe: boolean,
-      _token: string;
-      _tokenExpirationDate: string;
-    } = JSON.parse(localStorage.getItem('userData'));
-    if (!userData) {
-      return;
+    constructor(private http: HttpClient, private router: Router) {
     }
 
-    if (!userData.rememberMe) {
-        this.logout();
-        return;
+    register(formData: FormData) {
+
+        return this.http.post("http://localhost:8000/api/users/register", formData);
     }
 
-    const loadedUser = new UserAuthModel(
-      userData.userId,
-      userData.role,
-      userData.rememberMe,
-      userData._token,
-      new Date(userData._tokenExpirationDate)
-    );
+    signin(signinBindingModel: SigninBindingModel) {
 
-    if (loadedUser.token) {
-      this.user.next(loadedUser);
-      const expirationDuration =
-        new Date(userData._tokenExpirationDate).getTime() -
-        new Date().getTime();
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+        });
 
-      if (new Date(userData._tokenExpirationDate) < new Date()) {
-        this.logout();
-        return;
-      }
-
-      this.autoLogout(expirationDuration);
+        return this.http.post("http://localhost:8000/api/users/signin", signinBindingModel, {
+            headers: headers,
+            observe: "response"
+        });
     }
-  }
 
-  logout() {
-    this.user.next(null);
-    this.router.navigate(['/']);
-    localStorage.removeItem('userData');
-    if (this.tokenExpirationTimer) {
-      clearTimeout(this.tokenExpirationTimer);
+
+    autoLogin() {
+        const userData: {
+            userId: string,
+            rememberMe: boolean,
+            _token: string;
+            _tokenExpirationDate: string;
+        } = JSON.parse(localStorage.getItem('userData'));
+        if (!userData) {
+            return;
+        }
+
+        if (!userData.rememberMe) {
+            this.logout();
+            return;
+        }
+
+        const loadedUser = new UserAuthModel(
+            userData.userId,
+            JSON.parse(atob((userData._token.replace('Bearer: ', '').split('.')[1]))).role,
+            userData.rememberMe,
+            userData._token,
+            new Date(userData._tokenExpirationDate)
+        );
+
+        if (loadedUser.token) {
+            this.user.next(loadedUser);
+            const expirationDuration = 863940000;
+
+            if (new Date(userData._tokenExpirationDate) < new Date()) {
+                this.logout();
+                return;
+            }
+
+            this.autoLogout(expirationDuration);
+        }
     }
-    this.tokenExpirationTimer = null;
-  }
 
-  autoLogout(expirationDuration: number) {
-    this.tokenExpirationTimer = setTimeout(() => {
-      this.logout();
-    }, expirationDuration);
-  }
+    logout() {
+        this.user.next(null);
+        this.router.navigate(['/']);
+        localStorage.removeItem('userData');
+        if (this.tokenExpirationTimer) {
+            clearTimeout(this.tokenExpirationTimer);
+        }
+        this.tokenExpirationTimer = null;
+    }
 
-
-  public handleAuthentication(token: string, rememberMe: boolean) {
-
-
-    const payload = JSON.parse(atob((token.replace('Bearer: ', '').split('.')[1])));
-    const firstName = payload.firstName;
-    const userId = payload.userId;
-    const userRole = payload.role;
-    const tokenExpiresInMS = payload.exp;
-    const pictureUrl = payload.profilePictureUrl;
-
-    const expirationDate = new Date(new Date().getTime() + tokenExpiresInMS);
+    autoLogout(expirationDuration: number) {
+        this.tokenExpirationTimer = setTimeout(() => {
+            this.logout();
+        }, expirationDuration);
+    }
 
 
-    const user = new UserAuthModel(userId, userRole, rememberMe, token, expirationDate);
-    this.user.next(user);
-    this.autoLogout(tokenExpiresInMS);
-    localStorage.setItem('userData', JSON.stringify(user));
-  }
+    public handleAuthentication(token: string, rememberMe: boolean) {
 
 
-  // private handleError(errorRes: HttpErrorResponse) {
-  //   let errorMessage = 'An unknown error occurred!';
-  //   if (!errorRes.error || !errorRes.error.error) {
-  //     return throwError(errorMessage);
-  //   }
-  //   switch (errorRes.error.error.message) {
-  //     case 'EMAIL_EXISTS':
-  //       errorMessage = 'This email exists already';
-  //       break;
-  //     case 'EMAIL_NOT_FOUND':
-  //       errorMessage = 'This email does not exist.';
-  //       break;
-  //     case 'INVALID_PASSWORD':
-  //       errorMessage = 'This password is not correct.';
-  //       break;
-  //   }
-  //   return throwError(errorMessage);
-  // }
+        const payload = JSON.parse(atob((token.replace('Bearer: ', '').split('.')[1])));
+        const firstName = payload.firstName;
+        const userId = payload.userId;
+        const userRole = payload.role;
+        const tokenExpiresInMS = payload.exp;
+
+        const expirationDate = new Date(new Date().getTime() + 863940000);
+
+
+        const user = new UserAuthModel(userId, userRole, rememberMe, token, expirationDate);
+        this.user.next(user);
+        this.autoLogout(tokenExpiresInMS);
+
+        const localStorageUser = {...user};
+        delete localStorageUser.role;
+
+        localStorage.setItem('userData', JSON.stringify(localStorageUser));
+    }
+
+
 }

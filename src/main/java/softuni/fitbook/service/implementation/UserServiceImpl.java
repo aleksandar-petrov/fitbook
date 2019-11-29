@@ -1,5 +1,6 @@
 package softuni.fitbook.service.implementation;
 
+import com.google.common.base.CaseFormat;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -106,7 +107,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<AllUsersUserServiceModel> getAll() {
         return this.userRepository
-                .findAll()
+                .findAllByOrderByUsername()
                 .stream()
                 .map(this::mapUserToAllUsersUserServiceModel)
                 .collect(Collectors.toList());
@@ -371,11 +372,14 @@ public class UserServiceImpl implements UserService {
         return calories;
     }
 
-    public String extractAuthority(Set<UserRole> authorities) {
-        return authorities
+    private String extractAuthority(Set<UserRole> authorities) {
+        String authority = authorities
                 .stream()
                 .findFirst()
                 .orElse(null)
                 .getAuthority();
+
+        return CaseFormat.UPPER_UNDERSCORE.to(
+                CaseFormat.LOWER_CAMEL, authority);
     }
 }

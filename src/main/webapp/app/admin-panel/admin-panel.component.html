@@ -1,9 +1,6 @@
 <div class="container-fluid">
 
 
-
-
-
     <div class="jumbotron">
         <div class="container">
 
@@ -27,7 +24,8 @@
                         <thead>
                         <tr>
                             <th scope="col" style="width: 10%">Order</th>
-                            <th scope="col" style="width: 50%">Username</th>
+                            <th scope="col" style="width: 25%">Username</th>
+                            <th scope="col" style="width: 25%">Role</th>
                             <th scope="col" style="width: 40%">Actions</th>
 
                         </tr>
@@ -37,23 +35,26 @@
                         <tr *ngFor="let user of users| slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
                             <td class="align-middle">{{i + 1 + (page - 1) * pageSize}}</td>
                             <td class="align-middle">{{user.username}}</td>
+                            <td class="align-middle">{{(user.role | getConstantViewName | slice:4)}}</td>
                             <td>
-                                <button type="button" *ngIf="user.role !== 'ROLE_ROOT_ADMIN'"
-                                        class="btn btn-success mr-2" (click)="onPromoteHandler(user.id)">
-                                    Promote
-                                </button>
-                                <button type="button" *ngIf="user.role === 'ROLE_ROOT_ADMIN'"
-                                        class="btn btn-success mr-2" style="visibility: hidden">
-                                    Promote
-                                </button>
-                                <button type="button" *ngIf="user.role !== 'ROLE_USER'"
-                                        class="btn btn-danger mr-2" (click)="onDemoteHandler(user.id)">
-                                    Demote
-                                </button>
-                                <button type="button" *ngIf="user.role === 'ROLE_USER'"
-                                        class="btn btn-success mr-2" style="visibility: hidden">
-                                    Demote
-                                </button>
+                                <ng-template [ngIf]="user.role !== 'roleRootAdmin'">
+                                    <button type="button" *ngIf="user.role !== 'roleAdmin'"
+                                            class="btn btn-success mr-2" (click)="onPromoteHandler(user.id)">
+                                        Promote
+                                    </button>
+                                    <button type="button" *ngIf="user.role === 'roleAdmin'"
+                                            class="btn btn-success mr-2" style="visibility: hidden">
+                                        Promote
+                                    </button>
+                                    <button type="button" *ngIf="user.role !== 'roleUser'"
+                                            class="btn btn-danger mr-2" (click)="onDemoteHandler(user.id)">
+                                        Demote
+                                    </button>
+                                    <button type="button" *ngIf="user.role === 'roleUser'"
+                                            class="btn btn-success mr-2" style="visibility: hidden">
+                                        Demote
+                                    </button>
+                                </ng-template>
                             </td>
                         </tr>
                         </tbody>

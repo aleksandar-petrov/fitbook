@@ -15,13 +15,14 @@ import {EditSelectedWorkoutComponent} from "./workout/my-workouts/edit-selected-
 import {AllWorkoutsComponent} from "./workout/all-workouts/all-workouts.component";
 import {UserProfileComponent} from "./user/user-profile/user-profile.component";
 import {WorkoutDetailsComponent} from "./workout/workout-details/workout-details.component";
-import {MyWorkoutPlansComponent} from "./workout/my-workout-plans/my-workout-plans.component";
-import {NoSelectedWorkoutPlanComponent} from "./workout/my-workout-plans/no-selected-workout-plan/no-selected-workout-plan.component";
-import {SelectedWorkoutPlanComponent} from "./workout/my-workout-plans/selected-workout-plan/selected-workout-plan.component";
-import {AllWorkoutPlansComponent} from "./workout/all-workout-plans/all-workout-plans.component";
-import {WorkoutPlanDetailsComponent} from "./workout/workout-plan-details/workout-plan-details.component";
+import {MyWorkoutPlansComponent} from "./workoutPlan/my-workout-plans/my-workout-plans.component";
+import {NoSelectedWorkoutPlanComponent} from "./workoutPlan/my-workout-plans/no-selected-workout-plan/no-selected-workout-plan.component";
+import {SelectedWorkoutPlanComponent} from "./workoutPlan/my-workout-plans/selected-workout-plan/selected-workout-plan.component";
+import {AllWorkoutPlansComponent} from "./workoutPlan/all-workout-plans/all-workout-plans.component";
+import {WorkoutPlanDetailsComponent} from "./workoutPlan/workout-plan-details/workout-plan-details.component";
 import {SearchFoodComponent} from "./food/search-food/search-food.component";
 import {AdminPanelComponent} from "./admin-panel/admin-panel.component";
+import {FoodDetailsComponent} from "./food/food-details/food-details.component";
 
 
 const appRoutes: Routes = [
@@ -49,12 +50,13 @@ const appRoutes: Routes = [
     {path: 'workout-plans/all', component: AllWorkoutPlansComponent},
     {path: 'workout-plans/details/:id', component: WorkoutPlanDetailsComponent},
     {path: 'foods/create', component: SearchFoodComponent},
+    {path: 'foods/details/:id', component: FoodDetailsComponent},
     {path: 'profile/:username', component: UserProfileComponent},
     {path: 'admin-panel', component: AdminPanelComponent}
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(appRoutes)],
+    imports: [RouterModule.forRoot(appRoutes, {scrollPositionRestoration: 'enabled'})],
     exports: [RouterModule]
 })
 export class AppRoutingModule {
