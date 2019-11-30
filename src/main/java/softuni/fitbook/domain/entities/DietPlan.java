@@ -36,7 +36,7 @@ public class DietPlan extends BaseEntity {
         return meals;
     }
 
-    public void setWorkouts(List<DietPlanMeal> meals) {
+    public void setMeals(List<DietPlanMeal> meals) {
         this.meals = meals;
     }
 

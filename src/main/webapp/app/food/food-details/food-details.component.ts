@@ -3,11 +3,12 @@ import {Exercise} from "../../exercise/exercise.model";
 import {WorkoutExerciseBindingModel} from "../../exercise/all-exercises/workout-exercise-binding.model";
 import {Workout} from "../../workout/workout.model";
 import {ExerciseService} from "../../exercise/exercise.service";
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Params, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {WorkoutService} from "../../workout/workout.service";
 import {FoodService} from "../food.service";
 import {Food} from "../food.model";
+import {MealFoodBindingModel} from "../../meal/meal-food-binding-model";
 
 @Component({
   selector: 'app-food-details',
@@ -19,7 +20,7 @@ export class FoodDetailsComponent implements OnInit {
   selectedFood: Food;
   macroNutrientsData: any[];
 
-  // mealFoodBindingModel: MealFoodBindingModel;
+  mealFoodBindingModel: MealFoodBindingModel;
   // userMeals: Meal[];
   selectedMealId: string;
 
@@ -31,6 +32,13 @@ export class FoodDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+      window.scrollTo(0, 0)
+    });
 
     this.selectedFood = new Food();
     // this.mealFoodBindingModel = new MealFoodBindingModel();

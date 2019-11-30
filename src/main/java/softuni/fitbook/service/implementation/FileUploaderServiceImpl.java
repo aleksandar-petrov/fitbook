@@ -5,6 +5,7 @@ import com.cloudinary.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import softuni.fitbook.service.FileUploaderService;
+import softuni.fitbook.web.errors.exceptions.UploadFailException;
 
 import java.io.IOException;
 import java.util.Map;
@@ -30,6 +31,8 @@ public class FileUploaderServiceImpl implements FileUploaderService {
         try {
             uploadResult = cloudinary.uploader().upload(file.getBytes(), params);
         } catch (IOException e) {
+
+            throw new UploadFailException(String.format("Error occurred while uploading image with name %s in %s folder.", fileName, folderName));
         }
 
         System.out.println();

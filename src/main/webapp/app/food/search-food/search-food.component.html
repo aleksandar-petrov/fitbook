@@ -53,7 +53,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h5 class="card-title text-center">Food Form</h5>
-                <form class="form-signin" #createFoodForm = "ngForm">
+                <form class="form-signin" #createFoodForm="ngForm">
 
 
                     <div class="form-label-group">
@@ -61,14 +61,15 @@
                         <div class="form-label-group">
                             <label for="inputFoodName">Food name</label>
                             <input type="text" id="inputFoodName" class="form-control"
-                                   placeholder="Food name"  name="foodName"
+                                   placeholder="Food name" name="foodName"
                                    [(ngModel)]="foodBindingModel.name"
                                    required>
                         </div>
 
                         <div class="form-label-group">
                             <label for="inputFoodName">Food description</label>
-                            <textarea class="form-control" id="textarea" rows="4" required wrap="hard" [value]="selectedFoodForModal.description"
+                            <textarea class="form-control" id="textarea" rows="4" required wrap="hard"
+                                      [value]="selectedFoodForModal.description"
                                       placeholder="Food description"
                                       [(ngModel)]="foodBindingModel.description"
                                       name="foodDescription"></textarea>
@@ -154,18 +155,19 @@
 
                         </div>
                         <div class="col-lg-9">
-                            <form #searchForm="ngForm"></form>
-                            <input class="form-control form-control-lg form-control-borderless" id="searchInput"
-                                   type="search"
-                                   placeholder="Enter food name"
-                                   #inputSearch="ngModel"
-                                   name="foodName"
-                                   required
-                                   [ngClass]="{'is-valid': inputSearch.valid && inputSearch.touched, 'is-invalid': inputSearch.invalid && inputSearch.touched}"
-                                   [(ngModel)]="searchFoodName">
+                            <form #searchForm="ngForm">
+                                <input class="form-control form-control-lg form-control-borderless" id="searchInput"
+                                       type="search"
+                                       placeholder="Enter food name. E.g. boiled egg."
+                                       #inputSearch="ngModel"
+                                       name="foodName"
+                                       required
+                                       [ngClass]="{'is-valid': inputSearch.valid && inputSearch.touched, 'is-invalid': inputSearch.invalid && inputSearch.touched}"
+                                       [(ngModel)]="searchFoodName">
+                            </form>
                         </div>
                         <div class="col-lg-2">
-                            <button class="btn btn-lg btn-success" [disabled]="searchForm.invalid" type="submit"
+                            <button class="btn btn-lg btn-success" [disabled]="!inputSearch.touched" type="submit"
                                     (click)="onSearchHandler()">Search
                             </button>
                         </div>
@@ -202,7 +204,8 @@
                                     Nutrition Info
                                 </button>
                                 <button type="button"
-                                        class="btn btn-primary mr-2" (click)="open(createFoodModal, food.id)">Create Food
+                                        class="btn btn-primary mr-2" (click)="open(createFoodModal, food.id)">Create
+                                    Food
                                 </button>
                             </td>
                         </tr>

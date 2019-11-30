@@ -5,7 +5,7 @@ public class FoodServiceModel {
     private String id;
     private String name;
     private String description;
-    private String pictureUrl;
+    private String pictureURL;
     private Integer proteinPerHundred;
     private Integer carbohydratesPerHundred;
     private Integer fatsPerHundred;
@@ -38,12 +38,12 @@ public class FoodServiceModel {
         this.description = description;
     }
 
-    public String getPictureUrl() {
-        return pictureUrl;
+    public String getPictureURL() {
+        return pictureURL;
     }
 
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
+    public void setPictureURL(String pictureURL) {
+        this.pictureURL = pictureURL;
     }
 
     public Integer getProteinPerHundred() {

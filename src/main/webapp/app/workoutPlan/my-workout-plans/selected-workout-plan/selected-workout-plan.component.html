@@ -202,8 +202,13 @@
     <div class="workout-actions" *ngIf="!editMode">
 
         <button *ngIf="selectedWorkoutPlan.workouts && selectedWorkoutPlan.workouts.length" type="button"
-                class="btn btn-secondary my-3 mx-2" (click)="open(showWorkoutsSetsModal)">Show Sets per Muscle Group
+                class="btn btn-info my-3 mx-2" (click)="exportToExcelHandler()">Export to Excel
         </button>
+
+        <button *ngIf="selectedWorkoutPlan.workouts && selectedWorkoutPlan.workouts.length" type="button"
+                class="btn btn-secondary my-3 mx-2" (click)="open(showWorkoutsSetsModal)">Sets per Muscle Group
+        </button>
+
 
         <button type="link" class="btn btn-primary my-3 mx-2"
                 (click)="openAddWorkoutModal(addWorkoutToWorkoutPlanModal)">Add Workout
@@ -220,7 +225,7 @@
 
 
     <div class="workout-actions-edit" *ngIf="editMode">
-        <button type="link" [disabled]="editForm.invalid" class="btn btn-success my-3 mx-2" (click)="onSaveHandler()">
+        <button type="link" class="btn btn-success my-3 mx-2" (click)="onSaveHandler()">
             Save
         </button>
         <button type="link" class="btn btn-danger my-3 mx-2" routerLink="./">Cancel</button>

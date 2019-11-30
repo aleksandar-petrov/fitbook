@@ -2,7 +2,7 @@ export class Food {
   id: string;
   name: string;
   description: string;
-  pictureUrl: string;
+  pictureURL: string;
   proteinPerHundred: number;
   carbohydratesPerHundred: number;
   fatsPerHundred: number;
@@ -11,6 +11,6 @@ export class Food {
   constructor() {
     this.name = '';
     this.description = '';
-    this.pictureUrl = '';
+    this.pictureURL = '';
   }
 }

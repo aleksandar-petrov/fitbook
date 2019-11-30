@@ -11,15 +11,15 @@ public interface WorkoutService {
 
   WorkoutServiceModel createWorkout(WorkoutCreateServiceModel model, String username);
 
-  WorkoutServiceModel addWorkoutExerciseToWorkout(WorkoutExerciseCreateServiceModel model, String workoutId);
+  WorkoutServiceModel addWorkoutExerciseToWorkout(WorkoutExerciseCreateServiceModel model, String workoutId, String username);
 
   List<WorkoutServiceModel> getAllWorkoutsByUsername(String username);
 
-    WorkoutServiceModel deleteWorkoutExerciseFromWorkout(String workoutId, String exerciseId);
+    WorkoutServiceModel deleteWorkoutExerciseFromWorkout(String workoutId, String exerciseId, String username);
 
-  void deleteWorkoutById(String workoutId);
+  void deleteWorkoutById(String workoutId, String username);
 
-    WorkoutServiceModel editWorkoutById(String workoutId, WorkoutServiceModel model);
+    WorkoutServiceModel editWorkoutById(String workoutId, WorkoutServiceModel model, String username);
 
     List<WorkoutServiceModel> getAllPublicWorkouts();
 

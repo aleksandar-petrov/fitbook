@@ -228,4 +228,17 @@ export class SelectedWorkoutPlanComponent implements OnInit {
     setSelectedWorkoutForModal() {
         this.selectedWorkoutForModal = this.loggedUserWorkouts.filter(w => w.id === this.selectedWorkoutIdForModal)[0];
     }
+
+
+    exportToExcelHandler() {
+
+        this.workoutPlanService.exportWorkoutPlanToExcel(this.selectedWorkoutPlan.id).subscribe( (blob: Blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const anchor = document.createElement("a");
+            anchor.download = this.selectedWorkoutPlan.name.replace(/\s+/g, '-').toLowerCase() + '.xlsx';
+            anchor.href = url;
+            anchor.click();
+
+        })
+    }
 }

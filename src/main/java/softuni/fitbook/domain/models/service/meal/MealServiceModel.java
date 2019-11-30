@@ -1,26 +1,34 @@
-package softuni.fitbook.domain.entities;
+package softuni.fitbook.domain.models.service.meal;
 
-import javax.persistence.*;
+import softuni.fitbook.domain.models.service.CreatorServiceModel;
+
 import java.util.List;
 
-@Entity
-@Table(name = "meals")
-public class Meal extends BaseEntity {
+public class MealServiceModel {
 
+    private String id;
     private String name;
     private Boolean isPublic;
-    private List<MealFood> foods;
-    private UserProfile userProfile;
+    private List<MealFoodServiceModel> foods;
     private Boolean isCopied;
+    private CreatorServiceModel creator;
     private Integer totalProtein;
     private Integer totalCarbohydrates;
     private Integer totalFats;
     private Integer totalCalories;
 
-    public Meal() {
+
+    public MealServiceModel() {
     }
 
-    @Column(name = "name")
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -29,45 +37,39 @@ public class Meal extends BaseEntity {
         this.name = name;
     }
 
-    @Column(name = "is_public")
     public Boolean getIsPublic() {
         return isPublic;
     }
 
-    public void setIsPublic(Boolean aPublic) {
-        isPublic = aPublic;
+    public void setPublic(Boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "meal_id", referencedColumnName = "id")
-    public List<MealFood> getFoods() {
+    public List<MealFoodServiceModel> getFoods() {
         return foods;
     }
 
-    public void setFoods(List<MealFood> foods) {
+    public void setFoods(List<MealFoodServiceModel> foods) {
         this.foods = foods;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_profile_id", referencedColumnName = "id")
-    public UserProfile getUserProfile() {
-        return userProfile;
-    }
-
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
-    }
-
-    @Column(name = "is_copied")
     public Boolean getIsCopied() {
         return isCopied;
     }
 
-    public void setIsCopied(Boolean isCopied) {
-        this.isCopied = isCopied;
+    public void setIsCopied(Boolean copied) {
+        isCopied = copied;
     }
 
-    @Column(name = "total_protein")
+
+    public CreatorServiceModel getCreator() {
+        return creator;
+    }
+
+    public void setCreator(CreatorServiceModel creator) {
+        this.creator = creator;
+    }
+
     public Integer getTotalProtein() {
         return totalProtein;
     }
@@ -76,7 +78,6 @@ public class Meal extends BaseEntity {
         this.totalProtein = totalProtein;
     }
 
-    @Column(name = "total_carbohydrates")
     public Integer getTotalCarbohydrates() {
         return totalCarbohydrates;
     }
@@ -85,7 +86,6 @@ public class Meal extends BaseEntity {
         this.totalCarbohydrates = totalCarbohydrates;
     }
 
-    @Column(name = "total_fats")
     public Integer getTotalFats() {
         return totalFats;
     }
@@ -94,7 +94,6 @@ public class Meal extends BaseEntity {
         this.totalFats = totalFats;
     }
 
-    @Column(name = "total_calories")
     public Integer getTotalCalories() {
         return totalCalories;
     }

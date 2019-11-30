@@ -47,7 +47,7 @@ public class FoodServiceImpl implements FoodService {
 
         foodRepository.saveAndFlush(food);
 
-        food.setPictureUrl(fileUploaderService.getUploadedFileUrl("food", food.getId(), pictureFile));
+        food.setPictureURL(fileUploaderService.getUploadedFileUrl("food", food.getId(), pictureFile));
 
         food = foodRepository.save(food);
 

@@ -10,7 +10,7 @@ public class Food extends BaseEntity {
 
     private String name;
     private String description;
-    private String pictureUrl;
+    private String pictureURL;
     private Integer proteinPerHundred;
     private Integer carbohydratesPerHundred;
     private Integer fatsPerHundred;
@@ -36,12 +36,12 @@ public class Food extends BaseEntity {
     }
 
     @Column(name = "picture_url")
-    public String getPictureUrl() {
-        return pictureUrl;
+    public String getPictureURL() {
+        return pictureURL;
     }
 
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
+    public void setPictureURL(String pictureURL) {
+        this.pictureURL = pictureURL;
     }
 
     @Column(name = "protein_per_hundred")

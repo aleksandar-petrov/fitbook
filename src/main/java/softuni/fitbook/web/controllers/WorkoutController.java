@@ -49,33 +49,36 @@ public class WorkoutController {
     }
 
     @PostMapping("/add-exercise/{workoutId}")
-    public WorkoutViewModel addWorkoutExerciseToWorkout(@RequestBody WorkoutExerciseBindingModel model, @PathVariable(value = "workoutId") String workoutId) {
+    public WorkoutViewModel addWorkoutExerciseToWorkout(@RequestBody WorkoutExerciseBindingModel model, @PathVariable(value = "workoutId") String workoutId, Principal principal) {
 
         return modelMapper.map(this.workoutService.addWorkoutExerciseToWorkout(
                 this.modelMapper.map(model, WorkoutExerciseCreateServiceModel.class)
-                , workoutId), WorkoutViewModel.class);
+                , workoutId, principal.getName()), WorkoutViewModel.class);
     }
 
     @DeleteMapping("/delete-exercise/{workoutId}")
-    public ResponseEntity deleteWorkoutExerciseFromWorkout(@PathVariable String workoutId, @RequestParam(value = "exerciseId") String exerciseId) {
+    public ResponseEntity deleteWorkoutExerciseFromWorkout(@PathVariable String workoutId, @RequestParam(value = "exerciseId") String exerciseId, Principal principal) {
 
-        WorkoutViewModel model = modelMapper.map(this.workoutService.deleteWorkoutExerciseFromWorkout(workoutId, exerciseId), WorkoutViewModel.class);
+        WorkoutViewModel model = modelMapper.map(this.workoutService.deleteWorkoutExerciseFromWorkout(workoutId, exerciseId, principal.getName()), WorkoutViewModel.class);
 
         return ResponseEntity.ok(model);
     }
 
     @DeleteMapping("/delete/{workoutId}")
-    public boolean deleteWorkoutExerciseFromWorkout(@PathVariable String workoutId) {
+    public boolean deleteWorkoutExerciseFromWorkout(@PathVariable String workoutId, Principal principal) {
 
-        workoutService.deleteWorkoutById(workoutId);
+        workoutService.deleteWorkoutById(workoutId, principal.getName());
 
         return true;
     }
 
     @PutMapping("/edit/{workoutId}")
-    public WorkoutViewModel editWorkout(@PathVariable String workoutId, @RequestBody WorkoutEditBindingModel model) {
+    public WorkoutViewModel editWorkout(@PathVariable String workoutId, @RequestBody WorkoutEditBindingModel model, Principal principal) {
 
-        return modelMapper.map(workoutService.editWorkoutById(workoutId, modelMapper.map(model, WorkoutServiceModel.class)), WorkoutViewModel.class);
+        return modelMapper.map(workoutService.editWorkoutById(
+                workoutId,
+                modelMapper.map(model, WorkoutServiceModel.class),
+                principal.getName()), WorkoutViewModel.class);
 
     }
 

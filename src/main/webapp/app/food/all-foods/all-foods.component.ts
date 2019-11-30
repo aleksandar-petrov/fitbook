@@ -1,4 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import {Exercise} from "../../exercise/exercise.model";
+import {SelectedMuscleGroupsModel} from "../../exercise/selected-muscle-groups.model";
+import {WorkoutExerciseBindingModel} from "../../exercise/all-exercises/workout-exercise-binding.model";
+import {Workout} from "../../workout/workout.model";
+import {Food} from "../food.model";
+import {MealFoodBindingModel} from "../../meal/meal-food-binding-model";
+import {Meal} from "../../meal/meal.model";
+import {FoodService} from "../food.service";
+import {MealService} from "../../meal/meal.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-all-foods',
@@ -7,9 +18,51 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AllFoodsComponent implements OnInit {
 
-  constructor() { }
+  filteredFoods: Food[] = [];
+  allFoods: Food[] = [];
+  page: number = 1;
+  pageSize: number = 6;
+
+
+  mealFoodBindingModel: MealFoodBindingModel;
+  userMeals: Meal[];
+  selectedMealId: string;
+  selectedFoodForModal: Food;
+
+  constructor(private foodService: FoodService,
+              private mealService: MealService,
+              private modalService: NgbModal,
+              private router: Router) { }
 
   ngOnInit() {
+
+    this.mealFoodBindingModel = new MealFoodBindingModel();
+
+    this.foodService.getAllFoods().subscribe((foods: Food[]) => {
+      this.allFoods = foods;
+      this.filteredFoods = [...foods];
+    });
+
+    this.fetchUserMeals();
   }
 
+  fetchUserMeals() {
+    this.mealService.getLoggedInUserMeals();
+  }
+
+  open(content, foodId: any) {
+    this.selectedFoodForModal = this.allFoods.find(f => f.id === foodId);
+
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+
+
+      this.mealFoodBindingModel.foodId = foodId;
+      this.mealService.addMealFoodToMeal(this.mealFoodBindingModel, this.selectedMealId).subscribe((meal: Meal) => {
+        this.router.navigate(['my-meals', meal.id])
+      });
+      this.selectedMealId = this.userMeals[0].id;
+      this.mealFoodBindingModel = new MealFoodBindingModel();
+    }, (reason) => {
+    });
+  }
 }

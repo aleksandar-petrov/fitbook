@@ -23,6 +23,7 @@ import {WorkoutPlanDetailsComponent} from "./workoutPlan/workout-plan-details/wo
 import {SearchFoodComponent} from "./food/search-food/search-food.component";
 import {AdminPanelComponent} from "./admin-panel/admin-panel.component";
 import {FoodDetailsComponent} from "./food/food-details/food-details.component";
+import {AllFoodsComponent} from "./food/all-foods/all-foods.component";
 
 
 const appRoutes: Routes = [
@@ -50,13 +51,14 @@ const appRoutes: Routes = [
     {path: 'workout-plans/all', component: AllWorkoutPlansComponent},
     {path: 'workout-plans/details/:id', component: WorkoutPlanDetailsComponent},
     {path: 'foods/create', component: SearchFoodComponent},
+    {path: 'foods/all', component: AllFoodsComponent},
     {path: 'foods/details/:id', component: FoodDetailsComponent},
     {path: 'profile/:username', component: UserProfileComponent},
     {path: 'admin-panel', component: AdminPanelComponent}
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(appRoutes, {scrollPositionRestoration: 'enabled'})],
+    imports: [RouterModule.forRoot(appRoutes)],
     exports: [RouterModule]
 })
 export class AppRoutingModule {

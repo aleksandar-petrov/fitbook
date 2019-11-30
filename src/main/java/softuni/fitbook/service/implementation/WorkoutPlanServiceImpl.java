@@ -2,7 +2,6 @@ package softuni.fitbook.service.implementation;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import softuni.fitbook.domain.entities.User;
 import softuni.fitbook.domain.entities.Workout;
@@ -13,6 +12,7 @@ import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanCreateServic
 import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanServiceModel;
 import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanWorkoutServiceModel;
 import softuni.fitbook.repository.*;
+import softuni.fitbook.service.FileExporterService;
 import softuni.fitbook.service.WorkoutPlanService;
 import softuni.fitbook.service.WorkoutService;
 import softuni.fitbook.web.errors.exceptions.NotFoundException;
@@ -33,9 +33,10 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
     private final WorkoutService workoutService;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final FileExporterService fileExporterService;
 
     @Autowired
-    public WorkoutPlanServiceImpl(WorkoutPlanRepository workoutPlanRepository, WorkoutRepository workoutRepository, UserProfileRepository userProfileRepository, WorkoutPlanWorkoutRepository workoutPlanWorkoutRepository, WorkoutService workoutService, UserRepository userRepository, ModelMapper modelMapper) {
+    public WorkoutPlanServiceImpl(WorkoutPlanRepository workoutPlanRepository, WorkoutRepository workoutRepository, UserProfileRepository userProfileRepository, WorkoutPlanWorkoutRepository workoutPlanWorkoutRepository, WorkoutService workoutService, UserRepository userRepository, ModelMapper modelMapper, FileExporterService fileExporterService) {
         this.workoutPlanRepository = workoutPlanRepository;
         this.workoutRepository = workoutRepository;
         this.userProfileRepository = userProfileRepository;
@@ -43,6 +44,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
         this.workoutService = workoutService;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.fileExporterService = fileExporterService;
     }
 
     @Override
@@ -314,6 +316,18 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
         model.setWorkout(workoutService.mapWorkoutToWorkoutServiceModel(workout.getWorkout()));
 
         return model;
+
+    }
+
+    public byte[] exportWorkoutPlanToExcel(String workoutPlanId) {
+
+        WorkoutPlan workoutPlan = workoutPlanRepository
+                .findById(workoutPlanId)
+                .orElseThrow(() -> new NotFoundException("No such workout plan with given ID."));
+
+        return fileExporterService
+                .exportWorkoutPlanToExcel(
+                        mapWorkoutPlanToWorkoutPlanServiceModel(workoutPlan));
 
     }
 }

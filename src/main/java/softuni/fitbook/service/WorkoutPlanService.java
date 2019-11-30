@@ -27,4 +27,6 @@ public interface WorkoutPlanService {
     WorkoutPlanServiceModel copyWorkoutToLoggedUserWorkoutPlans(String workoutPlanId, String username);
 
     WorkoutPlanServiceModel getWorkoutPlanById(String id);
+
+    byte[] exportWorkoutPlanToExcel(String workoutPlanId);
 }

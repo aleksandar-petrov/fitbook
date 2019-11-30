@@ -67,4 +67,9 @@ export class WorkoutPlanService {
 
     }
 
+    exportWorkoutPlanToExcel(workoutPlanId: string) {
+
+        return this.http.get('http://localhost:8000/api/workout-plans/export/excel/' + workoutPlanId, {responseType: "blob"});
+    }
+
 }

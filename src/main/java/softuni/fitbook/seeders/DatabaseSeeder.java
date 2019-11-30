@@ -2,10 +2,6 @@ package softuni.fitbook.seeders;
 
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
-import com.dropbox.core.DbxException;
-import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.files.FileMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -17,10 +13,9 @@ import softuni.fitbook.domain.entities.UserRole;
 import softuni.fitbook.repository.ExerciseRepository;
 import softuni.fitbook.repository.RoleRepository;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 @Component
 public class DatabaseSeeder {

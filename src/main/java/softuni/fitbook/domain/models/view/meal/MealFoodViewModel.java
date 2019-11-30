@@ -1,22 +1,28 @@
-package softuni.fitbook.domain.entities;
+package softuni.fitbook.domain.models.view.meal;
 
-import javax.persistence.*;
+import softuni.fitbook.domain.models.service.food.FoodServiceModel;
 
-@Entity
-@Table(name = "meal_foods")
-public class MealFood extends BaseEntity {
+public class MealFoodViewModel {
 
+    private String id;
     private Integer serving;
+    private FoodServiceModel food;
     private Integer proteinPerServing;
     private Integer carbohydratesPerServing;
     private Integer fatsPerServing;
     private Integer caloriesPerServing;
-    private Food food;
 
-    public MealFood() {
+    public MealFoodViewModel() {
     }
 
-    @Column(name = "serving")
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public Integer getServing() {
         return serving;
     }
@@ -25,7 +31,14 @@ public class MealFood extends BaseEntity {
         this.serving = serving;
     }
 
-    @Column(name = "protein_per_serving")
+    public FoodServiceModel getFood() {
+        return food;
+    }
+
+    public void setFood(FoodServiceModel food) {
+        this.food = food;
+    }
+
     public Integer getProteinPerServing() {
         return proteinPerServing;
     }
@@ -34,7 +47,6 @@ public class MealFood extends BaseEntity {
         this.proteinPerServing = proteinPerServing;
     }
 
-    @Column(name = "carbohydrates_per_serving")
     public Integer getCarbohydratesPerServing() {
         return carbohydratesPerServing;
     }
@@ -43,7 +55,6 @@ public class MealFood extends BaseEntity {
         this.carbohydratesPerServing = carbohydratesPerServing;
     }
 
-    @Column(name = "fats_per_serving")
     public Integer getFatsPerServing() {
         return fatsPerServing;
     }
@@ -60,13 +71,4 @@ public class MealFood extends BaseEntity {
         this.caloriesPerServing = caloriesPerServing;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "food_id", referencedColumnName = "id")
-    public Food getFood() {
-        return food;
-    }
-
-    public void setFood(Food food) {
-        this.food = food;
-    }
 }

@@ -92,5 +92,11 @@ public class WorkoutPlanController {
         return modelMapper.map(workoutPlanService.addWorkoutFromMyWorkoutsToMyWorkoutPlan(workoutPlanId, workoutId, principal.getName()), WorkoutPlanViewModel.class);
     }
 
+    @GetMapping(value = "/export/excel/{workoutPlanId}", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    public byte[] exportWorkoutPlanToExcel(@PathVariable(value = "workoutPlanId") String workoutPlanId) {
+
+        return workoutPlanService.exportWorkoutPlanToExcel(workoutPlanId);
+    }
+
 
 }

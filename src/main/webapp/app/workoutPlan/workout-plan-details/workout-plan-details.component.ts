@@ -131,4 +131,16 @@ export class WorkoutPlanDetailsComponent implements OnInit {
     });
   }
 
+  exportToExcelHandler() {
+
+    this.workoutPlanService.exportWorkoutPlanToExcel(this.workoutPlanId).subscribe( (blob: Blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.download = this.workoutPlan.name.replace(/\s+/g, '-').toLowerCase() + '.xlsx';
+      anchor.href = url;
+      anchor.click();
+
+    })
+  }
+
 }

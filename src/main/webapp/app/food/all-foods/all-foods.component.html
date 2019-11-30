@@ -1,1 +1,94 @@
-<p>all-foods works!</p>
+<div class="container-fluid">
+
+    <ng-template #createWorkoutExerciseModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Add Exercise to Workout</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form #addToWorkoutForm="ngForm">
+                <h5>{{selectedExerciseForModal.name}}</h5>
+                <div class="form-row">
+                    <div class="form-group col-3">
+                        <label for="inputReps">Reps</label>
+                        <input type="number" class="form-control" id="inputReps" name="inputReps" #inputReps="ngModel"
+                               required
+                               pattern="^[1-9][0-9]*"
+                               min="1"
+                               [ngClass]="{'is-valid': inputReps.valid && inputReps.touched,
+                         'is-invalid': inputReps.invalid && inputReps.touched}"
+                               [(ngModel)]="workoutExerciseBindingModel.reps">
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">
+                            Reps should be a positive number.
+                        </div>
+                    </div>
+                    <div class="form-group col-3">
+                        <label for="inputSets">Sets</label>
+                        <input type="number" class="form-control" id="inputSets" name="inputSets" #inputSets="ngModel"
+                               required
+                               pattern="^[1-9][0-9]*"
+                               min="1"
+                               [ngClass]="{'is-valid': inputSets.valid && inputSets.touched,
+                         'is-invalid': inputSets.invalid && inputSets.touched}"
+                               [(ngModel)]="workoutExerciseBindingModel.sets">
+                        <div class="valid-feedback"></div>
+                        <div class="invalid-feedback">
+                            Sets should be a positive number.
+                        </div>
+                    </div>
+
+                    <div class="form-group col-6">
+                        <label for="inputStatus">Workout</label>
+                        <select id="inputStatus" name="status" class="form-control" #inputWorkoutId
+                                [(ngModel)]="selectedWorkoutId">
+                            <option [ngValue]="workout.id"
+                                    *ngFor="let workout of userWorkouts">{{workout.name}}</option>
+                        </select>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" [disabled]="addToWorkoutForm.invalid"
+                    (click)="modal.close()">Add to Workout
+            </button>
+        </div>
+    </ng-template>
+
+    <div class="jumbotron">
+
+        <img src="assets/static/images/logo.png" height="300px" class="align-center" alt="">
+        <h1 class="display-4">All Foods</h1>
+
+
+        <hr class="my-4">
+        <div class="container justify-content-center pb-0">
+            <ng-template [ngIf]="filteredFoods.length > 0" [ngIfElse]="noSuchFoods">
+                <div class="row">
+                    <app-food-card
+                            (modalOpen)="open(createWorkoutExerciseModal, $event)"
+                            [food]="food"
+                            class="col-lg-4 col-sm-12 my-3 d-flex mx-auto align-items-stretch"
+                            *ngFor="let food of filteredFoods | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+                        >
+                    </app-food-card>
+                </div>
+                <ngb-pagination class="d-inline-block mt-5" [(page)]="page"
+                                [pageSize]="pageSize"
+                                [collectionSize]="filteredFoods.length"></ngb-pagination>
+            </ng-template>
+
+            <ng-template #noSuchFoods>
+                <h5>There are no foods.</h5>
+            </ng-template>
+
+        </div>
+
+
+    </div>
+
+</div>
