@@ -1,1 +1,46 @@
-<p>meal-card works!</p>
+<div class="card d-inline-flex">
+    <div class="card-body">
+        <h3 class="card-title">{{meal.name}}</h3>
+        <hr/>
+        <h4 class="font-weight-light pb-2">Creator: <a class="card-link" routerLink="/profile/{{meal.creator.username}}">{{meal.creator.username}}</a></h4>
+        <hr/>
+
+        <h4 class="card-title">Meal Nutrition</h4>
+        <h5 class="card-subtitle font-weight-light mb-1">Protein: {{meal.totalProtein}}</h5>
+        <h5 class="card-subtitle font-weight-light mb-1">Carbohydrates: {{meal.totalCarbohydrates}}</h5>
+        <h5 class="card-subtitle font-weight-light mb-1">Fats: {{meal.totalFats}}</h5>
+        <hr/>
+        <h5 class="card-subtitle font-weight-light mb-3">Calories: {{meal.totalCalories}}</h5>
+        <div class="table-wrapper pr-3 pl-1">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr *ngIf="meal.foods && !meal.foods.length">
+                    <td colspan="5" class="py-auto"><h5>No added foods in this meal.</h5></td>
+                </tr>
+                <tr *ngIf="meal.foods && meal.foods.length">
+                    <th scope="col" style="width: 50%">Food name</th>
+                    <th scope="col" style="width: 50%">Serving</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr *ngFor="let food of meal.foods">
+                    <td class="align-middle">{{food.food.name}}</td>
+                    <td class="align-middle">{{food.serving}} g.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr class="mb-5"/>
+        <div class="buttons-wrapper left">
+            <button type="button" class="btn btn-sm btn-success" (click)="copyToMyMealsHandler(meal.id)">Copy to
+                My Meals
+            </button>
+        </div>
+        <div class="buttons-wrapper right">
+            <a routerLink="/meals/details/{{meal.id}}" class="btn btn-sm btn-info">Details</a>
+        </div>
+
+    </div>
+</div>
+

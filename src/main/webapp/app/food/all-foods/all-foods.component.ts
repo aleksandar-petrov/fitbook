@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Exercise} from "../../exercise/exercise.model";
 import {SelectedMuscleGroupsModel} from "../../exercise/selected-muscle-groups.model";
 import {WorkoutExerciseBindingModel} from "../../exercise/all-exercises/workout-exercise-binding.model";
@@ -12,57 +12,94 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-all-foods',
-  templateUrl: './all-foods.component.html',
-  styleUrls: ['./all-foods.component.css']
+    selector: 'app-all-foods',
+    templateUrl: './all-foods.component.html',
+    styleUrls: ['./all-foods.component.css']
 })
 export class AllFoodsComponent implements OnInit {
 
-  filteredFoods: Food[] = [];
-  allFoods: Food[] = [];
-  page: number = 1;
-  pageSize: number = 6;
+    filteredFoods: Food[] = [];
+    allFoods: Food[] = [];
+    page: number = 1;
+    pageSize: number = 6;
 
 
-  mealFoodBindingModel: MealFoodBindingModel;
-  userMeals: Meal[];
-  selectedMealId: string;
-  selectedFoodForModal: Food;
+    mealFoodBindingModel: MealFoodBindingModel;
+    mealFoodProteinPerServing: number;
+    mealFoodCarbohydratesPerServing: number;
+    mealFoodFatsPerServing: number;
+    mealFoodCaloriesPerServing: number;
+    userMeals: Meal[];
+    selectedMealId: string;
+    selectedFoodForModal: Food;
+    macroNutrientsData: any[];
 
-  constructor(private foodService: FoodService,
-              private mealService: MealService,
-              private modalService: NgbModal,
-              private router: Router) { }
+    constructor(private foodService: FoodService,
+                private mealService: MealService,
+                private modalService: NgbModal,
+                private router: Router) {
+    }
 
-  ngOnInit() {
+    ngOnInit() {
 
-    this.mealFoodBindingModel = new MealFoodBindingModel();
+        this.mealFoodBindingModel = new MealFoodBindingModel();
 
-    this.foodService.getAllFoods().subscribe((foods: Food[]) => {
-      this.allFoods = foods;
-      this.filteredFoods = [...foods];
-    });
+        this.foodService.getAllFoods().subscribe((foods: Food[]) => {
+            this.allFoods = foods;
+            this.filteredFoods = [...foods];
+        });
 
-    this.fetchUserMeals();
-  }
+        this.fetchUserMeals();
+    }
 
-  fetchUserMeals() {
-    this.mealService.getLoggedInUserMeals();
-  }
+    fetchUserMeals() {
+        this.mealService.getLoggedInUserMeals().subscribe((meals: Meal[]) => {
+          if (meals) {
+            this.userMeals = meals;
+            this.selectedMealId = meals[0].id;
+          }
+        });
+    }
 
-  open(content, foodId: any) {
-    this.selectedFoodForModal = this.allFoods.find(f => f.id === foodId);
+    open(content, foodId: any) {
+        this.selectedFoodForModal = this.allFoods.find(f => f.id === foodId);
+        this.makeChartDataForMacroNutrients();
 
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+        this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
 
 
-      this.mealFoodBindingModel.foodId = foodId;
-      this.mealService.addMealFoodToMeal(this.mealFoodBindingModel, this.selectedMealId).subscribe((meal: Meal) => {
-        this.router.navigate(['my-meals', meal.id])
-      });
-      this.selectedMealId = this.userMeals[0].id;
-      this.mealFoodBindingModel = new MealFoodBindingModel();
-    }, (reason) => {
-    });
-  }
+            this.mealFoodBindingModel.foodId = foodId;
+            this.mealService.addMealFoodToMeal(this.mealFoodBindingModel, this.selectedMealId).subscribe((meal: Meal) => {
+                this.router.navigate(['my-meals', meal.id])
+            });
+            this.selectedMealId = this.userMeals[0].id;
+            this.mealFoodBindingModel = new MealFoodBindingModel();
+        }, (reason) => {
+        });
+    }
+
+    makeChartDataForMacroNutrients() {
+
+        this.mealFoodProteinPerServing = Math.floor(this.mealFoodBindingModel.serving * (this.selectedFoodForModal.proteinPerHundred / 100));
+        this.mealFoodCarbohydratesPerServing = Math.floor(this.mealFoodBindingModel.serving * (this.selectedFoodForModal.carbohydratesPerHundred / 100));
+        this.mealFoodFatsPerServing = Math.floor(this.mealFoodBindingModel.serving * (this.selectedFoodForModal.fatsPerHundred / 100));
+        this.mealFoodCaloriesPerServing = Math.floor(this.mealFoodBindingModel.serving * (this.selectedFoodForModal.caloriesPerHundred / 100));
+
+        this.macroNutrientsData = [
+            {
+                "name": "Protein",
+                "value": this.mealFoodProteinPerServing
+            },
+            {
+                "name": "Carbohydrates",
+                "value": this.mealFoodCarbohydratesPerServing
+            },
+            {
+                "name": "Fats",
+                "value": this.mealFoodFatsPerServing
+            },
+
+
+        ]
+    }
 }

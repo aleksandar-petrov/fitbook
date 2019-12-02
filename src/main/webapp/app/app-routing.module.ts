@@ -11,7 +11,6 @@ import {MyWorkoutsComponent} from "./workout/my-workouts/my-workouts.component";
 import {NoSelectedWorkoutComponent} from "./workout/my-workouts/no-selected-workout/no-selected-workout.component";
 import {SelectedWorkoutComponent} from "./workout/my-workouts/selected-workout/selected-workout.component";
 import {ExerciseDetailsComponent} from "./exercise/exercise-details/exercise-details.component";
-import {EditSelectedWorkoutComponent} from "./workout/my-workouts/edit-selected-workout/edit-selected-workout.component";
 import {AllWorkoutsComponent} from "./workout/all-workouts/all-workouts.component";
 import {UserProfileComponent} from "./user/user-profile/user-profile.component";
 import {WorkoutDetailsComponent} from "./workout/workout-details/workout-details.component";
@@ -24,6 +23,11 @@ import {SearchFoodComponent} from "./food/search-food/search-food.component";
 import {AdminPanelComponent} from "./admin-panel/admin-panel.component";
 import {FoodDetailsComponent} from "./food/food-details/food-details.component";
 import {AllFoodsComponent} from "./food/all-foods/all-foods.component";
+import {MyMealsComponent} from "./meal/my-meals/my-meals.component";
+import {NoSelectedMealComponent} from "./meal/my-meals/no-selected-meal/no-selected-meal.component";
+import {SelectedMealComponent} from "./meal/my-meals/selected-meal/selected-meal.component";
+import {AllMealsComponent} from "./meal/all-meals/all-meals.component";
+import {MealDetailsComponent} from "./meal/meal-details/meal-details.component";
 
 
 const appRoutes: Routes = [
@@ -45,11 +49,18 @@ const appRoutes: Routes = [
             {path: '', component: NoSelectedWorkoutPlanComponent},
             {path: ':id', component: SelectedWorkoutPlanComponent},
         ]
+    }, {
+        path: 'my-meals', component: MyMealsComponent, children: [
+            {path: '', component: NoSelectedMealComponent},
+            {path: ':id', component: SelectedMealComponent},
+        ]
     },
     {path: 'workouts/all', component: AllWorkoutsComponent},
     {path: 'workouts/details/:id', component: WorkoutDetailsComponent},
     {path: 'workout-plans/all', component: AllWorkoutPlansComponent},
     {path: 'workout-plans/details/:id', component: WorkoutPlanDetailsComponent},
+    {path: 'meals/all', component: AllMealsComponent},
+    {path: 'meals/details/:id', component: MealDetailsComponent},
     {path: 'foods/create', component: SearchFoodComponent},
     {path: 'foods/all', component: AllFoodsComponent},
     {path: 'foods/details/:id', component: FoodDetailsComponent},
@@ -58,7 +69,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(appRoutes)],
+    imports: [RouterModule.forRoot(appRoutes, { scrollPositionRestoration: 'disabled' })],
     exports: [RouterModule]
 })
 export class AppRoutingModule {

@@ -1,8 +1,9 @@
 export class MealFoodBindingModel {
 
   serving: number;
-  foodId: number;
+  foodId: string;
 
   constructor() {
+    this.serving = 100;
   }
 }

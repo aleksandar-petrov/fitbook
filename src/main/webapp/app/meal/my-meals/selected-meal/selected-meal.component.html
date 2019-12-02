@@ -1,0 +1,191 @@
+<div class="selected-meal">
+
+    <ng-template #mealNutritionInfoModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Meal Nutrition Info</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body row">
+
+            <div class="col-lg-3 align-middle my-auto">
+                <h1 class="text-center font-weight-bold">{{selectedMeal.name}}</h1>
+
+
+                <h3 class="text-center font-weight-light">Calories: {{selectedMeal.totalCalories}}</h3>
+                <div class="macros text-center mx-auto">
+                    <h3 class="font-weight-light ">
+                        Protein: {{this.selectedMeal.totalProtein}}g.</h3>
+                    <h3 class="font-weight-light ">
+                        Carbohydrates: {{this.selectedMeal.totalCarbohydrates}}g.</h3>
+                    <h3 class="font-weight-light ">Fats: {{this.selectedMeal.totalFats}}
+                        g.</h3>
+                    <span class="display-5 opacity-5"><i
+                            class="fas fa-utensils fa-lg"></i></span>
+                </div>
+            </div>
+            <div class="chart-container row align-middle col-lg-9">
+
+                <ngx-charts-bar-horizontal-2d *ngIf="macroNutrientsData"
+                                              class="mx-auto"
+                                              [view]="[800, 600]"
+                                              [animations]="true"
+                                              [xAxis]="true"
+                                              [yAxis]="true"
+                                              [results]="macroNutrientsData"
+                                              [trimXAxisTicks]="false"
+                                              legendTitle="Nutrition"
+                                              [legend]="true"
+                                              [showXAxisLabel]="true"
+                                              [showGridLines]="true"
+                                              [showYAxisLabel]="true"
+                                              [gradient]="true"
+                                              [noBarWhenZero]="true"
+                                              [roundDomains]="true"
+                                              [tooltipDisabled]="false"
+                                              [trimYAxisTicks]="false"
+                                              [showDataLabel]="true">
+
+                </ngx-charts-bar-horizontal-2d>
+
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">Close</button>
+        </div>
+    </ng-template>
+
+
+    <h2 class="pt-3 font-weight-light" *ngIf="!editMode">{{selectedMeal.name}}</h2>
+    <div class="py-3 mx-auto col-5" *ngIf="editMode"><input type="text" value="{{editMealBindingModel.name}}"
+                                                            class="form-control form-control-lg text-center"
+                                                            id="inputName"
+                                                            name="inputName" #inputName="ngModel"
+                                                            required
+                                                            [ngClass]="{'is-valid': inputName.valid && inputName.touched,
+                         'is-invalid': inputName.invalid && inputName.touched}" [(ngModel)]="editMealBindingModel.name">
+    </div>
+    <h4 class="pb-3 font-weight-light" *ngIf="!editMode && !selectedMeal.isCopied">
+        ({{selectedMeal.isPublic ? 'Public' : 'Private'}})</h4>
+    <h4 class="pb-3 font-weight-light" *ngIf="selectedMeal.isCopied">(Copy)</h4>
+    <div *ngIf="editMode && !selectedMeal.isCopied" class="pb-3 col-3 mx-auto">
+        <select id="inputStatus" name="status" class="form-control" #inputWorkoutStatus
+                [(ngModel)]="editMealBindingModel.isPublic">
+            <option [ngValue]="true">Public</option>
+            <option [ngValue]="false">Private</option>
+        </select>
+    </div>
+    <button *ngIf="!editMode" type="button" routerLink="/meals/details/{{mealId}}"
+            class="btn btn-dark mb-2"><i class="fas fa-share-alt"></i></button>
+
+    <form #editForm="ngForm">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr *ngIf="selectedMeal.foods && !selectedMeal.foods.length">
+                <td colspan="5" class="py-auto"><h5>No added foods in this meal.</h5></td>
+            </tr>
+            <tr *ngIf="selectedMeal.foods && selectedMeal.foods.length">
+                <th scope="col" style="width: 25%">Food name</th>
+                <th scope="col" style="width: 15%">Serving</th>
+                <th scope="col" style="width: 10%">P</th>
+                <th scope="col" style="width: 10%">C</th>
+                <th scope="col" style="width: 10%">F</th>
+                <th scope="col" style="width: 10%">Calories</th>
+                <th scope="col" style="width: 20%;"></th>
+
+            </tr>
+            </thead>
+            <tbody *ngIf="!editMode && selectedMeal.foods && selectedMeal.foods.length">
+
+            <tr *ngFor="let food of selectedMeal.foods">
+                <td class="align-middle">{{food.food.name}}</td>
+                <td class="align-middle">{{food.serving}} g.</td>
+                <td class="align-middle">{{food.proteinPerServing}} g.</td>
+                <td class="align-middle">{{food.carbohydratesPerServing}} g.</td>
+                <td class="align-middle">{{food.fatsPerServing}} g.</td>
+                <td class="align-middle">{{food.caloriesPerServing}}</td>
+                <td>
+                    <button type="button" routerLink="/foods/details/{{food.food.id}}"
+                            class="btn btn-primary mr-2"><i class="far fa-eye"></i></button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="align-middle text-center">Total:</td>
+                <td class="align-middle">{{selectedMeal.totalProtein}} g.</td>
+                <td class="align-middle">{{selectedMeal.totalCarbohydrates}} g.</td>
+                <td class="align-middle">{{selectedMeal.totalFats}} g.</td>
+                <td class="align-middle">{{selectedMeal.totalCalories}}</td>
+                <td class="align-middle"></td>
+            </tr>
+            </tbody>
+            <tbody *ngIf="editMode">
+
+            <tr *ngFor="let food of editMealBindingModel.foods" [id]="food.id">
+                <td class="align-middle">{{food.food.name}}</td>
+                <td class="align-middle">
+                    <input type="number" value="{{food.serving}}" class="form-control" id="inputServing"
+                           name="inputServing-{{food.id}}"
+                           #inputServing="ngModel" [(ngModel)]="food.serving"
+                           required
+                           pattern="^[1-9][0-9]*"
+                           min="1"
+                           (change)="onEditMealFoodHandler(food)"
+                           [ngClass]="{'is-invalid': inputServing.invalid && inputServing.touched}"></td>
+
+                <td class="align-middle">{{food.proteinPerServing}} g.</td>
+                <td class="align-middle">{{food.carbohydratesPerServing}} g.</td>
+                <td class="align-middle">{{food.fatsPerServing}} g.</td>
+                <td class="align-middle">{{food.caloriesPerServing}}</td>
+                <td>
+                    <button type="button" routerLink="/foods/details/{{food.food.id}}"
+                            class="btn btn-primary mr-2"><i class="far fa-eye"></i></button>
+                    <button type="button" (click)="onMealFoodDeleteHandler(selectedMeal.id, food.id)"
+                            class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                </td>
+
+            </tr>
+
+            <tr>
+                <td colspan="2" class="align-middle text-center">Total:</td>
+                <td class="align-middle">{{editMealBindingModel.totalProtein}} g.</td>
+                <td class="align-middle">{{editMealBindingModel.totalCarbohydrates}} g.</td>
+                <td class="align-middle">{{editMealBindingModel.totalFats}} g.</td>
+                <td class="align-middle">{{editMealBindingModel.totalCalories}}</td>
+                <td class="align-middle"></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+
+    <div class="workout-actions" *ngIf="!editMode">
+
+        <button *ngIf="selectedMeal.foods && selectedMeal.foods.length" type="button"
+                class="btn btn-secondary my-3 mx-2" (click)="open(mealNutritionInfoModal)">Show Nutrition Info
+        </button>
+
+        <button type="link" class="btn btn-primary my-3 mx-2" routerLink="/foods/all">Add Food</button>
+
+        <button type="button"
+                class="btn btn-success my-3 mx-2" routerLink="./" [queryParams]="{'edit': 1}">Edit
+        </button>
+
+        <button type="button" (click)="onMealDeleteHandler(selectedMeal.id)" class="btn btn-danger my-3 mx-2">
+            Delete
+        </button>
+    </div>
+
+
+    <div class="workout-actions-edit" *ngIf="editMode">
+        <button type="link" [disabled]="editForm.invalid" class="btn btn-success my-3 mx-2" (click)="onSaveHandler()">
+            Save
+        </button>
+        <button type="link" class="btn btn-danger my-3 mx-2" routerLink="./">Cancel</button>
+    </div>
+
+
+</div>
+
+

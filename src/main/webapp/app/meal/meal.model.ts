@@ -8,4 +8,8 @@ export class Meal {
     isPublic: boolean;
     creator: Creator;
     isCopied: boolean;
+    totalCalories: number;
+    totalProtein: number;
+    totalCarbohydrates: number;
+    totalFats: number;
 }

@@ -38,7 +38,7 @@ public class Meal extends BaseEntity {
         isPublic = aPublic;
     }
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "meal_id", referencedColumnName = "id")
     public List<MealFood> getFoods() {
         return foods;

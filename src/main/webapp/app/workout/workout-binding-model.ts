@@ -3,6 +3,6 @@ export class WorkoutBindingModel {
   isPublic: boolean;
 
   constructor() {
-    this.isPublic = true;
+    this.isPublic = false;
   }
 }

@@ -7,7 +7,6 @@ import {IndexComponent} from './index/index.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {FooterComponent} from './footer/footer.component';
 import {CreateExerciseComponent} from './exercise/create-exercise/create-exercise.component';
-import {MuscleSelectorComponent} from './muscle-selector/muscle-selector.component';
 import {GuestNavbarComponent} from './navbar/guest-navbar/guest-navbar.component';
 import {LoggedNavbarComponent} from './navbar/logged-navbar/logged-navbar.component';
 import {FoodComponent} from './food/food.component';
@@ -30,7 +29,6 @@ import {SelectedWorkoutComponent} from './workout/my-workouts/selected-workout/s
 import {ExerciseDetailsComponent} from './exercise/exercise-details/exercise-details.component';
 import {SafePipe} from "./safe.pipe";
 import {NgxYoutubePlayerModule} from "ngx-youtube-player";
-import {EditSelectedWorkoutComponent} from './workout/my-workouts/edit-selected-workout/edit-selected-workout.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {AllWorkoutsComponent} from './workout/all-workouts/all-workouts.component';
 import {WorkoutCardComponent} from './workout/workout-card/workout-card.component';
@@ -53,6 +51,8 @@ import { MealCardComponent } from './meal/meal-card/meal-card.component';
 import { MealDetailsComponent } from './meal/meal-details/meal-details.component';
 import { AllFoodsComponent } from './food/all-foods/all-foods.component';
 import { FoodCardComponent } from './food/food-card/food-card.component';
+import { SelectedMealComponent } from './meal/my-meals/selected-meal/selected-meal.component';
+import { NoSelectedMealComponent } from './meal/my-meals/no-selected-meal/no-selected-meal.component';
 
 @NgModule({
     declarations: [
@@ -62,7 +62,6 @@ import { FoodCardComponent } from './food/food-card/food-card.component';
         IndexComponent,
         FooterComponent,
         CreateExerciseComponent,
-        MuscleSelectorComponent,
         GuestNavbarComponent,
         LoggedNavbarComponent,
         FoodComponent,
@@ -79,7 +78,6 @@ import { FoodCardComponent } from './food/food-card/food-card.component';
         SelectedWorkoutComponent,
         ExerciseDetailsComponent,
         SafePipe,
-        EditSelectedWorkoutComponent,
         AllWorkoutsComponent,
         WorkoutCardComponent,
         UserProfileComponent,
@@ -98,7 +96,9 @@ import { FoodCardComponent } from './food/food-card/food-card.component';
         MealCardComponent,
         MealDetailsComponent,
         AllFoodsComponent,
-        FoodCardComponent
+        FoodCardComponent,
+        SelectedMealComponent,
+        NoSelectedMealComponent
     ],
     imports: [
         BrowserModule,

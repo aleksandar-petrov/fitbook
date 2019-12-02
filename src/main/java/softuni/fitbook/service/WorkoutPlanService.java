@@ -10,13 +10,12 @@ import java.util.List;
 
 public interface WorkoutPlanService {
 
-    WorkoutPlanServiceModel createWorkout(WorkoutPlanCreateServiceModel model, String username);
+    WorkoutPlanServiceModel createWorkoutPlan(WorkoutPlanCreateServiceModel model, String username);
 
     WorkoutPlanServiceModel addWorkoutFromMyWorkoutsToMyWorkoutPlan(String workoutPlanId, String workoutId, String username);
 
     List<WorkoutPlanServiceModel> getAllWorkoutPlansByUsername(String username);
 
-    WorkoutPlanServiceModel deleteWorkoutFromMyWorkoutPlan(String workoutPlanId, String workoutId, String username);
 
     void deleteMyWorkoutPlanById(String workoutPlanId, String username);
 
@@ -24,7 +23,7 @@ public interface WorkoutPlanService {
 
     List<WorkoutPlanServiceModel> getAllPublicWorkoutPlans();
 
-    WorkoutPlanServiceModel copyWorkoutToLoggedUserWorkoutPlans(String workoutPlanId, String username);
+    WorkoutPlanServiceModel copyWorkoutPlanToLoggedUserWorkoutPlans(String workoutPlanId, String username);
 
     WorkoutPlanServiceModel getWorkoutPlanById(String id);
 

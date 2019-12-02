@@ -48,7 +48,7 @@ export class SelectedWorkoutComponent implements OnInit {
             if (queryParams['edit']) {
                 this.editMode = queryParams['edit'] === '1';
                 if (this.editMode) {
-                    this.editWorkoutBindingModel = Object.assign({}, this.selectedWorkout);
+                    this.editWorkoutBindingModel = JSON.parse(JSON.stringify(this.selectedWorkout));
                     this.editWorkoutBindingModel.isPublic = this.selectedWorkout.isPublic;
                     this.deletedWorkoutExercisesStack = [];
                 }

@@ -1,60 +1,82 @@
 <div class="container-fluid">
 
-    <ng-template #createWorkoutExerciseModal let-modal>
+    <ng-template #createMealFoodModal let-modal>
         <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Add Exercise to Workout</h4>
+            <h4 class="modal-title" id="modal-basic-title">Add Food to Meal</h4>
             <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
-            <form #addToWorkoutForm="ngForm">
-                <h5>{{selectedExerciseForModal.name}}</h5>
-                <div class="form-row">
-                    <div class="form-group col-3">
-                        <label for="inputReps">Reps</label>
-                        <input type="number" class="form-control" id="inputReps" name="inputReps" #inputReps="ngModel"
-                               required
-                               pattern="^[1-9][0-9]*"
-                               min="1"
-                               [ngClass]="{'is-valid': inputReps.valid && inputReps.touched,
-                         'is-invalid': inputReps.invalid && inputReps.touched}"
-                               [(ngModel)]="workoutExerciseBindingModel.reps">
-                        <div class="valid-feedback"></div>
-                        <div class="invalid-feedback">
-                            Reps should be a positive number.
+            <form #addToMealForm="ngForm">
+                <ng-template [ngIf]="userMeals && userMeals.length">
+                    <h5>{{selectedFoodForModal.name}}</h5>
+                    <div class="form-row">
+                        <div class="form-group col-3">
+                            <label for="inputServing">Serving (g.)</label>
+                            <input type="number" class="form-control" id="inputServing" name="inputServing"
+                                   #inputServing="ngModel"
+                                   required
+                                   pattern="^[1-9][0-9]*"
+                                   min="1"
+                                   (change)="this.makeChartDataForMacroNutrients()"
+                                   [ngClass]="{'is-valid': inputServing.valid && inputServing.touched,
+                         'is-invalid': inputServing.invalid && inputServing.touched}"
+                                   [(ngModel)]="mealFoodBindingModel.serving">
+                            <div class="valid-feedback"></div>
+                            <div class="invalid-feedback">
+                                Serving should be a positive number.
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group col-3">
-                        <label for="inputSets">Sets</label>
-                        <input type="number" class="form-control" id="inputSets" name="inputSets" #inputSets="ngModel"
-                               required
-                               pattern="^[1-9][0-9]*"
-                               min="1"
-                               [ngClass]="{'is-valid': inputSets.valid && inputSets.touched,
-                         'is-invalid': inputSets.invalid && inputSets.touched}"
-                               [(ngModel)]="workoutExerciseBindingModel.sets">
-                        <div class="valid-feedback"></div>
-                        <div class="invalid-feedback">
-                            Sets should be a positive number.
+
+                        <div class="form-group col-6">
+                            <label for="inputStatus">Meal</label>
+                            <select id="inputStatus" name="status" class="form-control" #inputMealId required
+                                    [(ngModel)]="selectedMealId">
+                                <option [ngValue]="meal.id"
+                                        *ngFor="let meal of userMeals">{{meal.name}}</option>
+                            </select>
                         </div>
+
                     </div>
 
-                    <div class="form-group col-6">
-                        <label for="inputStatus">Workout</label>
-                        <select id="inputStatus" name="status" class="form-control" #inputWorkoutId
-                                [(ngModel)]="selectedWorkoutId">
-                            <option [ngValue]="workout.id"
-                                    *ngFor="let workout of userWorkouts">{{workout.name}}</option>
-                        </select>
-                    </div>
+                    <hr/>
 
-                </div>
+                    <h3 class="text-center font-weight-light">Calories: {{mealFoodCaloriesPerServing}}</h3>
+                    <div class="chart-container row align-middle">
+                        <ngx-charts-pie-chart
+                                [results]="macroNutrientsData"
+                                [animations]="true"
+                                [trimLabels]="false"
+                                [doughnut]="true"
+                        >
+
+                        </ngx-charts-pie-chart>
+
+                        <div class="macros text-center mx-auto">
+                            <h5 class="font-weight-light ">
+                                Protein: {{mealFoodProteinPerServing}}g.</h5>
+                            <h5 class="font-weight-light ">
+                                Carbohydrates: {{mealFoodCarbohydratesPerServing}}g.</h5>
+                            <h5 class="font-weight-light ">Fats: {{mealFoodFatsPerServing}}
+                                g.</h5>
+                            <span class="display-5 opacity-5"><i
+                                    class="fas fa-utensils fa-lg"></i></span>
+                        </div>
+                    </div>
+                </ng-template>
             </form>
+
+            <ng-template [ngIf]="userMeals && !userMeals.length">
+                <h3 class="mb-3">You don't have any created meals.</h3>
+                <button type="button" class="btn btn-success mt-3 d-block mx-auto" routerLink="/my-meals" (click)="modal.dismiss()">Go to My Meals</button>
+            </ng-template>
+
+
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" [disabled]="addToWorkoutForm.invalid"
-                    (click)="modal.close()">Add to Workout
+            <button type="button" class="btn btn-outline-dark" [disabled]="addToMealForm.invalid || userMeals && !userMeals.length"
+                    (click)="modal.close()">Add to Meal
             </button>
         </div>
     </ng-template>
@@ -70,7 +92,7 @@
             <ng-template [ngIf]="filteredFoods.length > 0" [ngIfElse]="noSuchFoods">
                 <div class="row">
                     <app-food-card
-                            (modalOpen)="open(createWorkoutExerciseModal, $event)"
+                            (modalOpen)="open(createMealFoodModal, $event)"
                             [food]="food"
                             class="col-lg-4 col-sm-12 my-3 d-flex mx-auto align-items-stretch"
                             *ngFor="let food of filteredFoods | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">

@@ -1,1 +1,172 @@
-<p>meal-details works!</p>
+<div class="container-fluid">
+
+    <ng-template #copyMealModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Copy Meal To My Meals</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form #copyMealForm="ngForm">
+                <h5 class="text-center">{{meal.name}}</h5>
+                <table class="table table-striped table-hover text-center">
+                    <thead>
+                    <tr *ngIf="meal.foods && !meal.foods.length">
+                        <td colspan="5" class="py-auto"><h5>No added foods in this meal.</h5></td>
+                    </tr>
+                    <tr *ngIf="meal.foods && meal.foods.length">
+                        <th scope="col" style="width: 25%">Food name</th>
+                        <th scope="col" style="width: 15%">Serving</th>
+                        <th scope="col" style="width: 10%">P</th>
+                        <th scope="col" style="width: 10%">C</th>
+                        <th scope="col" style="width: 10%">F</th>
+                        <th scope="col" style="width: 10%">Calories</th>
+
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="meal.foods && meal.foods.length">
+
+                    <tr *ngFor="let food of meal.foods">
+                        <td class="align-middle">{{food.food.name}}</td>
+                        <td class="align-middle">{{food.serving}} g.</td>
+                        <td class="align-middle">{{food.proteinPerServing}} g.</td>
+                        <td class="align-middle">{{food.carbohydratesPerServing}} g.</td>
+                        <td class="align-middle">{{food.fatsPerServing}} g.</td>
+                        <td class="align-middle">{{food.caloriesPerServing}}</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" class="align-middle text-right">Total: </td>
+                        <td class="align-middle">{{meal.totalProtein}} g.</td>
+                        <td class="align-middle">{{meal.totalCarbohydrates}} g.</td>
+                        <td class="align-middle">{{meal.totalFats}} g.</td>
+                        <td class="align-middle">{{meal.totalCalories}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Copy to My Meals</button>
+        </div>
+    </ng-template>
+
+
+    <div class="jumbotron">
+        <img src="assets/static/images/logo.png" height="300px" class="d-inline-block align-center" alt="">
+        <h1 class="display-4">Meal Details</h1>
+        <hr class="my-2"/>
+        <div class="container pt-4">
+            <div class="row">
+                <div class="meal-details col-lg-9 mx-auto">
+                    <div class="exercise-intro mt-4">
+                        <h2 class="display-4 d-block mx-auto font-weight-bolder">{{meal.name}}</h2>
+                    </div>
+
+                    <hr class="my-4"/>
+
+                    <h3 class="font-weight-light pb-3">Creator: <a class="card-link" routerLink="/profile/{{meal.creator.username}}">{{meal.creator.username}}</a></h3>
+
+                    <div *ngIf="meal.foods && meal.foods.length">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr *ngIf="meal.foods && !meal.foods.length">
+                                <td colspan="5" class="py-auto"><h5>No added foods in this meal.</h5></td>
+                            </tr>
+                            <tr *ngIf="meal.foods && meal.foods.length">
+                                <th scope="col" style="width: 25%">Food name</th>
+                                <th scope="col" style="width: 15%">Serving</th>
+                                <th scope="col" style="width: 10%">P</th>
+                                <th scope="col" style="width: 10%">C</th>
+                                <th scope="col" style="width: 10%">F</th>
+                                <th scope="col" style="width: 10%">Calories</th>
+                                <th scope="col" style="width: 20%;"></th>
+
+                            </tr>
+                            </thead>
+                            <tbody *ngIf="meal.foods && meal.foods.length">
+
+                            <tr *ngFor="let food of meal.foods">
+                                <td class="align-middle">{{food.food.name}}</td>
+                                <td class="align-middle">{{food.serving}} g.</td>
+                                <td class="align-middle">{{food.proteinPerServing}} g.</td>
+                                <td class="align-middle">{{food.carbohydratesPerServing}} g.</td>
+                                <td class="align-middle">{{food.fatsPerServing}} g.</td>
+                                <td class="align-middle">{{food.caloriesPerServing}}</td>
+                                <td>
+                                    <button type="button" routerLink="/foods/details/{{food.food.id}}"
+                                            class="btn btn-primary mr-2"><i class="far fa-eye"></i></button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2" class="align-middle text-center">Total: </td>
+                                <td class="align-middle">{{meal.totalProtein}} g.</td>
+                                <td class="align-middle">{{meal.totalCarbohydrates}} g.</td>
+                                <td class="align-middle">{{meal.totalFats}} g.</td>
+                                <td class="align-middle">{{meal.totalCalories}}</td>
+                                <td class="align-middle"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <hr class="my-2"/>
+
+                        <h2 class="mx-auto font-weight-bold">Meal Nutrition</h2>
+
+                        <h3 class="text-center font-weight-light">Calories: {{meal.totalCalories}}</h3>
+                        <div class="macros text-center mx-auto">
+                            <h3 class="font-weight-light ">
+                                Protein: {{this.meal.totalProtein}}g.</h3>
+                            <h3 class="font-weight-light ">
+                                Carbohydrates: {{this.meal.totalCarbohydrates}}g.</h3>
+                            <h3 class="font-weight-light ">Fats: {{this.meal.totalFats}}
+                                g.</h3>
+                            <span class="display-5 opacity-5"><i
+                                    class="fas fa-utensils fa-lg"></i></span>
+                        </div>
+                        <div class="chart-container row align-middle">
+                            <ngx-charts-bar-horizontal-2d *ngIf="macroNutrientsData"
+                                                          class="mx-auto"
+                                                          [view]="[800, 600]"
+                                                          [animations]="true"
+                                                          [xAxis]="true"
+                                                          [yAxis]="true"
+                                                          [results]="macroNutrientsData"
+                                                          [trimXAxisTicks]="false"
+                                                          legendTitle="Nutrition"
+                                                          [legend]="true"
+                                                          [showXAxisLabel]="true"
+                                                          [showDataLabel]="true"
+                                                          [showGridLines]="true"
+                                                          [showYAxisLabel]="true"
+                                                          [gradient]="true"
+                                                          [noBarWhenZero]="true"
+                                                          [roundDomains]="true"
+                                                          [tooltipDisabled]="false"
+                                                          [trimYAxisTicks]="false">
+
+                            </ngx-charts-bar-horizontal-2d>
+
+
+                    </div>
+
+                    <h3 *ngIf="meal.foods && !meal.foods.length">No added foods to this meal.</h3>
+
+                    <div class="buttons col-12 mx-auto p-3">
+                        <button type="button" class="btn btn-success" (click)="open(copyMealModal)">
+                            Copy to My Meals
+                        </button>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>

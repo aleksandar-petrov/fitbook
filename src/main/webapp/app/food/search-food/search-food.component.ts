@@ -20,11 +20,11 @@ export class SearchFoodComponent implements OnInit {
 
     foodBindingModel: FoodBindingModel;
     pictureFile: File;
-    @ViewChild('chooseFileLabel', {static: false}) chooseFileLabelRef: ElementRef;
 
     page: number = 1;
     pageSize: number = 6;
     macroNutrientsData: any[];
+    file: any;
 
 
     constructor(private foodService: FoodService, private modalService: NgbModal, private router: Router) {
@@ -103,11 +103,18 @@ export class SearchFoodComponent implements OnInit {
         });
     }
 
-    handleFileInput(files: FileList) {
+    handleFileInput(files: FileList, chooseFileLabel: HTMLLabelElement) {
 
-        this.pictureFile = files[0];
-        this.chooseFileLabelRef.nativeElement.innerHTML = this.pictureFile.name;
-
+        const file = files[0];
+        const pattern = /image-*/;
+        if (file && file.type.match(pattern)) {
+            this.pictureFile = file;
+            chooseFileLabel.innerHTML = this.pictureFile.name;
+        } else {
+            this.file = undefined;
+            this.pictureFile = undefined;
+            chooseFileLabel.innerHTML = 'Choose file';
+        }
     }
 
     makeChartDataForMacroNutrients() {

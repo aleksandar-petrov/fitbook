@@ -48,10 +48,18 @@
                 </table>
             </form>
 
-            <h3 *ngIf="!selectedWorkoutForModal" class="text-center">You don't have any workouts.</h3>
+            <div *ngIf="!selectedWorkoutForModal"><h5 class="text-center">You don't have any
+                workouts.</h5>
+                <button type="button" class="btn btn-success d-block mt-3 mx-auto"
+                        routerLink="/my-workouts" (click)="modal.dismiss()">Go to My Workouts
+                </button>
+            </div>
+
         </div>
         <div class="modal-footer">
-            <button type="button" [disabled]="!selectedWorkoutForModal" class="btn btn-outline-dark" (click)="modal.close()">Add to Workout Plan</button>
+            <button type="button" [disabled]="!selectedWorkoutForModal" class="btn btn-outline-dark"
+                    (click)="modal.close()">Add to Workout Plan
+            </button>
         </div>
     </ng-template>
 
@@ -96,12 +104,14 @@
 
 
     <h2 *ngIf="!editMode" class="pt-3 font-weight-light">{{selectedWorkoutPlan.name}}</h2>
-    <div class="py-3 mx-auto col-5"  *ngIf="editMode"><input type="text" value="{{editWorkoutPlanBindingModel.name}}" class="form-control form-control-lg text-center"
-                                                             id="inputName"
-                                                             name="inputName" #inputName="ngModel"
-                                                             required
-                                                             [ngClass]="{'is-valid': inputName.valid && inputName.touched,
-                         'is-invalid': inputName.invalid && inputName.touched}" [(ngModel)]="editWorkoutPlanBindingModel.name"></div>
+    <div class="py-3 mx-auto col-5" *ngIf="editMode"><input type="text" value="{{editWorkoutPlanBindingModel.name}}"
+                                                            class="form-control form-control-lg text-center"
+                                                            id="inputName"
+                                                            name="inputName" #inputName="ngModel"
+                                                            required
+                                                            [ngClass]="{'is-valid': inputName.valid && inputName.touched,
+                         'is-invalid': inputName.invalid && inputName.touched}"
+                                                            [(ngModel)]="editWorkoutPlanBindingModel.name"></div>
     <h4 class="pb-3 font-weight-light" *ngIf="!editMode && !selectedWorkoutPlan.isCopied">
         ({{selectedWorkoutPlan.isPublic ? 'Public' : 'Private'}})</h4>
     <h4 class="pb-3 font-weight-light" *ngIf="selectedWorkoutPlan.isCopied">(Copy)</h4>

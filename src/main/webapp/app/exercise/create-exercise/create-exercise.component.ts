@@ -18,8 +18,8 @@ export class CreateExerciseComponent implements OnInit {
   assistingMuscleGroupsSelected: SelectedMuscleGroupsModel;
   pictureFile: File;
   focusedMuscleGroup: string;
-  @ViewChild('chooseFileLabel', {static: false}) chooseFileLabelRef: ElementRef;
   loading = false;
+  file: any;
 
 
   constructor(private exerciseService: ExerciseService, private router: Router, private titleService: Title) {
@@ -80,11 +80,18 @@ export class CreateExerciseComponent implements OnInit {
 
   }
 
-  handleFileInput(files: FileList) {
+  handleFileInput(files: FileList, chooseFileLabel: HTMLLabelElement) {
 
-    this.pictureFile = files[0];
-    this.chooseFileLabelRef.nativeElement.innerHTML = this.pictureFile.name;
-
+    const file = files[0];
+    const pattern = /image-*/;
+    if (file && file.type.match(pattern)) {
+      this.pictureFile = file;
+      chooseFileLabel.innerHTML = this.pictureFile.name;
+    } else {
+      this.file = undefined;
+      this.pictureFile = undefined;
+      chooseFileLabel.innerHTML = 'Choose file';
+    }
   }
 
 

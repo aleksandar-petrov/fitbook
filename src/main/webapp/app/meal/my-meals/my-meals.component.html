@@ -1,1 +1,70 @@
-<p>my-meals works!</p>
+<div class="container-fluid">
+
+    <ng-template #createMealModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Create Meal</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form #createMealForm="ngForm">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputMealName">Meal Name</label>
+                        <input type="text" class="form-control" id="inputMealName" name="name" #inputMealName="ngModel"
+                               required
+                               [ngClass]="{'is-valid': inputMealName.valid && inputMealName.touched,
+                               'is-invalid': inputMealName.invalid && inputMealName.touched}"
+                               [(ngModel)]="mealBindingModel.name">
+
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputStatus">Status</label>
+                        <select id="inputStatus" name="status" class="form-control" #inputMealStatus
+                                [(ngModel)]="mealBindingModel.isPublic">
+                            <option [ngValue]="true" selected>Public</option>
+                            <option [ngValue]="false">Private</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" [disabled]="createMealForm.invalid" class="btn btn-outline-dark" (click)="modal.close()">Save</button>
+        </div>
+    </ng-template>
+
+    <div class="jumbotron">
+        <img src="assets/static/images/logo.png" height="300px" class="d-inline-block align-center" alt="">
+        <h1 class="display-4">My Meals</h1>
+        <div class="container pt-4">
+            <div class="row">
+                <div class="col-lg-4 mx-auto">
+                    <h2>Meals</h2>
+                    <hr/>
+                    <div class="list-group" *ngIf="meals && meals.length">
+                        <button type="button" class="list-group-item list-group-item-action"
+                                [ngClass]="{'active': selectedMealId === meal.id}"
+                                (click)="onMealButtonClick(meal.id)"
+                                *ngFor="let meal of meals">
+                            {{meal.name}}
+                        </button>
+                    </div>
+
+                    <h5 *ngIf="!meals || !meals.length">You don't have any created meals.</h5>
+
+
+                    <button type="button" class="btn btn-success mt-3" (click)="open(createMealModal)">Create Meal</button>
+                </div>
+                <div class="col-lg-8 mx-auto">
+                    <h2>Selected Meal</h2>
+                    <hr/>
+                    <router-outlet (deactivate)="onRouterOutletDeactivate()" (activate)="onRouterOutletActivate()"></router-outlet>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

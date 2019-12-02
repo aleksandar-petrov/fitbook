@@ -3,6 +3,6 @@ export class MealBindingModel {
   isPublic: boolean;
 
   constructor() {
-    this.isPublic = true;
+    this.isPublic = false;
   }
 }

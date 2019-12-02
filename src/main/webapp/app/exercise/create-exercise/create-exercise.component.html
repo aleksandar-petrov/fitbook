@@ -351,10 +351,19 @@
                                         <div class="custom-file" id="customFileContainer">
                                             <input type="file" class="custom-file-input form-control"
                                                    id="customFile" name="exercisePictureFile"
-                                                   (change)="handleFileInput($event.target.files)">
+                                                   #inputExercisePicture="ngModel"
+                                                   accept="image/*"
+                                                   [(ngModel)]="file"
+                                                   [ngClass]="{'is-valid': file && inputExercisePicture.touched,
+                         'is-invalid': !file && inputExercisePicture.touched}"
+                                                   (change)="handleFileInput($event.target.files, chooseFileLabel)">
                                             <label class="custom-file-label" for="customFile"
                                                    id="çhooseFileLabel" #chooseFileLabel>Choose
                                                 file</label>
+                                            <div class="valid-feedback"></div>
+                                            <div class="invalid-feedback">
+                                                Exercise picture file should be an image.
+                                            </div>
                                         </div>
 
                                     </div>

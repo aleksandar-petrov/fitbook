@@ -48,7 +48,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
     }
 
     @Override
-    public WorkoutPlanServiceModel createWorkout(WorkoutPlanCreateServiceModel model, String username) {
+    public WorkoutPlanServiceModel createWorkoutPlan(WorkoutPlanCreateServiceModel model, String username) {
 
         User user = this.userRepository
                 .findByUsername(username)
@@ -62,7 +62,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
 
         workoutPlan = workoutPlanRepository.save(workoutPlan);
 
-        return modelMapper.map(workoutPlan, WorkoutPlanServiceModel.class);
+        return mapWorkoutPlanToWorkoutPlanServiceModel(workoutPlan);
     }
 
     @Override
@@ -114,33 +114,6 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public WorkoutPlanServiceModel deleteWorkoutFromMyWorkoutPlan(String workoutPlanId, String workoutId, String username) {
-
-        User user = this.userRepository
-                .findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."));
-
-        WorkoutPlan workoutPlan = user.getUserProfile()
-                .getWorkoutPlans()
-                .stream()
-                .filter(wp -> wp.getId().equals(workoutPlanId))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("No such workout plan with given ID."));
-
-        WorkoutPlanWorkout workout = workoutPlan.getWorkouts()
-                .stream()
-                .filter(w -> w.getId().equals(workoutId))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("No such workout with given ID."));
-
-        workoutPlan.getWorkouts().remove(workout);
-
-        workoutPlan = workoutPlanRepository.save(workoutPlan);
-
-        return mapWorkoutPlanToWorkoutPlanServiceModel(workoutPlan);
-
-    }
 
     @Override
     @Transactional
@@ -233,7 +206,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
     }
 
     @Override
-    public WorkoutPlanServiceModel copyWorkoutToLoggedUserWorkoutPlans(String workoutPlanId, String username) {
+    public WorkoutPlanServiceModel copyWorkoutPlanToLoggedUserWorkoutPlans(String workoutPlanId, String username) {
 
         User user = this.userRepository
                 .findByUsername(username)
@@ -269,9 +242,6 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
                     workoutPlanWorkoutRepository.save(copyWorkoutPlanWorkout);
                     copy.getWorkouts().add(copyWorkoutPlanWorkout);
                 });
-
-
-        System.out.println();
 
         workoutPlanRepository.save(copy);
 

@@ -25,10 +25,10 @@
 
                     <div class="macros text-center mx-auto">
                         <h5 class="font-weight-light ">
-                            Protein: {{this.selectedFoodForModal.proteinPerHundred}}g.</h5>
+                            Protein: {{selectedFoodForModal.proteinPerHundred}}g.</h5>
                         <h5 class="font-weight-light ">
-                            Carbohydrates: {{this.selectedFoodForModal.carbohydratesPerHundred}}g.</h5>
-                        <h5 class="font-weight-light ">Fats: {{this.selectedFoodForModal.fatsPerHundred}}
+                            Carbohydrates: {{selectedFoodForModal.carbohydratesPerHundred}}g.</h5>
+                        <h5 class="font-weight-light ">Fats: {{selectedFoodForModal.fatsPerHundred}}
                             g.</h5>
                         <span class="display-5 opacity-5"><i
                                 class="fas fa-utensils fa-lg"></i></span>
@@ -61,18 +61,30 @@
                         <div class="form-label-group">
                             <label for="inputFoodName">Food name</label>
                             <input type="text" id="inputFoodName" class="form-control"
-                                   placeholder="Food name" name="foodName"
-                                   [(ngModel)]="foodBindingModel.name"
-                                   required>
+                                   required
+                                   placeholder="Food name" name="foodName" #inputFoodName="ngModel"
+                                   [ngClass]="{'is-valid': inputFoodName.valid && inputFoodName.touched,
+                         'is-invalid': inputFoodName.invalid && inputFoodName.touched}"
+                                   [(ngModel)]="foodBindingModel.name">
+                            <div class="valid-feedback"></div>
+                            <div class="invalid-feedback">
+                                Food name is required.
+                            </div>
                         </div>
 
                         <div class="form-label-group">
                             <label for="inputFoodName">Food description</label>
-                            <textarea class="form-control" id="textarea" rows="4" required wrap="hard"
+                            <textarea class="form-control" id="textarea" rows="4" required wrap="hard" #inputFoodDescription="ngModel"
                                       [value]="selectedFoodForModal.description"
                                       placeholder="Food description"
+                                      [ngClass]="{'is-valid': inputFoodDescription.valid && inputFoodDescription.touched,
+                         'is-invalid': inputFoodDescription.invalid && inputFoodDescription.touched}"
                                       [(ngModel)]="foodBindingModel.description"
                                       name="foodDescription"></textarea>
+                            <div class="valid-feedback"></div>
+                            <div class="invalid-feedback">
+                                Food description is required.
+                            </div>
                         </div>
 
 
@@ -80,11 +92,20 @@
                             <label for="inputFoodPicture" id="inputFoodPictureLabel">Food picture</label>
                             <div class="custom-file" id="customFileContainer">
                                 <input type="file" class="custom-file-input form-control"
+                                       #inputFoodPicture="ngModel"
+                                       accept="image/*"
+                                       [(ngModel)]="file"
                                        id="inputFoodPicture" name="inputFoodPicture"
-                                       (change)="handleFileInput($event.target.files)">
+                                       [ngClass]="{'is-valid': file && inputFoodPicture.touched,
+                         'is-invalid': !file && inputFoodPicture.touched}"
+                                       (change)="handleFileInput($event.target.files, chooseFileLabel)">
                                 <label class="custom-file-label" for="inputFoodPicture"
                                        id="çhooseFileLabel" #chooseFileLabel>Choose
                                     file</label>
+                                <div class="valid-feedback"></div>
+                                <div class="invalid-feedback">
+                                    Food picture file should be an image.
+                                </div>
                             </div>
                         </div>
 
@@ -128,7 +149,7 @@
                     <hr>
 
                     <button class="btn btn-lg btn-secondary btn-block text-uppercase"
-                            type="submit" (click)="onSubmit()">Create Food
+                            type="submit" [disabled]="createFoodForm.invalid" (click)="onSubmit()">Create Food
                     </button>
                 </form>
 

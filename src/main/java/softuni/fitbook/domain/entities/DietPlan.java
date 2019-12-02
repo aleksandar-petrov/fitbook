@@ -12,6 +12,10 @@ public class DietPlan extends BaseEntity {
     private List<DietPlanMeal> meals;
     private UserProfile userProfile;
     private Boolean isCopied;
+    private Integer totalProtein;
+    private Integer totalCarbohydrates;
+    private Integer totalFats;
+    private Integer totalCalories;
 
     @Column(name = "name")
     public String getName() {
@@ -60,4 +64,39 @@ public class DietPlan extends BaseEntity {
         isCopied = copied;
     }
 
+    @Column(name = "total_protein")
+    public Integer getTotalProtein() {
+        return totalProtein;
+    }
+
+    public void setTotalProtein(Integer totalProtein) {
+        this.totalProtein = totalProtein;
+    }
+
+    @Column(name = "total_carbohydrates")
+    public Integer getTotalCarbohydrates() {
+        return totalCarbohydrates;
+    }
+
+    public void setTotalCarbohydrates(Integer totalCarbohydrates) {
+        this.totalCarbohydrates = totalCarbohydrates;
+    }
+
+    @Column(name = "total_fats")
+    public Integer getTotalFats() {
+        return totalFats;
+    }
+
+    public void setTotalFats(Integer totalFats) {
+        this.totalFats = totalFats;
+    }
+
+    @Column(name = "total_calories")
+    public Integer getTotalCalories() {
+        return totalCalories;
+    }
+
+    public void setTotalCalories(Integer totalCalories) {
+        this.totalCalories = totalCalories;
+    }
 }

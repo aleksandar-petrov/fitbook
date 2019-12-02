@@ -4,6 +4,11 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
+import softuni.fitbook.domain.entities.MealFood;
+import softuni.fitbook.domain.models.service.dietPlan.DietPlanMealServiceModel;
+import softuni.fitbook.domain.models.service.dietPlan.DietPlanServiceModel;
+import softuni.fitbook.domain.models.service.meal.MealFoodServiceModel;
+import softuni.fitbook.domain.models.service.meal.MealServiceModel;
 import softuni.fitbook.domain.models.service.workout.WorkoutExerciseServiceModel;
 import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanServiceModel;
 import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanWorkoutServiceModel;
@@ -45,7 +50,7 @@ public class FileExporterServiceImpl implements FileExporterService {
 
                 makeSubHeader(workbook,
                         sheet,
-                        workout.getWorkout().getName(),
+                        workout.getOrderIndex() + ". " + workout.getWorkout().getName(),
                         lastRow++,
                         3,
                         14);
@@ -87,9 +92,90 @@ public class FileExporterServiceImpl implements FileExporterService {
         sheet.setColumnWidth(2, 4000);
         sheet.setColumnWidth(3, 4000);
 
+        return createFile(workbook, model.getId());
+    }
+
+    @Override
+    public byte[] exportDietPlanToExcel(DietPlanServiceModel model) {
+
+        Workbook workbook = new XSSFWorkbook();
+
+        Sheet sheet = workbook.createSheet("Diet Plan");
+
+
+        makeMainHeader(workbook, sheet, model.getName(), 5);
+
+        int lastRow = 1;
+
+        if (model.getMeals().isEmpty()) {
+            makeSubHeader(workbook,
+                    sheet,
+                    "No added meals in this diet plan.",
+                    lastRow++,
+                    5,
+                    14);
+        } else {
+
+            for (DietPlanMealServiceModel meal : model.getMeals()) {
+
+
+                makeSubHeader(workbook,
+                        sheet,
+                        meal.getOrderIndex() + ". " + meal.getMeal().getName(),
+                        lastRow++,
+                        5,
+                        14);
+
+                if (meal.getMeal().getFoods().isEmpty()) {
+                    makeSubHeader(workbook,
+                            sheet,
+                            "No added foods in this meal",
+                            lastRow++,
+                            5,
+                            12);
+                } else {
+
+                    makeRow(workbook, sheet, lastRow++, 5,
+                            "Food name", "Serving", "Protein", "Carbohydrates", "Fats", "Calories");
+
+                    for (MealFoodServiceModel mealFood : meal.getMeal().getFoods()) {
+                        makeRow(workbook,
+                                sheet,
+                                lastRow++,
+                                5,
+                                mealFood.getFood().getName(),
+                                mealFood.getServing() + " g.",
+                                mealFood.getProteinPerServing() + " g.",
+                                mealFood.getCarbohydratesPerServing() + " g.",
+                                mealFood.getFatsPerServing() + " g.",
+                                mealFood.getCaloriesPerServing().toString());
+                    }
+
+                    makeSubHeader(workbook, sheet, "Total: ", lastRow, 1, 14);
+
+
+                }
+
+
+            }
+
+
+        }
+
+        sheet.setColumnWidth(0, 7000);
+        sheet.setColumnWidth(1, 4000);
+        sheet.setColumnWidth(2, 4000);
+        sheet.setColumnWidth(3, 4000);
+        sheet.setColumnWidth(4, 4000);
+        sheet.setColumnWidth(5, 4000);
+
+        return createFile(workbook, model.getId());
+    }
+
+    private byte[] createFile(Workbook workbook, String id) {
         File excelFile;
         try {
-            excelFile = File.createTempFile(model.getId(), "xlsx");
+            excelFile = File.createTempFile(id, "xlsx");
 
             FileOutputStream fileOutputStream = new FileOutputStream(excelFile);
 
@@ -97,7 +183,7 @@ public class FileExporterServiceImpl implements FileExporterService {
             fileOutputStream.close();
 
             return Files.readAllBytes(excelFile.toPath());
-        } catch (IOException e) {
+        } catch (IOException ignored) {
 
         }
 

@@ -9,51 +9,67 @@
         </div>
         <div class="modal-body">
             <form #addToWorkoutForm="ngForm">
-                <h5>{{selectedExerciseForModal.name}}</h5>
-                <div class="form-row">
-                    <div class="form-group col-3">
-                        <label for="inputReps">Reps</label>
-                        <input type="number" class="form-control" id="inputReps" name="inputReps" #inputReps="ngModel"
-                               required
-                               pattern="^[1-9][0-9]*"
-                               min="1"
-                               [ngClass]="{'is-valid': inputReps.valid && inputReps.touched,
+                <ng-template [ngIf]="userWorkouts && userWorkouts.length">
+                    <h5>{{selectedExerciseForModal.name}}</h5>
+                    <div class="form-row">
+                        <div class="form-group col-3">
+                            <label for="inputReps">Reps</label>
+                            <input type="number" class="form-control" id="inputReps" name="inputReps"
+                                   #inputReps="ngModel"
+                                   required
+                                   pattern="^[1-9][0-9]*"
+                                   min="1"
+                                   [ngClass]="{'is-valid': inputReps.valid && inputReps.touched,
                          'is-invalid': inputReps.invalid && inputReps.touched}"
-                               [(ngModel)]="workoutExerciseBindingModel.reps">
-                        <div class="valid-feedback"></div>
-                        <div class="invalid-feedback">
-                            Reps should be a positive number.
+                                   [(ngModel)]="workoutExerciseBindingModel.reps">
+                            <div class="valid-feedback"></div>
+                            <div class="invalid-feedback">
+                                Reps should be a positive number.
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group col-3">
-                        <label for="inputSets">Sets</label>
-                        <input type="number" class="form-control" id="inputSets" name="inputSets" #inputSets="ngModel"
-                               required
-                               pattern="^[1-9][0-9]*"
-                               min="1"
-                               [ngClass]="{'is-valid': inputSets.valid && inputSets.touched,
+                        <div class="form-group col-3">
+                            <label for="inputSets">Sets</label>
+                            <input type="number" class="form-control" id="inputSets" name="inputSets"
+                                   #inputSets="ngModel"
+                                   required
+                                   pattern="^[1-9][0-9]*"
+                                   min="1"
+                                   [ngClass]="{'is-valid': inputSets.valid && inputSets.touched,
                          'is-invalid': inputSets.invalid && inputSets.touched}"
-                               [(ngModel)]="workoutExerciseBindingModel.sets">
-                        <div class="valid-feedback"></div>
-                        <div class="invalid-feedback">
-                            Sets should be a positive number.
+                                   [(ngModel)]="workoutExerciseBindingModel.sets">
+                            <div class="valid-feedback"></div>
+                            <div class="invalid-feedback">
+                                Sets should be a positive number.
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group col-6">
-                        <label for="inputStatus">Workout</label>
-                        <select id="inputStatus" name="status" class="form-control" #inputWorkoutId
-                                [(ngModel)]="selectedWorkoutId">
-                            <option [ngValue]="workout.id"
-                                    *ngFor="let workout of userWorkouts">{{workout.name}}</option>
-                        </select>
-                    </div>
+                        <div class="form-group col-6">
+                            <label for="inputStatus">Workout</label>
+                            <select id="inputStatus" name="status" class="form-control" #inputWorkoutId
+                                    [(ngModel)]="selectedWorkoutId">
+                                <option [ngValue]="workout.id"
+                                        *ngFor="let workout of userWorkouts">{{workout.name}}</option>
+                            </select>
+                        </div>
 
-                </div>
+                        <ng-template [ngIf]="userWorkouts && !userWorkouts.length">
+                            <h3 class="mb-3">You don't have any created workouts.</h3>
+                            <button type="button" class="btn btn-success mt-3 d-block mx-auto" routerLink="/my-workouts"
+                                    (click)="modal.dismiss()">Go to My Workouts
+                            </button>
+                        </ng-template>
+
+                    </div>
+                </ng-template>
             </form>
+
+            <ng-template [ngIf]="userWorkouts && !userWorkouts.length">
+                <h3 class="mb-3">You don't have any created meals.</h3>
+                <button type="button" class="btn btn-success mt-3 d-block mx-auto" routerLink="/my-workouts" (click)="modal.dismiss()">Go to My Workouts</button>
+            </ng-template>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" [disabled]="addToWorkoutForm.invalid"
+            <button type="button" class="btn btn-outline-dark" [disabled]="addToWorkoutForm.invalid || userWorkouts && !userWorkouts.length"
                     (click)="modal.close()">Add to Workout
             </button>
         </div>

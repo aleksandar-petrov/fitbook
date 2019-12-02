@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Workout} from "../../workout/workout.model";
+import {Meal} from "../meal.model";
 
 @Component({
   selector: 'app-meal-card',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MealCardComponent implements OnInit {
 
+  @Input() meal: Meal;
+  @Output() modalOpen: EventEmitter<any> = new EventEmitter();
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  copyToMyMealsHandler(id: string) {
+    this.modalOpen.emit(id);
+  }
 }

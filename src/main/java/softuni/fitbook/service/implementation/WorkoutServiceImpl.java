@@ -2,7 +2,6 @@ package softuni.fitbook.service.implementation;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import softuni.fitbook.domain.entities.*;
 import softuni.fitbook.domain.models.service.CreatorServiceModel;
@@ -15,7 +14,6 @@ import softuni.fitbook.web.errors.exceptions.NotFoundException;
 import javax.transaction.Transactional;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +21,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     private final WorkoutRepository workoutRepository;
     private final UserRepository userRepository;
-    private final WorkoutExercisesRepository workoutExercisesRepository;
+    private final WorkoutExercisesRepository workoutExerciseRepository;
     private final WorkoutPlanWorkoutRepository workoutPlanWorkoutRepository;
     private final ExerciseRepository exerciseRepository;
     private final ExerciseService exerciseService;
@@ -33,7 +31,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public WorkoutServiceImpl(WorkoutRepository workoutRepository, UserRepository userRepository, WorkoutExercisesRepository workoutExercisesRepository, WorkoutPlanWorkoutRepository workoutPlanWorkoutRepository, ExerciseRepository exerciseRepository, ExerciseService exerciseService, ModelMapper modelMapper) {
         this.workoutRepository = workoutRepository;
         this.userRepository = userRepository;
-        this.workoutExercisesRepository = workoutExercisesRepository;
+        this.workoutExerciseRepository = workoutExercisesRepository;
         this.workoutPlanWorkoutRepository = workoutPlanWorkoutRepository;
         this.exerciseRepository = exerciseRepository;
         this.exerciseService = exerciseService;
@@ -79,7 +77,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         workoutExercise.setExercise(exercise);
 
-        workoutExercise = workoutExercisesRepository.save(workoutExercise);
+        workoutExercise = workoutExerciseRepository.save(workoutExercise);
 
 
 
@@ -127,7 +125,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         workoutRepository.save(workout);
 
-        workoutExercisesRepository.delete(workoutExercise);
+        workoutExerciseRepository.delete(workoutExercise);
 
         Workout updated = getWorkoutWithRearrangedWorkoutExerciseOrderIndexes(workout);
 
@@ -156,9 +154,11 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Transactional
     public void deleteWorkoutById(String workoutId, String username) {
 
-        Workout workout = userRepository.findByUsername(username)
+        UserProfile userProfile = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("No such user with given username."))
-                .getUserProfile()
+                .getUserProfile();
+
+        Workout workout = userProfile
                 .getWorkouts()
                 .stream()
                 .filter(w -> w.getId().equals(workoutId))
@@ -172,7 +172,13 @@ public class WorkoutServiceImpl implements WorkoutService {
                     workoutPlanWorkoutRepository.deleteById(wpw.getId());
                 });
 
-        workoutRepository.delete(workout);
+        workout.getExercises()
+                .forEach(e -> {
+                    e.setExercise(null);
+                    workoutExerciseRepository.delete(e);
+                });
+
+        userProfile.getWorkouts().remove(workout);
     }
 
     @Override
@@ -198,7 +204,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         oldExercises.removeAll(newExercises);
 
         oldExercises.
-                forEach(e -> workoutExercisesRepository.deleteById(e.getId()));
+                forEach(e -> workoutExerciseRepository.deleteById(e.getId()));
 
         editedWorkout.setUserProfile(oldWorkout.getUserProfile());
 

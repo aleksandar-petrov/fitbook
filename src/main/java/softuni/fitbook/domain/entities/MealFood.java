@@ -60,7 +60,7 @@ public class MealFood extends BaseEntity {
         this.caloriesPerServing = caloriesPerServing;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "food_id", referencedColumnName = "id")
     public Food getFood() {
         return food;

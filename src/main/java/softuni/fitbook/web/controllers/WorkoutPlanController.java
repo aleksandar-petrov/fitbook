@@ -29,7 +29,7 @@ public class WorkoutPlanController {
     public WorkoutPlanViewModel createWorkoutPlan(@RequestBody WorkoutCreateBindingModel model, Principal principal) {
 
         WorkoutPlanServiceModel workoutPlan =
-                workoutPlanService.createWorkout(
+                workoutPlanService.createWorkoutPlan(
                         modelMapper.map(model, WorkoutPlanCreateServiceModel.class),
                         principal.getName());
 
@@ -82,7 +82,7 @@ public class WorkoutPlanController {
     @PostMapping("/copy/{workoutPlanId}")
     public WorkoutPlanViewModel copyWorkoutPlan(@PathVariable(value = "workoutPlanId") String workoutPlanId, Principal principal) {
 
-        return modelMapper.map(workoutPlanService.copyWorkoutToLoggedUserWorkoutPlans(workoutPlanId, principal.getName()), WorkoutPlanViewModel.class);
+        return modelMapper.map(workoutPlanService.copyWorkoutPlanToLoggedUserWorkoutPlans(workoutPlanId, principal.getName()), WorkoutPlanViewModel.class);
 
     }
 

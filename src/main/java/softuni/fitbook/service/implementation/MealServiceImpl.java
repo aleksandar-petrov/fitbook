@@ -2,6 +2,7 @@ package softuni.fitbook.service.implementation;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import softuni.fitbook.domain.entities.*;
 import softuni.fitbook.domain.models.service.CreatorServiceModel;
@@ -13,6 +14,7 @@ import softuni.fitbook.repository.*;
 import softuni.fitbook.service.MealService;
 import softuni.fitbook.web.errors.exceptions.NotFoundException;
 
+import javax.persistence.PreRemove;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -49,6 +51,11 @@ public class MealServiceImpl implements MealService {
         );
 
         meal.setUserProfile(user.getUserProfile());
+        meal.setTotalProtein(0);
+        meal.setTotalCarbohydrates(0);
+        meal.setTotalFats(0);
+        meal.setTotalCalories(0);
+
         meal.setIsCopied(false);
 
         meal = mealRepository.save(meal);
@@ -77,7 +84,7 @@ public class MealServiceImpl implements MealService {
 
 
         mealFood.setFood(food);
-
+        setMealFoodInitialValues(mealFood);
         addNutritionToMealFood(mealFood, food);
 
         mealFood = mealFoodRepository.save(mealFood);
@@ -91,21 +98,28 @@ public class MealServiceImpl implements MealService {
         return mapMealToMealServiceModel(meal);
     }
 
+    private void setMealFoodInitialValues(MealFood mealFood) {
+        mealFood.setCaloriesPerServing(0);
+        mealFood.setProteinPerServing(0);
+        mealFood.setCarbohydratesPerServing(0);
+        mealFood.setFatsPerServing(0);
+    }
+
     private void addNutritionToMeal(Meal meal, MealFood mealFood) {
 
         meal.setTotalProtein(mealFood.getProteinPerServing() + meal.getTotalProtein());
-        meal.setTotalProtein(mealFood.getCarbohydratesPerServing() + meal.getTotalCarbohydrates());
-        meal.setTotalProtein(mealFood.getFatsPerServing() + meal.getTotalFats());
-        meal.setTotalProtein(mealFood.getCaloriesPerServing() + meal.getTotalCalories());
+        meal.setTotalCarbohydrates(mealFood.getCarbohydratesPerServing() + meal.getTotalCarbohydrates());
+        meal.setTotalFats(mealFood.getFatsPerServing() + meal.getTotalFats());
+        meal.setTotalCalories(mealFood.getCaloriesPerServing() + meal.getTotalCalories());
 
     }
 
     private void removeNutritionFromMeal(Meal meal, MealFood mealFood) {
 
         meal.setTotalProtein(mealFood.getProteinPerServing() - meal.getTotalProtein());
-        meal.setTotalProtein(mealFood.getCarbohydratesPerServing() - meal.getTotalCarbohydrates());
-        meal.setTotalProtein(mealFood.getFatsPerServing() - meal.getTotalFats());
-        meal.setTotalProtein(mealFood.getCaloriesPerServing() - meal.getTotalCalories());
+        meal.setTotalCarbohydrates(mealFood.getCarbohydratesPerServing() - meal.getTotalCarbohydrates());
+        meal.setTotalFats(mealFood.getFatsPerServing() - meal.getTotalFats());
+        meal.setTotalCalories(mealFood.getCaloriesPerServing() - meal.getTotalCalories());
 
     }
 
@@ -117,7 +131,7 @@ public class MealServiceImpl implements MealService {
 
         mealFood.setCaloriesPerServing(caloriesPerServing + mealFood.getCaloriesPerServing());
         mealFood.setProteinPerServing(proteinPerServing + mealFood.getProteinPerServing());
-        mealFood.setCarbohydratesPerServing(carbohydratesPerServing + mealFood.getCaloriesPerServing());
+        mealFood.setCarbohydratesPerServing(carbohydratesPerServing + mealFood.getCarbohydratesPerServing());
         mealFood.setFatsPerServing(fatsPerServing + mealFood.getFatsPerServing());
     }
 
@@ -134,11 +148,14 @@ public class MealServiceImpl implements MealService {
 
     @Override
     @Transactional
+    @PreRemove
     public void deleteMealById(String mealId, String username) {
 
-        Meal meal = userRepository.findByUsername(username)
+        UserProfile userProfile = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("No such user with given username."))
-                .getUserProfile()
+                .getUserProfile();
+
+        Meal meal = userProfile
                 .getMeals()
                 .stream()
                 .filter(w -> w.getId().equals(mealId))
@@ -152,7 +169,11 @@ public class MealServiceImpl implements MealService {
                     dietPlanMealRepository.deleteById(dpm.getId());
                 });
 
-        mealRepository.delete(meal);
+
+        meal.getFoods()
+                .forEach(f -> f.setFood(null));
+        meal.getFoods().clear();
+        userProfile.getMeals().remove(meal);
 
     }
 
@@ -169,40 +190,62 @@ public class MealServiceImpl implements MealService {
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("No such meal with given ID."));
 
+
+
         Meal editedMeal = modelMapper.map(model, Meal.class);
+
+
+        oldMeal.setName(editedMeal.getName());
+
+        if (!oldMeal.getIsCopied()) {
+            oldMeal.setIsPublic(editedMeal.getIsPublic());
+        }
 
 
         List<MealFood> oldFoods = oldMeal.getFoods();
 
         List<MealFood> editedFoods = editedMeal.getFoods();
 
+        setMealInitialValues(oldMeal);
+
 
         List<MealFood> foodsToRemove = new ArrayList<>();
 
         for (MealFood oldFood : oldFoods) {
 
-            MealFood foodCandidate = editedFoods
+            MealFood editedFood = editedFoods
                     .stream()
                     .filter(w -> w.getId().equals(oldFood.getId()))
                     .findFirst().orElse(null);
 
-            if (foodCandidate == null) {
+            if (editedFood == null) {
                 foodsToRemove.add(oldFood);
+            } else {
+                setMealFoodInitialValues(oldFood);
+                oldFood.setServing(editedFood.getServing());
+                addNutritionToMealFood(oldFood, oldFood.getFood());
+                addNutritionToMeal(oldMeal, oldFood);
             }
         }
 
-        oldFoods.removeAll(foodsToRemove);
-
         foodsToRemove.forEach(w -> {
             w.setFood(null);
-            removeNutritionFromMeal(oldMeal, w);
-            mealFoodRepository.delete(w);
         });
 
+        oldFoods.removeAll(foodsToRemove);
 
         mealRepository.save(oldMeal);
 
         return mapMealToMealServiceModel(oldMeal);
+    }
+
+    private void setMealInitialValues(Meal oldMeal) {
+
+        oldMeal.setTotalProtein(0);
+        oldMeal.setTotalCarbohydrates(0);
+        oldMeal.setTotalFats(0);
+        oldMeal.setTotalCalories(0);
+
     }
 
     @Override
@@ -259,6 +302,10 @@ public class MealServiceImpl implements MealService {
         meal.setName(source.getName() + " - Copy");
         meal.setIsCopied(true);
         meal.setIsPublic(false);
+        meal.setTotalCalories(source.getTotalCalories());
+        meal.setTotalProtein(source.getTotalProtein());
+        meal.setTotalCarbohydrates(source.getTotalCarbohydrates());
+        meal.setTotalFats(source.getTotalFats());
 
         List<MealFood> foods = source.getFoods()
                 .stream()
