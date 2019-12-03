@@ -16,57 +16,57 @@ export class DietPlanService {
 
     createDietPlan(dietPlanBindingModel: DietPlanBindingModel) {
 
-        return this.http.post('http://localhost:8000/api/diet-plans/create', dietPlanBindingModel);
+        return this.http.post('/api/diet-plans/create', dietPlanBindingModel);
 
     }
 
     getLoggedInUserDietPlans() {
 
-        return this.http.get('http://localhost:8000/api/diet-plans/my');
+        return this.http.get('/api/diet-plans/my');
 
     }
 
 
     deleteMyDietPlan(dietPlanId: string) {
 
-        return this.http.delete('http://localhost:8000/api/diet-plans/delete/' + dietPlanId);
+        return this.http.delete('/api/diet-plans/delete/' + dietPlanId);
 
     }
 
     editMyDietPlan(dietPlanId: string, dietPlanEditBindingModel: DietPlan) {
 
-        return this.http.put('http://localhost:8000/api/diet-plans/edit/' + dietPlanId, dietPlanEditBindingModel);
+        return this.http.put('/api/diet-plans/edit/' + dietPlanId, dietPlanEditBindingModel);
 
     }
 
     getAllPublicDietPlans() {
 
-        return this.http.get('http://localhost:8000/api/diet-plans/public/all');
+        return this.http.get('/api/diet-plans/public/all');
 
     }
 
     getDietPlanById(dietPlanId: string) {
 
-        return this.http.get('http://localhost:8000/api/diet-plans/' + dietPlanId);
+        return this.http.get('/api/diet-plans/' + dietPlanId);
 
     }
 
     copyDietPlanToMyDietPlans(dietPlanId: string) {
 
-        return this.http.post('http://localhost:8000/api/diet-plans/copy/' + dietPlanId, null);
+        return this.http.post('/api/diet-plans/copy/' + dietPlanId, null);
     }
 
     addMealFromMyMealsToMyDietPlan(dietPlanId: string, mealId: string) {
 
         const params = new HttpParams().append('mealId', mealId);
 
-        return this.http.post('http://localhost:8000/api/diet-plans/add-meal/' + dietPlanId, null, {params: params});
+        return this.http.post('/api/diet-plans/add-meal/' + dietPlanId, null, {params: params});
 
     }
 
     exportDietPlanToExcel(dietPlanId: string) {
 
-        return this.http.get('http://localhost:8000/api/diet-plans/export/excel/' + dietPlanId, {responseType: "blob"});
+        return this.http.get('/api/diet-plans/export/excel/' + dietPlanId, {responseType: "blob"});
     }
 
 }
