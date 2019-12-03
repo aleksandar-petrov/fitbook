@@ -50,8 +50,6 @@ export class MyWorkoutPlansComponent implements OnInit {
 
     fetchWorkoutsPlans() {
         this.workoutPlanService.getLoggedInUserWorkoutPlans().subscribe((workoutPlans: WorkoutPlan[]) => {
-            console.log(workoutPlans);
-            workoutPlans.sort((w1, w2) => w1.name.localeCompare(w2.name));
             this.workoutPlans = workoutPlans;
         })
     }

@@ -1,0 +1,58 @@
+<div class="card d-inline-flex col-12">
+    <div class="card-body">
+        <h3 class="card-title">{{dietPlan.name}}</h3>
+        <hr/>
+        <h4 class="font-weight-light pb-2">Creator: <a class="card-link" routerLink="/profile/{{dietPlan.creator.username}}">{{dietPlan.creator.username}}</a></h4>
+        <hr/>
+        <h4 class="card-title">Meal Nutrition</h4>
+        <h5 class="card-subtitle font-weight-light mb-1">Protein: {{dietPlan.totalProtein}}</h5>
+        <h5 class="card-subtitle font-weight-light mb-1">Carbohydrates: {{dietPlan.totalCarbohydrates}}</h5>
+        <h5 class="card-subtitle font-weight-light mb-1">Fats: {{dietPlan.totalFats}}</h5>
+        <hr/>
+        <h5 class="card-subtitle font-weight-light mb-3">Calories: {{dietPlan.totalCalories}}</h5>
+        <div class="accordion" id="accordionExample">
+            <div class="" *ngFor="let meal of dietPlan.meals; let i = index">
+                <div class="header" [id]="meal.id">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapse show" type="button" data-toggle="collapse" [attr.data-target]="'#collapse' + meal.id + dietPlan.id" aria-expanded="true" [attr.aria-controls]="'collapse' + meal.id + dietPlan.id">
+                            {{meal.orderIndex}}. {{meal.meal.name}}
+                        </button>
+                    </h2>
+                </div>
+                <div [id]="'collapse' + meal.id + dietPlan.id" class="collapse" [attr.aria-labelledby]="meal.id" data-parent="#accordionExample">
+                    <div class="body">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr *ngIf="meal.meal.foods && !meal.meal.foods.length">
+                                <td colspan="5" class="py-auto"><h5>No added foods in this meal.</h5></td>
+                            </tr>
+                            <tr *ngIf="meal.meal.foods && meal.meal.foods.length">
+                                <th scope="col" style="width: 50%">Food name</th>
+                                <th scope="col" style="width: 50%">Serving</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr *ngFor="let food of meal.meal.foods">
+                                <td class="align-middle">{{food.food.name}}</td>
+                                <td class="align-middle">{{food.serving}} g.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr class="mb-5"/>
+        <div class="buttons-wrapper left">
+            <button type="button" class="btn btn-sm btn-success" (click)="copyToMyDietPlansHandler(dietPlan.id)">Copy To My Plans
+            </button>
+        </div>
+        <div class="buttons-wrapper right">
+            <a routerLink="/diet-plans/details/{{dietPlan.id}}" class="btn btn-sm btn-info">Details</a>
+        </div>
+
+    </div>
+</div>
+

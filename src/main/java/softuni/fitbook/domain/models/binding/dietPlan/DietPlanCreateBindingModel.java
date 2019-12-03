@@ -1,11 +1,11 @@
-package softuni.fitbook.domain.models.service.dietPlan;
+package softuni.fitbook.domain.models.binding.dietPlan;
 
-public class DietPlanCreateServiceModel {
+public class DietPlanCreateBindingModel {
 
     private String name;
     private Boolean isPublic;
 
-    public DietPlanCreateServiceModel() {
+    public DietPlanCreateBindingModel() {
     }
 
     public String getName() {

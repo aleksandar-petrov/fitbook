@@ -98,50 +98,19 @@ public class MealServiceImpl implements MealService {
         return mapMealToMealServiceModel(meal);
     }
 
-    private void setMealFoodInitialValues(MealFood mealFood) {
-        mealFood.setCaloriesPerServing(0);
-        mealFood.setProteinPerServing(0);
-        mealFood.setCarbohydratesPerServing(0);
-        mealFood.setFatsPerServing(0);
-    }
 
-    private void addNutritionToMeal(Meal meal, MealFood mealFood) {
-
-        meal.setTotalProtein(mealFood.getProteinPerServing() + meal.getTotalProtein());
-        meal.setTotalCarbohydrates(mealFood.getCarbohydratesPerServing() + meal.getTotalCarbohydrates());
-        meal.setTotalFats(mealFood.getFatsPerServing() + meal.getTotalFats());
-        meal.setTotalCalories(mealFood.getCaloriesPerServing() + meal.getTotalCalories());
-
-    }
-
-    private void removeNutritionFromMeal(Meal meal, MealFood mealFood) {
-
-        meal.setTotalProtein(mealFood.getProteinPerServing() - meal.getTotalProtein());
-        meal.setTotalCarbohydrates(mealFood.getCarbohydratesPerServing() - meal.getTotalCarbohydrates());
-        meal.setTotalFats(mealFood.getFatsPerServing() - meal.getTotalFats());
-        meal.setTotalCalories(mealFood.getCaloriesPerServing() - meal.getTotalCalories());
-
-    }
-
-    private void addNutritionToMealFood(MealFood mealFood, Food food) {
-        Integer caloriesPerServing = (int) (mealFood.getServing() * (food.getCaloriesPerHundred() / 100d));
-        Integer proteinPerServing = (int) (mealFood.getServing() * (food.getProteinPerHundred() / 100d));
-        Integer carbohydratesPerServing = (int) (mealFood.getServing() * (food.getCarbohydratesPerHundred() / 100d));
-        Integer fatsPerServing = (int) (mealFood.getServing() * (food.getFatsPerHundred() / 100d));
-
-        mealFood.setCaloriesPerServing(caloriesPerServing + mealFood.getCaloriesPerServing());
-        mealFood.setProteinPerServing(proteinPerServing + mealFood.getProteinPerServing());
-        mealFood.setCarbohydratesPerServing(carbohydratesPerServing + mealFood.getCarbohydratesPerServing());
-        mealFood.setFatsPerServing(fatsPerServing + mealFood.getFatsPerServing());
-    }
 
     @Override
     public List<MealServiceModel> getAllMealsByUsername(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("No such user with given ID."));
 
-        return user.getUserProfile().getMeals()
+        return userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("No such user with given ID."))
+                .getUserProfile()
+                .getMeals()
                 .stream()
                 .map(this::mapMealToMealServiceModel)
+                .sorted(Comparator.comparing(MealServiceModel::getName))
                 .collect(Collectors.toList());
     }
 
@@ -191,7 +160,6 @@ public class MealServiceImpl implements MealService {
                 .orElseThrow(() -> new NotFoundException("No such meal with given ID."));
 
 
-
         Meal editedMeal = modelMapper.map(model, Meal.class);
 
 
@@ -239,15 +207,6 @@ public class MealServiceImpl implements MealService {
         return mapMealToMealServiceModel(oldMeal);
     }
 
-    private void setMealInitialValues(Meal oldMeal) {
-
-        oldMeal.setTotalProtein(0);
-        oldMeal.setTotalCarbohydrates(0);
-        oldMeal.setTotalFats(0);
-        oldMeal.setTotalCalories(0);
-
-    }
-
     @Override
     public List<MealServiceModel> getAllPublicMeals() {
 
@@ -255,6 +214,7 @@ public class MealServiceImpl implements MealService {
                 .findAllPublicNotCopiedNotEmpty()
                 .stream()
                 .map(this::mapMealToMealServiceModel)
+                .sorted(Comparator.comparing(MealServiceModel::getName))
                 .collect(Collectors.toList());
 
     }
@@ -324,5 +284,51 @@ public class MealServiceImpl implements MealService {
         meal.setFoods(foods);
 
         return meal;
+    }
+
+    private void setMealFoodInitialValues(MealFood mealFood) {
+        mealFood.setCaloriesPerServing(0);
+        mealFood.setProteinPerServing(0);
+        mealFood.setCarbohydratesPerServing(0);
+        mealFood.setFatsPerServing(0);
+    }
+
+    private void addNutritionToMeal(Meal meal, MealFood mealFood) {
+
+        meal.setTotalProtein(mealFood.getProteinPerServing() + meal.getTotalProtein());
+        meal.setTotalCarbohydrates(mealFood.getCarbohydratesPerServing() + meal.getTotalCarbohydrates());
+        meal.setTotalFats(mealFood.getFatsPerServing() + meal.getTotalFats());
+        meal.setTotalCalories(mealFood.getCaloriesPerServing() + meal.getTotalCalories());
+
+    }
+
+    private void removeNutritionFromMeal(Meal meal, MealFood mealFood) {
+
+        meal.setTotalProtein(mealFood.getProteinPerServing() - meal.getTotalProtein());
+        meal.setTotalCarbohydrates(mealFood.getCarbohydratesPerServing() - meal.getTotalCarbohydrates());
+        meal.setTotalFats(mealFood.getFatsPerServing() - meal.getTotalFats());
+        meal.setTotalCalories(mealFood.getCaloriesPerServing() - meal.getTotalCalories());
+
+    }
+
+    private void addNutritionToMealFood(MealFood mealFood, Food food) {
+        Integer caloriesPerServing = (int) (mealFood.getServing() * (food.getCaloriesPerHundred() / 100d));
+        Integer proteinPerServing = (int) (mealFood.getServing() * (food.getProteinPerHundred() / 100d));
+        Integer carbohydratesPerServing = (int) (mealFood.getServing() * (food.getCarbohydratesPerHundred() / 100d));
+        Integer fatsPerServing = (int) (mealFood.getServing() * (food.getFatsPerHundred() / 100d));
+
+        mealFood.setCaloriesPerServing(caloriesPerServing + mealFood.getCaloriesPerServing());
+        mealFood.setProteinPerServing(proteinPerServing + mealFood.getProteinPerServing());
+        mealFood.setCarbohydratesPerServing(carbohydratesPerServing + mealFood.getCarbohydratesPerServing());
+        mealFood.setFatsPerServing(fatsPerServing + mealFood.getFatsPerServing());
+    }
+
+    private void setMealInitialValues(Meal oldMeal) {
+
+        oldMeal.setTotalProtein(0);
+        oldMeal.setTotalCarbohydrates(0);
+        oldMeal.setTotalFats(0);
+        oldMeal.setTotalCalories(0);
+
     }
 }

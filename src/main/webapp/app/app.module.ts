@@ -36,12 +36,12 @@ import {UserProfileComponent} from './user/user-profile/user-profile.component';
 import {NgxChartsModule, PieChartModule} from "@swimlane/ngx-charts";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {WorkoutDetailsComponent} from './workout/workout-details/workout-details.component';
-import {MyWorkoutPlansComponent} from './workoutPlan/my-workout-plans/my-workout-plans.component';
-import {NoSelectedWorkoutPlanComponent} from './workoutPlan/my-workout-plans/no-selected-workout-plan/no-selected-workout-plan.component';
-import {SelectedWorkoutPlanComponent} from './workoutPlan/my-workout-plans/selected-workout-plan/selected-workout-plan.component';
-import {AllWorkoutPlansComponent} from './workoutPlan/all-workout-plans/all-workout-plans.component';
-import {WorkoutPlanDetailsComponent} from './workoutPlan/workout-plan-details/workout-plan-details.component';
-import {WorkoutPlanCardComponent} from './workoutPlan/workout-plan-card/workout-plan-card.component';
+import {MyWorkoutPlansComponent} from './workout-plan/my-workout-plans/my-workout-plans.component';
+import {NoSelectedWorkoutPlanComponent} from './workout-plan/my-workout-plans/no-selected-workout-plan/no-selected-workout-plan.component';
+import {SelectedWorkoutPlanComponent} from './workout-plan/my-workout-plans/selected-workout-plan/selected-workout-plan.component';
+import {AllWorkoutPlansComponent} from './workout-plan/all-workout-plans/all-workout-plans.component';
+import {WorkoutPlanDetailsComponent} from './workout-plan/workout-plan-details/workout-plan-details.component';
+import {WorkoutPlanCardComponent} from './workout-plan/workout-plan-card/workout-plan-card.component';
 import {SearchFoodComponent} from './food/search-food/search-food.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { FoodDetailsComponent } from './food/food-details/food-details.component';
@@ -53,6 +53,12 @@ import { AllFoodsComponent } from './food/all-foods/all-foods.component';
 import { FoodCardComponent } from './food/food-card/food-card.component';
 import { SelectedMealComponent } from './meal/my-meals/selected-meal/selected-meal.component';
 import { NoSelectedMealComponent } from './meal/my-meals/no-selected-meal/no-selected-meal.component';
+import { AllDietPlansComponent } from './diet-plan/all-diet-plans/all-diet-plans.component';
+import { MyDietPlansComponent } from './diet-plan/my-diet-plans/my-diet-plans.component';
+import { DietPlanDetailsComponent } from './diet-plan/diet-plan-details/diet-plan-details.component';
+import { DietPlanCardComponent } from './diet-plan/diet-plan-card/diet-plan-card.component';
+import { NoSelectedDietPlanComponent } from './diet-plan/my-diet-plans/no-selected-diet-plan/no-selected-diet-plan.component';
+import { SelectedDietPlanComponent } from './diet-plan/my-diet-plans/selected-diet-plan/selected-diet-plan.component';
 
 @NgModule({
     declarations: [
@@ -98,7 +104,13 @@ import { NoSelectedMealComponent } from './meal/my-meals/no-selected-meal/no-sel
         AllFoodsComponent,
         FoodCardComponent,
         SelectedMealComponent,
-        NoSelectedMealComponent
+        NoSelectedMealComponent,
+        AllDietPlansComponent,
+        MyDietPlansComponent,
+        DietPlanDetailsComponent,
+        DietPlanCardComponent,
+        NoSelectedDietPlanComponent,
+        SelectedDietPlanComponent
     ],
     imports: [
         BrowserModule,

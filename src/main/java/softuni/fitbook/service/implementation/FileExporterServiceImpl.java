@@ -4,25 +4,22 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
-import softuni.fitbook.domain.entities.MealFood;
 import softuni.fitbook.domain.models.service.dietPlan.DietPlanMealServiceModel;
 import softuni.fitbook.domain.models.service.dietPlan.DietPlanServiceModel;
 import softuni.fitbook.domain.models.service.meal.MealFoodServiceModel;
-import softuni.fitbook.domain.models.service.meal.MealServiceModel;
 import softuni.fitbook.domain.models.service.workout.WorkoutExerciseServiceModel;
 import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanServiceModel;
 import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanWorkoutServiceModel;
 import softuni.fitbook.service.FileExporterService;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
-import java.util.List;
+import java.nio.file.Paths;
 
 @Service
 public class FileExporterServiceImpl implements FileExporterService {
+
+    private static final String LOGO_FILE_PATH = System.getProperty("user.dir") + "/src/main/resources/static/assets/static/images/logo.png";
 
     @Override
     public byte[] exportWorkoutPlanToExcel(WorkoutPlanServiceModel model) {
@@ -31,8 +28,7 @@ public class FileExporterServiceImpl implements FileExporterService {
 
         Sheet sheet = workbook.createSheet("Workout Plan");
 
-
-        makeMainHeader(workbook, sheet, model.getName(), 3);
+        makeMainHeader(workbook, 0, sheet, model.getName(), 3);
 
         int lastRow = 1;
 
@@ -64,13 +60,14 @@ public class FileExporterServiceImpl implements FileExporterService {
                             12);
                 } else {
 
-                    makeRow(workbook, sheet, lastRow++, 3,
+                    makeRow(workbook, sheet, lastRow++, 0, 3,
                             "Order", "Exercise", "Reps", "Sets");
 
                     for (WorkoutExerciseServiceModel exercise : workout.getWorkout().getExercises()) {
                         makeRow(workbook,
                                 sheet,
                                 lastRow++,
+                                0,
                                 3,
                                 exercise.getOrderIndex().toString(),
                                 exercise.getExercise().getName(),
@@ -91,9 +88,43 @@ public class FileExporterServiceImpl implements FileExporterService {
         sheet.setColumnWidth(1, 7000);
         sheet.setColumnWidth(2, 4000);
         sheet.setColumnWidth(3, 4000);
+        sheet.setColumnWidth(5, 5500);
+        sheet.setColumnWidth(6, 5500);
+
+        attachImageToFile(workbook, sheet, 4);
 
         return createFile(workbook, model.getId());
     }
+
+    private void attachImageToFile(Workbook workbook, Sheet sheet, int col) {
+
+
+        try {
+            byte[] logoBytes = Files.readAllBytes(Paths.get(LOGO_FILE_PATH));
+
+            final CreationHelper helper = workbook.getCreationHelper();
+            final Drawing drawing = sheet.createDrawingPatriarch();
+
+            final ClientAnchor anchor = helper.createClientAnchor();
+            anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_AND_RESIZE);
+
+
+            final int pictureIndex =
+                    workbook.addPicture(logoBytes, Workbook.PICTURE_TYPE_PNG);
+
+
+            anchor.setCol1(col + 1);
+            anchor.setRow1(2); // same row is okay
+            anchor.setRow2(2);
+            anchor.setCol2(col + 2);
+            final Picture pict = drawing.createPicture(anchor, pictureIndex);
+            pict.resize(2, 9);
+        } catch (Exception ignored) {
+        }
+
+
+    }
+
 
     @Override
     public byte[] exportDietPlanToExcel(DietPlanServiceModel model) {
@@ -103,7 +134,7 @@ public class FileExporterServiceImpl implements FileExporterService {
         Sheet sheet = workbook.createSheet("Diet Plan");
 
 
-        makeMainHeader(workbook, sheet, model.getName(), 5);
+        makeMainHeader(workbook, 0,  sheet, model.getName(), 5);
 
         int lastRow = 1;
 
@@ -135,13 +166,14 @@ public class FileExporterServiceImpl implements FileExporterService {
                             12);
                 } else {
 
-                    makeRow(workbook, sheet, lastRow++, 5,
+                    makeRow(workbook, sheet, lastRow++, 0, 5,
                             "Food name", "Serving", "Protein", "Carbohydrates", "Fats", "Calories");
 
                     for (MealFoodServiceModel mealFood : meal.getMeal().getFoods()) {
                         makeRow(workbook,
                                 sheet,
                                 lastRow++,
+                                0,
                                 5,
                                 mealFood.getFood().getName(),
                                 mealFood.getServing() + " g.",
@@ -151,7 +183,13 @@ public class FileExporterServiceImpl implements FileExporterService {
                                 mealFood.getCaloriesPerServing().toString());
                     }
 
-                    makeSubHeader(workbook, sheet, "Total: ", lastRow, 1, 14);
+                    Row sheetRow = makeSubHeader(workbook, sheet, "Total: ", lastRow++, 1, 12);
+
+                    makeRow(workbook, sheet, sheetRow, 2, 5,
+                            meal.getMeal().getTotalProtein() + " g.",
+                            meal.getMeal().getTotalCarbohydrates() + " g.",
+                            meal.getMeal().getTotalFats() + " g.",
+                            meal.getMeal().getTotalCalories().toString());
 
 
                 }
@@ -162,17 +200,31 @@ public class FileExporterServiceImpl implements FileExporterService {
 
         }
 
+        String dietPlanTotal = String.format("Protein: %s g. | Carbohydrates: %s g. | Fats: %s g. | Calories: %s", model.getTotalProtein(), model.getTotalCarbohydrates(), model.getTotalFats(), model.getTotalCalories());
+
+        makeMainHeader(workbook, lastRow++, sheet, "Diet Plan Nutrition Info"
+                , 5);
+
+        makeMainHeader(workbook, lastRow, sheet, dietPlanTotal
+                , 5);
+
         sheet.setColumnWidth(0, 7000);
         sheet.setColumnWidth(1, 4000);
         sheet.setColumnWidth(2, 4000);
-        sheet.setColumnWidth(3, 4000);
-        sheet.setColumnWidth(4, 4000);
+        sheet.setColumnWidth(3, 4800);
+        sheet.setColumnWidth(4, 3500);
         sheet.setColumnWidth(5, 4000);
+        sheet.setColumnWidth(7, 5500);
+        sheet.setColumnWidth(8, 5500);
+
+
+        attachImageToFile(workbook, sheet, 6);
 
         return createFile(workbook, model.getId());
     }
 
     private byte[] createFile(Workbook workbook, String id) {
+
         File excelFile;
         try {
             excelFile = File.createTempFile(id, "xlsx");
@@ -206,14 +258,14 @@ public class FileExporterServiceImpl implements FileExporterService {
         cellStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
     }
 
-    private void makeMainHeader(Workbook workbook, Sheet sheet, String value, int cols) {
+    private void makeMainHeader(Workbook workbook, int row,  Sheet sheet, String value, int cols) {
 
         CellStyle headerRowStyle = getRowStyle(workbook);
 
-        Row headerRow = sheet.createRow(0);
+        Row headerRow = sheet.createRow(row);
         headerRow.setRowStyle(headerRowStyle);
 
-        mergeCells(sheet, 0, cols);
+        mergeCells(sheet, row, cols);
 
         headerRow.setHeight((short) 700);
 
@@ -233,7 +285,7 @@ public class FileExporterServiceImpl implements FileExporterService {
 
     }
 
-    private void makeSubHeader(Workbook workbook, Sheet sheet, String value, int row, int cols, int fontSize) {
+    private Row makeSubHeader(Workbook workbook, Sheet sheet, String value, int row, int cols, int fontSize) {
 
         CellStyle rowStyle = getRowStyle(workbook);
 
@@ -257,9 +309,11 @@ public class FileExporterServiceImpl implements FileExporterService {
 
         }
 
+        return headerRow;
+
     }
 
-    private void makeRow(Workbook workbook, Sheet sheet, int row, int cols, String... values) {
+    private void makeRow(Workbook workbook, Sheet sheet, int row, int startCol, int endCol, String... values) {
 
         CellStyle rowStyle = getRowStyle(workbook);
 
@@ -270,25 +324,46 @@ public class FileExporterServiceImpl implements FileExporterService {
 
         CellStyle headerRowCellStyle = getRowCellStyle(workbook);
 
-        for (int i = 0; i <= cols; i++) {
+        createCells(startCol, endCol, sheetRow, headerRowCellStyle, values);
+
+    }
+
+    private void createCells(int startCol, int endCol, Row sheetRow, CellStyle headerRowCellStyle, String[] values) {
+        int arrayCounter = 0;
+        for (int i = startCol; i <= endCol; i++) {
 
             Cell cell = sheetRow.createCell(i);
             cell.setCellStyle(headerRowCellStyle);
 
             try {
-                int number = Integer.parseInt(values[i]);
+                int number = Integer.parseInt(values[arrayCounter]);
                 cell.setCellValue(number);
             } catch (NumberFormatException ex) {
-                cell.setCellValue(values[i]);
+                cell.setCellValue(values[arrayCounter]);
             }
+
+            arrayCounter++;
         }
+    }
+
+    private void makeRow(Workbook workbook, Sheet sheet, Row sheetRow, int startCol, int endCol, String... values) {
+
+        CellStyle rowStyle = getRowStyle(workbook);
+
+        sheetRow.setRowStyle(rowStyle);
+
+        sheetRow.setHeight((short) 500);
+
+        CellStyle cellStyle = getSubHeaderRowCellStyle(workbook, 12);
+
+        createCells(startCol, endCol, sheetRow, cellStyle, values);
 
     }
 
     private CellStyle getHeaderRowCellStyle(Workbook workbook, int fontSize) {
 
         CellStyle cellStyle = workbook.createCellStyle();
-        cellStyle.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+        cellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         cellStyle.setFont(getHeaderFont(workbook, fontSize));
         setAlignmentStyle(cellStyle);
@@ -324,7 +399,7 @@ public class FileExporterServiceImpl implements FileExporterService {
 
         Font headerFont = workbook.createFont();
         headerFont.setFontHeightInPoints((short) 12);
-        headerFont.setFontName("Arial");
+        headerFont.setFontName("Bahnschrift");
         return headerFont;
 
     }
@@ -341,7 +416,7 @@ public class FileExporterServiceImpl implements FileExporterService {
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
         headerFont.setFontHeightInPoints((short) fontSize);
-        headerFont.setFontName("Arial");
+        headerFont.setFontName("Bahnschrift");
         return headerFont;
     }
 

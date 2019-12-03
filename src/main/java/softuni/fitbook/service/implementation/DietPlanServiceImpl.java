@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import softuni.fitbook.domain.entities.*;
 import softuni.fitbook.domain.models.service.CreatorServiceModel;
+
 import softuni.fitbook.domain.models.service.dietPlan.DietPlanCreateServiceModel;
 import softuni.fitbook.domain.models.service.dietPlan.DietPlanMealServiceModel;
 import softuni.fitbook.domain.models.service.dietPlan.DietPlanServiceModel;
@@ -60,11 +61,13 @@ public class DietPlanServiceImpl implements DietPlanService {
 
         dietPlan.setUserProfile(user.getUserProfile());
 
+        dietPlan.setMeals(new ArrayList<>());
+
         setInitialValuesToDietPlan(dietPlan);
 
         dietPlan = dietPlanRepository.save(dietPlan);
 
-        return mapDietPlanToDietPlanServiceModel(dietPlan);
+        return modelMapper.map(dietPlan, DietPlanServiceModel.class);
 
     }
 
@@ -130,6 +133,7 @@ public class DietPlanServiceImpl implements DietPlanService {
                 .getDietPlans()
                 .stream()
                 .map(this::mapDietPlanToDietPlanServiceModel)
+                .sorted(Comparator.comparing(DietPlanServiceModel::getName))
                 .collect(Collectors.toList());
     }
 
@@ -201,16 +205,17 @@ public class DietPlanServiceImpl implements DietPlanService {
                 mealsToRemove.add(oldMeal);
             } else {
                 oldMeal.setOrderIndex(editedDietPlanMeal.getOrderIndex());
-                addNutritionToDietPlan(oldDietPlan, editedDietPlanMeal.getMeal());
+                addNutritionToDietPlan(oldDietPlan, oldMeal.getMeal());
             }
         }
 
-        mealsToRemove.forEach(w -> {
-            w.setMeal(null);
-            dietPlanMealRepository.delete(w);
-        });
 
         oldMeals.removeAll(mealsToRemove);
+
+        mealsToRemove.forEach(m -> {
+            m.setMeal(null);
+            dietPlanMealRepository.delete(m);
+        });
 
         oldDietPlan = dietPlanRepository.save(oldDietPlan);
 
@@ -223,6 +228,7 @@ public class DietPlanServiceImpl implements DietPlanService {
                 .findAllPublicNotCopiedNotEmpty()
                 .stream()
                 .map(this::mapDietPlanToDietPlanServiceModel)
+                .sorted(Comparator.comparing(DietPlanServiceModel::getName))
                 .collect(Collectors.toList());
     }
 
@@ -241,6 +247,10 @@ public class DietPlanServiceImpl implements DietPlanService {
         copy.setIsPublic(false);
         copy.setIsCopied(true);
         copy.setMeals(new ArrayList<>());
+        copy.setTotalProtein(dietPlan.getTotalProtein());
+        copy.setTotalCarbohydrates(dietPlan.getTotalCarbohydrates());
+        copy.setTotalFats(dietPlan.getTotalFats());
+        copy.setTotalCalories(dietPlan.getTotalCalories());
 
         copy.setUserProfile(user.getUserProfile());
 

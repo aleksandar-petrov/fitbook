@@ -182,11 +182,6 @@ export class SelectedWorkoutPlanComponent implements OnInit {
         this.rearrangeOrderIndexes();
     }
 
-    deleteWorkoutExercise(workoutPlanId: string, workoutId: string) {
-        // this.workoutPlanService.deleteWorkoutFromMyWorkoutPlan(workoutPlanId, workoutId).subscribe((workoutPlan: WorkoutPlan) => {
-        //   this.selectedWorkoutPlan = workoutPlan;
-        // })
-    }
 
     onSaveHandler() {
 
@@ -219,10 +214,6 @@ export class SelectedWorkoutPlanComponent implements OnInit {
         for (let i = 0; i < workouts.length; i++) {
             workouts[i].orderIndex = i + 1;
         }
-    }
-
-    onAddWorkoutHandler() {
-
     }
 
     setSelectedWorkoutForModal() {

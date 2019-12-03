@@ -15,6 +15,10 @@ public class DietPlanServiceModel {
     private List<DietPlanMealServiceModel> meals;
     private CreatorServiceModel creator;
     private Boolean isCopied;
+    private Integer totalProtein;
+    private Integer totalCarbohydrates;
+    private Integer totalFats;
+    private Integer totalCalories;
 
     public DietPlanServiceModel() {
     }
@@ -65,5 +69,37 @@ public class DietPlanServiceModel {
 
     public void setIsCopied(Boolean isCopied) {
         this.isCopied = isCopied;
+    }
+
+    public Integer getTotalProtein() {
+        return totalProtein;
+    }
+
+    public void setTotalProtein(Integer totalProtein) {
+        this.totalProtein = totalProtein;
+    }
+
+    public Integer getTotalCarbohydrates() {
+        return totalCarbohydrates;
+    }
+
+    public void setTotalCarbohydrates(Integer totalCarbohydrates) {
+        this.totalCarbohydrates = totalCarbohydrates;
+    }
+
+    public Integer getTotalFats() {
+        return totalFats;
+    }
+
+    public void setTotalFats(Integer totalFats) {
+        this.totalFats = totalFats;
+    }
+
+    public Integer getTotalCalories() {
+        return totalCalories;
+    }
+
+    public void setTotalCalories(Integer totalCalories) {
+        this.totalCalories = totalCalories;
     }
 }

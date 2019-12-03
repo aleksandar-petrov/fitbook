@@ -8,6 +8,7 @@ import softuni.fitbook.domain.entities.Workout;
 import softuni.fitbook.domain.entities.WorkoutPlan;
 import softuni.fitbook.domain.entities.WorkoutPlanWorkout;
 import softuni.fitbook.domain.models.service.CreatorServiceModel;
+import softuni.fitbook.domain.models.service.dietPlan.DietPlanServiceModel;
 import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanCreateServiceModel;
 import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanServiceModel;
 import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanWorkoutServiceModel;
@@ -58,11 +59,13 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
 
         workoutPlan.setIsCopied(false);
 
+        workoutPlan.setWorkouts(new ArrayList<>());
+
         workoutPlan.setUserProfile(user.getUserProfile());
 
         workoutPlan = workoutPlanRepository.save(workoutPlan);
 
-        return mapWorkoutPlanToWorkoutPlanServiceModel(workoutPlan);
+        return modelMapper.map(workoutPlan, WorkoutPlanServiceModel.class);
     }
 
     @Override
@@ -104,13 +107,14 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
     @Override
     public List<WorkoutPlanServiceModel> getAllWorkoutPlansByUsername(String username) {
 
-        User user = this.userRepository
+        return this.userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."));
-
-        return user.getUserProfile().getWorkoutPlans()
+                .orElseThrow(() -> new NotFoundException("No such user with given username."))
+                .getUserProfile()
+                .getWorkoutPlans()
                 .stream()
                 .map(this::mapWorkoutPlanToWorkoutPlanServiceModel)
+                .sorted(Comparator.comparing(WorkoutPlanServiceModel::getName))
                 .collect(Collectors.toList());
     }
 
@@ -202,6 +206,7 @@ public class WorkoutPlanServiceImpl implements WorkoutPlanService {
                 .findAllPublicNotCopiedNotEmpty()
                 .stream()
                 .map(this::mapWorkoutPlanToWorkoutPlanServiceModel)
+                .sorted(Comparator.comparing(WorkoutPlanServiceModel::getName))
                 .collect(Collectors.toList());
     }
 

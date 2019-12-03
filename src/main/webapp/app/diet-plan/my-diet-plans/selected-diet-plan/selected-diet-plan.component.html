@@ -1,0 +1,393 @@
+<div class="selected-diet-plan">
+
+    <ng-template #addMealToDietPlanModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title2">Add Meal To Diet Plan</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form *ngIf="selectedMealForModal" #addMealToDietPlanForm="ngForm">
+
+                <div class="form-group col-6">
+                    <label for="inputStatus">Meal</label>
+                    <select id="inputMealId" name="mealId" class="form-control" #inputMealId
+                            (change)="setSelectedMealForModal()"
+                            [(ngModel)]="selectedMealIdForModal">
+                        <option [ngValue]="meal.id"
+                                *ngFor="let meal of loggedUserMeals">{{meal.name}}</option>
+                    </select>
+                </div>
+
+                <hr/>
+
+                <h5 class="text-center">{{selectedMealForModal.name}}</h5>
+
+                <table class="table table-striped table-hover mx-auto">
+                    <thead>
+                    <tr *ngIf="selectedMealForModal.foods && !selectedMealForModal.foods.length">
+                        <td colspan="5" class="py-auto"><h5 class="text-center">No added foods in this meal.</h5></td>
+                    </tr>
+                    <tr *ngIf="selectedMealForModal.foods && selectedMealForModal.foods.length">
+                        <th scope="col" style="width: 25%">Food name</th>
+                        <th scope="col" style="width: 15%">Serving</th>
+                        <th scope="col" style="width: 15%">P</th>
+                        <th scope="col" style="width: 15%">C</th>
+                        <th scope="col" style="width: 15%">F</th>
+                        <th scope="col" style="width: 15%">Calories</th>
+
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="selectedMealForModal.foods && selectedMealForModal.foods.length">
+
+                    <tr *ngFor="let food of selectedMealForModal.foods">
+                        <td class="align-middle">{{food.food.name}}</td>
+                        <td class="align-middle">{{food.serving}} g.</td>
+                        <td class="align-middle">{{food.proteinPerServing}} g.</td>
+                        <td class="align-middle">{{food.carbohydratesPerServing}} g.</td>
+                        <td class="align-middle">{{food.fatsPerServing}} g.</td>
+                        <td class="align-middle">{{food.caloriesPerServing}}</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" class="align-middle text-center">Total:</td>
+                        <td class="align-middle">{{selectedMealForModal.totalProtein}} g.</td>
+                        <td class="align-middle">{{selectedMealForModal.totalCarbohydrates}} g.</td>
+                        <td class="align-middle">{{selectedMealForModal.totalFats}} g.</td>
+                        <td class="align-middle">{{selectedMealForModal.totalCalories}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+
+            <div *ngIf="!selectedMealForModal"><h5 class="text-center">You don't have any
+                meals.</h5>
+                <button type="button" class="btn btn-success d-block mt-3 mx-auto"
+                        routerLink="/my-meals" (click)="modal.dismiss()">Go to My Meals
+                </button>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" [disabled]="!selectedMealForModal" class="btn btn-outline-dark"
+                    (click)="modal.close()">Add to Diet Plan
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template #showDietPlanNutritionModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Diet Plan Nutrition Info</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body row">
+
+            <div class="col-lg-3 align-middle my-auto pl-5">
+                <h1 class="text-center font-weight-bold">{{selectedDietPlan.name}}</h1>
+
+
+                <h3 class="text-center font-weight-light">Calories: {{selectedDietPlan.totalCalories}}</h3>
+                <div class="macros text-center mx-auto">
+                    <h3 class="font-weight-light ">
+                        Protein: {{selectedDietPlan.totalProtein}}g.</h3>
+                    <h3 class="font-weight-light ">
+                        Carbohydrates: {{selectedDietPlan.totalCarbohydrates}}g.</h3>
+                    <h3 class="font-weight-light ">Fats: {{selectedDietPlan.totalFats}}
+                        g.</h3>
+                    <span class="display-5 opacity-5"><i
+                            class="fas fa-utensils fa-lg"></i></span>
+                </div>
+            </div>
+            <div class="chart-container row align-middle col-lg-9">
+
+                <ngx-charts-bar-horizontal-2d *ngIf="macroNutrientsData"
+                                              class="mx-auto"
+                                              [view]="[600, 400]"
+                                              [animations]="true"
+                                              [xAxis]="true"
+                                              [yAxis]="true"
+                                              [results]="macroNutrientsData"
+                                              [trimXAxisTicks]="false"
+                                              legendTitle="Nutrition"
+                                              [legend]="true"
+                                              [showXAxisLabel]="true"
+                                              [showGridLines]="true"
+                                              [showYAxisLabel]="true"
+                                              [gradient]="true"
+                                              [noBarWhenZero]="true"
+                                              [roundDomains]="true"
+                                              [tooltipDisabled]="false"
+                                              [trimYAxisTicks]="false"
+                                              [showDataLabel]="true">
+
+                </ngx-charts-bar-horizontal-2d>
+
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">Close</button>
+        </div>
+    </ng-template>
+
+
+    <h2 *ngIf="!editMode" class="pt-3 font-weight-light">{{selectedDietPlan.name}}</h2>
+    <div class="py-3 mx-auto col-5" *ngIf="editMode"><input type="text" value="{{editDietPlanBindingModel.name}}"
+                                                            class="form-control form-control-lg text-center"
+                                                            id="inputName"
+                                                            name="inputName" #inputName="ngModel"
+                                                            required
+                                                            [ngClass]="{'is-valid': inputName.valid && inputName.touched,
+                         'is-invalid': inputName.invalid && inputName.touched}"
+                                                            [(ngModel)]="editDietPlanBindingModel.name"></div>
+    <h4 class="pb-3 font-weight-light" *ngIf="!editMode && !selectedDietPlan.isCopied">
+        ({{selectedDietPlan.isPublic ? 'Public' : 'Private'}})</h4>
+    <h4 class="pb-3 font-weight-light" *ngIf="selectedDietPlan.isCopied">(Copy)</h4>
+    <div *ngIf="editMode && !selectedDietPlan.isCopied" class="pb-3 col-3 mx-auto">
+        <select id="inputStatus" name="status" class="form-control" #inputMealStatus
+                [(ngModel)]="editDietPlanBindingModel.isPublic">
+            <option [ngValue]="true">Public</option>
+            <option [ngValue]="false">Private</option>
+        </select>
+    </div>
+    <button *ngIf="!editMode" type="button" routerLink="/diet-plans/details/{{dietPlanId}}"
+            class="btn btn-dark mb-2"><i class="fas fa-share-alt"></i></button>
+
+
+    <h5 *ngIf="!selectedDietPlan.meals || !selectedDietPlan.meals.length">No added meals in this diet
+        plan.</h5>
+
+
+    <div class="meals-container col-12 mx-auto" *ngIf="!editMode">
+        <table class="table table-striped table-hover mb-4" *ngFor="let meal of selectedDietPlan.meals">
+            <h4 class="order-index-meal font-weight-bold font-italic">{{meal.orderIndex}}</h4>
+            <thead>
+            <tr>
+                <th colspan="7" class="py-auto"><h5><a
+                        routerLink="/my-meals/{{meal.meal.id}}">{{meal.meal.name}}</a></h5></th>
+            </tr>
+            <tr *ngIf="meal.meal.foods && !meal.meal.foods.length">
+                <td colspan="7" class="py-auto"><h5>No added foods in this meal.</h5></td>
+            </tr>
+            <tr *ngIf="meal.meal.foods && meal.meal.foods.length">
+                <th scope="col" style="width: 25%">Food name</th>
+                <th scope="col" style="width: 15%">Serving</th>
+                <th scope="col" style="width: 10%">P</th>
+                <th scope="col" style="width: 10%">C</th>
+                <th scope="col" style="width: 10%">F</th>
+                <th scope="col" style="width: 10%">Calories</th>
+                <th scope="col" style="width: 20%;"></th>
+            </tr>
+            </thead>
+            <tbody *ngIf="!editMode && meal.meal.foods && meal.meal.foods.length">
+            <tr *ngFor="let food of meal.meal.foods">
+                <td class="align-middle">{{food.food.name}}</td>
+                <td class="align-middle">{{food.serving}} g.</td>
+                <td class="align-middle">{{food.proteinPerServing}} g.</td>
+                <td class="align-middle">{{food.carbohydratesPerServing}} g.</td>
+                <td class="align-middle">{{food.fatsPerServing}} g.</td>
+                <td class="align-middle">{{food.caloriesPerServing}}</td>
+                <td>
+                    <button type="button" routerLink="/foods/details/{{food.food.id}}"
+                            class="btn btn-primary mr-2"><i class="far fa-eye"></i></button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="align-middle text-center">Total:</td>
+                <td class="align-middle">{{meal.meal.totalProtein}} g.</td>
+                <td class="align-middle">{{meal.meal.totalCarbohydrates}} g.</td>
+                <td class="align-middle">{{meal.meal.totalFats}} g.</td>
+                <td class="align-middle">{{meal.meal.totalCalories}}</td>
+                <td class="align-middle"></td>
+            </tr>
+
+            </tbody>
+        </table>
+
+        <div class="nutrition-goal" *ngIf="selectedDietPlan.meals && selectedDietPlan.meals.length">
+            <table class="table table-hover table-borderless mb-4">
+                <tbody>
+                <tr>
+                    <td class="align-middle" style="width: 37%"><h5 class="m-0">Diet Plan: </h5></td>
+                    <td class="align-middle" style="width: 11%"><p class="font-weight-bold m-0">{{selectedDietPlan.totalProtein}} g.</p></td>
+                    <td class="align-middle" style="width: 11%"><p class="font-weight-bold m-0">{{selectedDietPlan.totalCarbohydrates}} g.</p></td>
+                    <td class="align-middle" style="width: 11%"><p class="font-weight-bold m-0">{{selectedDietPlan.totalFats}} g.</p></td>
+                    <td class="align-middle" style="width: 11%"><p class="font-weight-bold m-0">{{selectedDietPlan.totalCalories}}</p></td>
+                    <td class="align-middle" style="width: 19%"></td>
+                </tr>
+                <tr>
+                    <td class="align-middle" style="width: 37%"><h5 class="m-0">Nutrition Goal: </h5></td>
+                    <td class="align-middle" style="width: 11%"><p class="font-weight-bold m-0">{{userNutritionGoal.gramsOfProtein}} g.</p></td>
+                    <td class="align-middle" style="width: 11%"><p class="font-weight-bold m-0">{{userNutritionGoal.gramsOfCarbohydrates}} g.</p>
+                    </td>
+                    <td class="align-middle" style="width: 11%"><p class="font-weight-bold m-0">{{userNutritionGoal.gramsOfFats}} g.</p></td>
+                    <td class="align-middle" style="width: 11%"><p class="font-weight-bold m-0">{{userNutritionGoal.calories}}</p></td>
+                    <td class="align-middle" style="width: 19%"></td>
+                </tr>
+                <tr>
+                    <td class="align-middle" style="width: 37%"><h5 class="m-0">Remaining: </h5></td>
+                    <td class="align-middle" style="width: 11%"><p class="font-weight-bold m-0" [ngClass]="{'text-danger': userNutritionGoal.gramsOfProtein - selectedDietPlan.totalProtein < 0,
+                        'text-success': userNutritionGoal.gramsOfProtein - selectedDietPlan.totalProtein >= 0}">
+                        {{userNutritionGoal.gramsOfProtein - selectedDietPlan.totalProtein}} g.</p></td>
+                    <td class="align-middle" style="width: 11%">
+                        <p class="font-weight-bold m-0" [ngClass]="{'text-danger': userNutritionGoal.gramsOfCarbohydrates - selectedDietPlan.totalCarbohydrates < 0,
+                        'text-success': userNutritionGoal.gramsOfCarbohydrates - selectedDietPlan.totalCarbohydrates >= 0}">
+                            {{userNutritionGoal.gramsOfCarbohydrates - selectedDietPlan.totalCarbohydrates}} g.</p>
+                    </td>
+                    <td class="align-middle" style="width: 11%"><p class="font-weight-bold m-0" [ngClass]="{'text-danger': userNutritionGoal.gramsOfFats - selectedDietPlan.totalFats < 0,
+                        'text-success': userNutritionGoal.gramsOfFats - selectedDietPlan.totalFats >= 0}">
+                        {{userNutritionGoal.gramsOfFats - selectedDietPlan.totalFats}} g.</p>
+                    </td>
+                    <td class="align-middle" style="width: 11%"><p class="font-weight-bold m-0" [ngClass]="{'text-danger': userNutritionGoal.calories - selectedDietPlan.totalCalories < 0,
+                        'text-success': userNutritionGoal.calories - selectedDietPlan.totalCalories >= 0}">
+                        {{userNutritionGoal.calories - selectedDietPlan.totalCalories}}</p>
+                    </td>
+                    <td class="align-middle" style="width: 19%"></td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+    <div class="meals-container col-12 mx-auto" cdkDropList (cdkDropListDropped)="onDrop($event)" *ngIf="editMode">
+        <table cdkDrag class="table table-striped table-hover mb-4"
+               *ngFor="let meal of editDietPlanBindingModel.meals">
+            <h4 class="order-index-meal font-weight-bold font-italic">{{meal.orderIndex}}</h4>
+            <thead>
+            <tr>
+                <th colspan="7" class="py-auto"><h5 class="d-inline-block">{{meal.meal.name}}</h5>
+                    <button type="button" (click)="onMealDeleteHandler(meal.id, meal.orderIndex)"
+                            class="btn btn-danger delete-btn ml-3"><i class="far fa-trash-alt"></i></button>
+                </th>
+
+            </tr>
+            <tr *ngIf="meal.meal.foods && !meal.meal.foods.length">
+                <td colspan="7" class="py-auto"><h5>No added foods in this meal.</h5></td>
+            </tr>
+            <tr *ngIf="meal.meal.foods && meal.meal.foods.length">
+                <th scope="col" style="width: 25%">Food name</th>
+                <th scope="col" style="width: 15%">Serving</th>
+                <th scope="col" style="width: 10%">P</th>
+                <th scope="col" style="width: 10%">C</th>
+                <th scope="col" style="width: 10%">F</th>
+                <th scope="col" style="width: 10%">Calories</th>
+                <th scope="col" style="width: 20%;"></th>
+            </tr>
+            </thead>
+            <tbody *ngIf="meal.meal.foods && meal.meal.foods.length">
+
+            <tr *ngFor="let food of meal.meal.foods">
+                <td class="align-middle">{{food.food.name}}</td>
+                <td class="align-middle">{{food.serving}} g.</td>
+                <td class="align-middle">{{food.proteinPerServing}} g.</td>
+                <td class="align-middle">{{food.carbohydratesPerServing}} g.</td>
+                <td class="align-middle">{{food.fatsPerServing}} g.</td>
+                <td class="align-middle">{{food.caloriesPerServing}}</td>
+                <td>
+                    <button type="button" routerLink="/foods/details/{{food.food.id}}"
+                            class="btn btn-primary mr-2"><i class="far fa-eye"></i></button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="align-middle text-center">Total:</td>
+                <td class="align-middle">{{meal.meal.totalProtein}} g.</td>
+                <td class="align-middle">{{meal.meal.totalCarbohydrates}} g.</td>
+                <td class="align-middle">{{meal.meal.totalFats}} g.</td>
+                <td class="align-middle">{{meal.meal.totalCalories}}</td>
+                <td class="align-middle"></td>
+            </tr>
+
+            </tbody>
+            <tr *cdkDragPreview class="text-center">
+            </tr>
+        </table>
+
+        <div class="nutrition-goal">
+            <table class="table table-hover table-borderless mb-4">
+                <tbody>
+                <tr>
+                    <td colspan="2" class="align-middle"><h5>Diet Plan: </h5></td>
+                    <td class="align-middle"><h5>{{editDietPlanBindingModel.totalProtein}} g.</h5></td>
+                    <td class="align-middle"><h5>{{editDietPlanBindingModel.totalCarbohydrates}} g.</h5></td>
+                    <td class="align-middle"><h5>{{editDietPlanBindingModel.totalFats}} g.</h5></td>
+                    <td class="align-middle"><h5>{{editDietPlanBindingModel.totalCalories}}</h5></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="align-middle"><h5>Nutrition Goal: </h5></td>
+                    <td class="align-middle"><h5>{{userNutritionGoal.gramsOfProtein}} g.</h5></td>
+                    <td class="align-middle"><h5>{{userNutritionGoal.gramsOfCarbohydrates}} g.</h5></td>
+                    <td class="align-middle"><h5>{{userNutritionGoal.gramsOfFats}} g.</h5></td>
+                    <td class="align-middle"><h5>{{userNutritionGoal.calories}}</h5></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="align-middle"><h5>Remaining: </h5></td>
+                    <td class="align-middle"><h5 [ngClass]="{'text-danger': userNutritionGoal.gramsOfProtein - editDietPlanBindingModel.totalProtein < 0,
+                        'text-success': userNutritionGoal.gramsOfProtein - editDietPlanBindingModel.totalProtein >= 0}">
+                        {{userNutritionGoal.gramsOfProtein - editDietPlanBindingModel.totalProtein}} g.</h5></td>
+                    <td class="align-middle">
+                        <h5 [ngClass]="{'text-danger': userNutritionGoal.gramsOfCarbohydrates - editDietPlanBindingModel.totalCarbohydrates < 0,
+                        'text-success': userNutritionGoal.gramsOfCarbohydrates - editDietPlanBindingModel.totalCarbohydrates >= 0}">
+                            {{userNutritionGoal.gramsOfCarbohydrates - editDietPlanBindingModel.totalCarbohydrates}}
+                            g.</h5>
+                    </td>
+                    <td class="align-middle"><h5 [ngClass]="{'text-danger': userNutritionGoal.gramsOfFats - editDietPlanBindingModel.totalFats < 0,
+                        'text-success': userNutritionGoal.gramsOfFats - editDietPlanBindingModel.totalFats >= 0}">
+                        {{userNutritionGoal.gramsOfFats - editDietPlanBindingModel.totalFats}} g.</h5>
+                    </td>
+                    <td class="align-middle"><h5 [ngClass]="{'text-danger': userNutritionGoal.calories - editDietPlanBindingModel.totalCalories < 0,
+                        'text-success': userNutritionGoal.calories - editDietPlanBindingModel.totalCalories >= 0}">
+                        {{userNutritionGoal.calories - editDietPlanBindingModel.totalCalories}}</h5>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+    <div class="meal-actions" *ngIf="!editMode">
+
+        <button *ngIf="selectedDietPlan.meals && selectedDietPlan.meals.length" type="button"
+                class="btn btn-info my-3 mx-2" (click)="exportToExcelHandler()">Export to Excel
+        </button>
+
+        <button *ngIf="selectedDietPlan.meals && selectedDietPlan.meals.length" type="button"
+                class="btn btn-secondary my-3 mx-2" (click)="open(showDietPlanNutritionModal)">Show Nutrition Info
+        </button>
+
+
+        <button type="link" class="btn btn-primary my-3 mx-2"
+                (click)="openAddMealModal(addMealToDietPlanModal)">Add Meal
+        </button>
+
+        <button type="button"
+                class="btn btn-success my-3 mx-2" routerLink="./" [queryParams]="{'edit': 1}">Edit
+        </button>
+
+        <button type="button" (click)="onDietPlanDeleteHandler()" class="btn btn-danger my-3 mx-2">
+            Delete
+        </button>
+    </div>
+
+
+    <div class="meal-actions-edit" *ngIf="editMode">
+        <button type="link" class="btn btn-success my-3 mx-2" (click)="onSaveHandler()">
+            Save
+        </button>
+        <button type="link" class="btn btn-danger my-3 mx-2" routerLink="./">Cancel</button>
+    </div>
+
+
+</div>
+
+
+

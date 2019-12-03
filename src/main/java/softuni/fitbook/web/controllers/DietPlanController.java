@@ -3,7 +3,7 @@ package softuni.fitbook.web.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
-import softuni.fitbook.domain.models.binding.dietPlan.DietCreateBindingModel;
+import softuni.fitbook.domain.models.binding.dietPlan.DietPlanCreateBindingModel;
 import softuni.fitbook.domain.models.binding.dietPlan.DietPlanEditBindingModel;
 import softuni.fitbook.domain.models.service.dietPlan.DietPlanCreateServiceModel;
 import softuni.fitbook.domain.models.service.dietPlan.DietPlanServiceModel;
@@ -27,7 +27,7 @@ public class DietPlanController {
     }
 
     @PostMapping("/create")
-    public DietPlanViewModel createDietPlan(@RequestBody DietCreateBindingModel model, Principal principal) {
+    public DietPlanViewModel createDietPlan(@RequestBody DietPlanCreateBindingModel model, Principal principal) {
 
         DietPlanServiceModel dietPlan =
                 dietPlanService.createDietPlan(
@@ -87,10 +87,10 @@ public class DietPlanController {
 
     }
 
-    @PostMapping("/add-diet/{dietPlanId}")
-    public DietPlanViewModel addDietFromMyDietsToMyDietPlan(@PathVariable(value = "dietPlanId") String dietPlanId, @RequestParam(value = "dietId") String dietId, Principal principal) {
+    @PostMapping("/add-meal/{dietPlanId}")
+    public DietPlanViewModel addMealFromMyMealsToMyDietPlan(@PathVariable(value = "dietPlanId") String dietPlanId, @RequestParam(value = "mealId") String mealId, Principal principal) {
 
-        return modelMapper.map(dietPlanService.addMealFromMyMealsToMyDietPlan(dietPlanId, dietId, principal.getName()), DietPlanViewModel.class);
+        return modelMapper.map(dietPlanService.addMealFromMyMealsToMyDietPlan(dietPlanId, mealId, principal.getName()), DietPlanViewModel.class);
     }
 
     @GetMapping(value = "/export/excel/{dietPlanId}", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")

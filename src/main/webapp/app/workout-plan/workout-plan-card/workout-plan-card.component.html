@@ -4,15 +4,6 @@
         <hr/>
         <h4 class="font-weight-light pb-2">Creator: <a class="card-link" routerLink="/profile/{{workoutPlan.creator.username}}">{{workoutPlan.creator.username}}</a></h4>
         <hr/>
-<!--        <div class="table-wrapper pb-5 pr-3 pl-1">-->
-<!--            <table class="table table-striped table-hover mb-4">-->
-<!--                <thead>-->
-<!--                <tr *ngFor="let workout of workoutPlan.workouts">-->
-<!--                    <th colspan="5" class="py-auto"><h5>{{workout.orderIndex}}. {{workout.workout.name}}</h5></th>-->
-<!--                </tr>-->
-<!--                </thead>-->
-<!--            </table>-->
-<!--        </div>-->
         <div class="accordion" id="accordionExample">
             <div class="" *ngFor="let workout of workoutPlan.workouts; let i = index">
                 <div class="header" [id]="workout.id">
