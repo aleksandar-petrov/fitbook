@@ -39,14 +39,17 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/api/users/register", "/**").permitAll()
-                .antMatchers("/watches/add").hasAnyAuthority(Constants.AUTHORITY_ADMIN, Constants.AUTHORITY_MODERATOR)
-                .antMatchers("/api/users/all", "/api/users/promote", "/api/users/demote").hasAuthority(Constants.AUTHORITY_ADMIN)
+                .antMatchers("/api/exercises/create").hasAnyAuthority(Constants.AUTHORITY_ROOT_ADMIN, Constants.AUTHORITY_ADMIN, Constants.AUTHORITY_MODERATOR)
+                .antMatchers("/api/users/all", "/api/users/promote", "/api/users/demote").hasAnyAuthority(Constants.AUTHORITY_ROOT_ADMIN, Constants.AUTHORITY_ADMIN)
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), this.userService))
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().requiresChannel()
+                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+                .requiresSecure();
     }
 
     @Bean
