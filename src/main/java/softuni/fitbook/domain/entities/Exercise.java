@@ -1,5 +1,7 @@
 package softuni.fitbook.domain.entities;
 
+import softuni.fitbook.domain.entities.enumerations.Muscle;
+
 import javax.persistence.*;
 import java.util.Set;
 

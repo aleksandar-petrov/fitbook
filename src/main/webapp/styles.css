@@ -128,5 +128,9 @@ svg.body-model .assisting-muscle-group {
   color: white !important;
 }
 
+.chart-container {
+  overflow: hidden;
+}
+
 /*.legend-label*/
 

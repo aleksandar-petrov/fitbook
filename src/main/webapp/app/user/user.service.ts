@@ -4,6 +4,7 @@ import {AuthService} from '../auth/auth.service';
 import {UserModel} from './user.model';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {FitnessProfileBindingModel} from '../home/create-fitness-profile/fitness-profile-binding.model';
+import {map} from "rxjs/operators";
 
 
 @Injectable({
@@ -29,11 +30,11 @@ export class UserService implements OnInit {
   }
 
   getUserById(id: string): Observable<UserModel> {
-    return this.http.get<UserModel>('/api/users/id/' + id);
+    return this.http.get<UserModel>('http://localhost:8000/api/users/id/' + id);
   }
 
   getUserByUsername(username: string): Observable<UserModel> {
-    return this.http.get<UserModel>('/api/users/username/' + username);
+    return this.http.get<UserModel>('http://localhost:8000/api/users/username/' + username);
   }
 
   setFitnessProfileToLoggedInUser(fitnessProfileBindingModel: FitnessProfileBindingModel) {
@@ -42,7 +43,7 @@ export class UserService implements OnInit {
       'Content-Type': 'application/json',
     });
 
-    return this.http.post('/api/users/fitness-profile/set/' + this.loggedUserId,
+    return this.http.post('http://localhost:8000/api/users/fitness-profile/set/' + this.loggedUserId,
       fitnessProfileBindingModel, {headers: headers, observe: 'response'});
 
   }
@@ -53,7 +54,7 @@ export class UserService implements OnInit {
       'Content-Type': 'application/json',
     });
 
-    return this.http.put('/api/users/fitness-profile/edit/' + this.loggedUserId,
+    return this.http.put('http://localhost:8000/api/users/fitness-profile/edit/' + this.loggedUserId,
       fitnessProfileBindingModel, {headers: headers, observe: 'response'});
   }
 
@@ -62,10 +63,18 @@ export class UserService implements OnInit {
       if (user) {
         this.loggedUserId = user.userId;
         this.getUserById(user.userId).subscribe(data => {
-          console.log(data);
           this.loggedUser.next(data);
+          this.setFitnessProfileInLocalStorage(!!data.fitnessProfile);
         });
       }
     });
+  }
+
+  setFitnessProfileInLocalStorage(boolean: boolean): void {
+    localStorage.setItem('fp', String(boolean));
+  }
+
+  getLoggedUserFitnessProfileCondition(): boolean {
+    return localStorage.getItem('fp') == 'true';
   }
 }

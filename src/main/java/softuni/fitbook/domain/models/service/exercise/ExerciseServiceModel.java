@@ -1,7 +1,5 @@
 package softuni.fitbook.domain.models.service.exercise;
 
-import softuni.fitbook.domain.entities.Muscle;
-
 import java.util.Set;
 
 public class ExerciseServiceModel {

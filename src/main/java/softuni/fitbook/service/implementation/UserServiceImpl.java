@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import softuni.fitbook.config.Constants;
 import softuni.fitbook.domain.entities.*;
+import softuni.fitbook.domain.entities.enumerations.*;
 import softuni.fitbook.domain.models.service.user.AllUsersUserServiceModel;
 import softuni.fitbook.domain.models.service.user.FitnessProfileServiceModel;
 import softuni.fitbook.domain.models.service.user.UserServiceModel;

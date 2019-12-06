@@ -1,5 +1,7 @@
 package softuni.fitbook.domain.entities;
 
+import softuni.fitbook.domain.entities.enumerations.Gender;
+
 import javax.persistence.*;
 import java.util.List;
 

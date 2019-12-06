@@ -11,10 +11,32 @@ export class MealCardComponent implements OnInit {
 
   @Input() meal: Meal;
   @Output() modalOpen: EventEmitter<any> = new EventEmitter();
+  macroNutrientsData: any[];
 
   constructor() { }
 
   ngOnInit() {
+    this.makeChartDataForMacroNutrients();
+  }
+
+  makeChartDataForMacroNutrients() {
+
+    this.macroNutrientsData = [
+      {
+        "name": "Protein",
+        "value": this.meal.totalProtein
+      },
+      {
+        "name": "Carbohydrates",
+        "value": this.meal.totalCarbohydrates
+      },
+      {
+        "name": "Fats",
+        "value": this.meal.totalFats
+      },
+
+
+    ]
   }
 
   copyToMyMealsHandler(id: string) {

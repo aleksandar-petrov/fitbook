@@ -8,7 +8,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import softuni.fitbook.config.Constants;
 import softuni.fitbook.domain.entities.Exercise;
-import softuni.fitbook.domain.entities.Muscle;
+import softuni.fitbook.domain.entities.enumerations.Muscle;
 import softuni.fitbook.domain.entities.UserRole;
 import softuni.fitbook.repository.ExerciseRepository;
 import softuni.fitbook.repository.RoleRepository;
@@ -80,7 +80,7 @@ public class DatabaseSeeder {
             UserRole user = new UserRole();
             user.setAuthority(Constants.AUTHORITY_USER);
 
-            this.roleRepository.saveAll(Arrays.asList(admin, moderator, user));
+            this.roleRepository.saveAll(Arrays.asList(rootAdmin, admin, moderator, user));
         }
     }
 

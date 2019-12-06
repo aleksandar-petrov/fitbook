@@ -31,15 +31,15 @@ export class FoodService {
 
     createFood(formData: FormData) {
 
-        return this.http.post("/api/foods/create", formData);
+        return this.http.post("http://localhost:8000/api/foods/create", formData);
     }
 
     getFoodById(foodId: string) {
-        return this.http.get('/api/foods/details/' + foodId);
+        return this.http.get('http://localhost:8000/api/foods/details/' + foodId);
     }
 
     getAllFoods() {
-        return this.http.get('/api/foods/all/');
+        return this.http.get('http://localhost:8000/api/foods/all/');
     }
 
 

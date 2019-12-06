@@ -1,10 +1,5 @@
 package softuni.fitbook.domain.models.binding;
 
-import softuni.fitbook.domain.entities.ActivityLevel;
-import softuni.fitbook.domain.entities.SportsExperience;
-import softuni.fitbook.domain.entities.WeightChangeRate;
-import softuni.fitbook.domain.entities.WeightGoal;
-
 public class FitnessProfileBindingModel {
 
     private Integer weight;

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import softuni.fitbook.domain.entities.Exercise;
-import softuni.fitbook.domain.entities.Muscle;
+import softuni.fitbook.domain.entities.enumerations.Muscle;
 import softuni.fitbook.domain.models.service.exercise.ExerciseCreateServiceModel;
 import softuni.fitbook.domain.models.service.exercise.ExerciseServiceModel;
 import softuni.fitbook.repository.ExerciseRepository;

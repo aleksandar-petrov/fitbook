@@ -6,7 +6,7 @@ import softuni.fitbook.domain.models.binding.workout.WorkoutCreateBindingModel;
 import softuni.fitbook.domain.models.binding.workoutPlan.WorkoutPlanEditBindingModel;
 import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanCreateServiceModel;
 import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanServiceModel;
-import softuni.fitbook.domain.models.view.workoutPlan.WorkoutPlanViewModel;
+import softuni.fitbook.domain.models.response.workoutPlan.WorkoutPlanResponseModel;
 import softuni.fitbook.service.WorkoutPlanService;
 
 import java.security.Principal;
@@ -26,22 +26,22 @@ public class WorkoutPlanController {
     }
 
     @PostMapping("/create")
-    public WorkoutPlanViewModel createWorkoutPlan(@RequestBody WorkoutCreateBindingModel model, Principal principal) {
+    public WorkoutPlanResponseModel createWorkoutPlan(@RequestBody WorkoutCreateBindingModel model, Principal principal) {
 
         WorkoutPlanServiceModel workoutPlan =
                 workoutPlanService.createWorkoutPlan(
                         modelMapper.map(model, WorkoutPlanCreateServiceModel.class),
                         principal.getName());
 
-        return modelMapper.map(workoutPlan, WorkoutPlanViewModel.class);
+        return modelMapper.map(workoutPlan, WorkoutPlanResponseModel.class);
     }
 
     @GetMapping("/my")
-    public List<WorkoutPlanViewModel> getLoggedInUserWorkoutPlans(Principal principal) {
+    public List<WorkoutPlanResponseModel> getLoggedInUserWorkoutPlans(Principal principal) {
 
         return workoutPlanService.getAllWorkoutPlansByUsername(principal.getName())
                 .stream()
-                .map(wp -> modelMapper.map(wp, WorkoutPlanViewModel.class))
+                .map(wp -> modelMapper.map(wp, WorkoutPlanResponseModel.class))
                 .collect(Collectors.toList());
     }
 
@@ -54,42 +54,42 @@ public class WorkoutPlanController {
     }
 
     @PutMapping("/edit/{workoutPlanId}")
-    public WorkoutPlanViewModel editMyWorkoutPlan(@PathVariable(value = "workoutPlanId") String workoutPlanId, @RequestBody WorkoutPlanEditBindingModel model, Principal principal) {
+    public WorkoutPlanResponseModel editMyWorkoutPlan(@PathVariable(value = "workoutPlanId") String workoutPlanId, @RequestBody WorkoutPlanEditBindingModel model, Principal principal) {
 
-        return modelMapper.map(workoutPlanService.editMyWorkoutPlanById(workoutPlanId, modelMapper.map(model, WorkoutPlanServiceModel.class), principal.getName()), WorkoutPlanViewModel.class);
+        return modelMapper.map(workoutPlanService.editMyWorkoutPlanById(workoutPlanId, modelMapper.map(model, WorkoutPlanServiceModel.class), principal.getName()), WorkoutPlanResponseModel.class);
 
     }
 
     @GetMapping("/public/all")
-    public List<WorkoutPlanViewModel> getAllPublicWorkoutPlans() {
+    public List<WorkoutPlanResponseModel> getAllPublicWorkoutPlans() {
 
         return workoutPlanService
                 .getAllPublicWorkoutPlans()
                 .stream()
-                .map(w -> modelMapper.map(w, WorkoutPlanViewModel.class))
+                .map(w -> modelMapper.map(w, WorkoutPlanResponseModel.class))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public WorkoutPlanViewModel getWorkoutPlanById(@PathVariable(value = "id") String id) {
+    public WorkoutPlanResponseModel getWorkoutPlanById(@PathVariable(value = "id") String id) {
 
         return modelMapper.map(
                 workoutPlanService.getWorkoutPlanById(id),
-                WorkoutPlanViewModel.class);
+                WorkoutPlanResponseModel.class);
 
     }
 
     @PostMapping("/copy/{workoutPlanId}")
-    public WorkoutPlanViewModel copyWorkoutPlan(@PathVariable(value = "workoutPlanId") String workoutPlanId, Principal principal) {
+    public WorkoutPlanResponseModel copyWorkoutPlan(@PathVariable(value = "workoutPlanId") String workoutPlanId, Principal principal) {
 
-        return modelMapper.map(workoutPlanService.copyWorkoutPlanToLoggedUserWorkoutPlans(workoutPlanId, principal.getName()), WorkoutPlanViewModel.class);
+        return modelMapper.map(workoutPlanService.copyWorkoutPlanToLoggedUserWorkoutPlans(workoutPlanId, principal.getName()), WorkoutPlanResponseModel.class);
 
     }
 
     @PostMapping("/add-workout/{workoutPlanId}")
-    public WorkoutPlanViewModel addWorkoutFromMyWorkoutsToMyWorkoutPlan(@PathVariable(value = "workoutPlanId") String workoutPlanId, @RequestParam(value = "workoutId") String workoutId, Principal principal) {
+    public WorkoutPlanResponseModel addWorkoutFromMyWorkoutsToMyWorkoutPlan(@PathVariable(value = "workoutPlanId") String workoutPlanId, @RequestParam(value = "workoutId") String workoutId, Principal principal) {
 
-        return modelMapper.map(workoutPlanService.addWorkoutFromMyWorkoutsToMyWorkoutPlan(workoutPlanId, workoutId, principal.getName()), WorkoutPlanViewModel.class);
+        return modelMapper.map(workoutPlanService.addWorkoutFromMyWorkoutsToMyWorkoutPlan(workoutPlanId, workoutId, principal.getName()), WorkoutPlanResponseModel.class);
     }
 
     @GetMapping(value = "/export/excel/{workoutPlanId}", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")

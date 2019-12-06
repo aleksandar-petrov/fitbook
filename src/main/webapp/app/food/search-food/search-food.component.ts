@@ -13,12 +13,13 @@ import {Router} from "@angular/router";
 })
 export class SearchFoodComponent implements OnInit {
 
-    foodSearchResults: Food[];
+    foodSearchResults: Food[] = [];
     searchFoodName: string;
 
     selectedFoodForModal: Food;
 
     foodBindingModel: FoodBindingModel;
+    searchOccurred: boolean = false;
     pictureFile: File;
 
     page: number = 1;
@@ -31,12 +32,12 @@ export class SearchFoodComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.foodBindingModel = new FoodBindingModel();
     }
 
     onSearchHandler() {
         this.foodService.fetchFoodsFromDataCentralByFoodName(this.searchFoodName).subscribe((resp: any) => {
 
-            console.log(resp);
 
             this.foodSearchResults = [];
             this.page = 1;
@@ -48,7 +49,8 @@ export class SearchFoodComponent implements OnInit {
 
                 this.foodSearchResults.push(foodInfo);
 
-            })
+            });
+            this.searchOccurred = true;
 
         })
     }

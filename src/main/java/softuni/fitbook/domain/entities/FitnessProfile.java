@@ -1,5 +1,10 @@
 package softuni.fitbook.domain.entities;
 
+import softuni.fitbook.domain.entities.enumerations.ActivityLevel;
+import softuni.fitbook.domain.entities.enumerations.SportsExperience;
+import softuni.fitbook.domain.entities.enumerations.WeightChangeRate;
+import softuni.fitbook.domain.entities.enumerations.WeightGoal;
+
 import javax.persistence.*;
 
 @Entity

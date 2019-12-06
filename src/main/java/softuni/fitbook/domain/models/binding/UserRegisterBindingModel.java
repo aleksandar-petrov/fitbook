@@ -1,7 +1,5 @@
 package softuni.fitbook.domain.models.binding;
 
-import softuni.fitbook.domain.entities.Gender;
-
 public class UserRegisterBindingModel {
     private String firstName;
 

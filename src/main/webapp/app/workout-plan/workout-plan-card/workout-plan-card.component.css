@@ -46,3 +46,8 @@ table {
     -webkit-overflow-scrolling: touch;
 }
 
+svg.body-model .is-focused {
+    fill: greenyellow !important;
+    fill-opacity: 0.4;
+}
+

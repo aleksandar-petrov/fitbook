@@ -9,8 +9,8 @@ import softuni.fitbook.domain.models.binding.FitnessProfileBindingModel;
 import softuni.fitbook.domain.models.binding.UserRegisterBindingModel;
 import softuni.fitbook.domain.models.service.user.FitnessProfileServiceModel;
 import softuni.fitbook.domain.models.service.user.UserServiceModel;
-import softuni.fitbook.domain.models.view.user.AllUsersUserViewModel;
-import softuni.fitbook.domain.models.view.user.UserViewModel;
+import softuni.fitbook.domain.models.response.user.AllUsersUserResponseModel;
+import softuni.fitbook.domain.models.response.user.UserResponseModel;
 import softuni.fitbook.repository.RoleRepository;
 import softuni.fitbook.service.UserService;
 
@@ -46,37 +46,37 @@ public class UserController {
     }
 
     @GetMapping(value = "/all")
-    public List<AllUsersUserViewModel> all() {
+    public List<AllUsersUserResponseModel> all() {
         return userService.getAll()
                 .stream()
-                .map(u -> modelMapper.map(u, AllUsersUserViewModel.class))
+                .map(u -> modelMapper.map(u, AllUsersUserResponseModel.class))
                 .collect(Collectors.toList());
     }
 
     @PostMapping("/promote")
-    public AllUsersUserViewModel promoteUser(@RequestParam(name = "id") String id) {
+    public AllUsersUserResponseModel promoteUser(@RequestParam(name = "id") String id) {
 
-        return modelMapper.map(userService.promoteUser(id), AllUsersUserViewModel.class);
+        return modelMapper.map(userService.promoteUser(id), AllUsersUserResponseModel.class);
     }
 
     @PostMapping("/demote")
-    public AllUsersUserViewModel demoteUser(@RequestParam(name = "id") String id) {
+    public AllUsersUserResponseModel demoteUser(@RequestParam(name = "id") String id) {
 
-        return modelMapper.map(userService.demoteUser(id), AllUsersUserViewModel.class);
+        return modelMapper.map(userService.demoteUser(id), AllUsersUserResponseModel.class);
     }
 
     @GetMapping(value = "/id/{id}")
-    public UserViewModel getUserById(@PathVariable(value = "id") String id) {
+    public UserResponseModel getUserById(@PathVariable(value = "id") String id) {
         return modelMapper
-                .map(userService.getById(id), UserViewModel.class);
+                .map(userService.getById(id), UserResponseModel.class);
 
 
     }
 
     @GetMapping(value = "/username/{username}")
-    public UserViewModel getUserByUsername(@PathVariable(value = "username") String username) {
-        UserViewModel map = modelMapper
-                .map(userService.getByUsername(username), UserViewModel.class);
+    public UserResponseModel getUserByUsername(@PathVariable(value = "username") String username) {
+        UserResponseModel map = modelMapper
+                .map(userService.getByUsername(username), UserResponseModel.class);
         return map;
 
 

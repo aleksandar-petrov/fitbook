@@ -33,55 +33,60 @@ import {NoSelectedDietPlanComponent} from "./diet-plan/my-diet-plans/no-selected
 import {SelectedDietPlanComponent} from "./diet-plan/my-diet-plans/selected-diet-plan/selected-diet-plan.component";
 import {AllDietPlansComponent} from "./diet-plan/all-diet-plans/all-diet-plans.component";
 import {DietPlanDetailsComponent} from "./diet-plan/diet-plan-details/diet-plan-details.component";
+import {AuthGuard} from "./auth/auth.guard";
+import {LoggedGuard} from "./home/logged.guard";
+import {ModeratorGuard} from "./auth/moderator.guard";
+import {AdminGuard} from "./auth/admin.guard";
+import {FitnessProfileGuard} from "./home/fitness-profile.guard";
 
 
 const appRoutes: Routes = [
-    {path: '', pathMatch: 'full', component: IndexComponent},
-    {path: 'exercises/all', component: AllExercisesComponent},
-    {path: 'exercises/create', component: CreateExerciseComponent},
-    {path: 'exercises/details/:id', component: ExerciseDetailsComponent},
-    {path: 'home', component: HomeComponent},
-    {path: 'register', component: RegisterComponent},
-    {path: 'signin', component: SigninComponent},
-    {path: 'fitness-profile/edit', component: EditFitnessProfileComponent},
+    {path: '', pathMatch: 'full', component: IndexComponent, canActivate: [LoggedGuard]},
+    {path: 'exercises/all', component: AllExercisesComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
+    {path: 'exercises/create', component: CreateExerciseComponent, canActivate: [ModeratorGuard, FitnessProfileGuard]},
+    {path: 'exercises/details/:id', component: ExerciseDetailsComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
+    {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
+    {path: 'register', component: RegisterComponent, canActivate: [LoggedGuard]},
+    {path: 'signin', component: SigninComponent, canActivate: [LoggedGuard]},
+    {path: 'fitness-profile/edit', component: EditFitnessProfileComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
     {
-        path: 'my-workouts', component: MyWorkoutsComponent, children: [
+        path: 'my-workouts', component: MyWorkoutsComponent, canActivate: [AuthGuard, FitnessProfileGuard], children: [
             {path: '', component: NoSelectedWorkoutComponent},
             {path: ':id', component: SelectedWorkoutComponent},
         ]
     }, {
-        path: 'my-workout-plans', component: MyWorkoutPlansComponent, children: [
+        path: 'my-workout-plans', component: MyWorkoutPlansComponent, canActivate: [AuthGuard, FitnessProfileGuard], children: [
             {path: '', component: NoSelectedWorkoutPlanComponent},
             {path: ':id', component: SelectedWorkoutPlanComponent},
         ]
     }, {
-        path: 'my-meals', component: MyMealsComponent, children: [
+        path: 'my-meals', component: MyMealsComponent, canActivate: [AuthGuard, FitnessProfileGuard], children: [
             {path: '', component: NoSelectedMealComponent},
             {path: ':id', component: SelectedMealComponent},
         ]
     }, {
-        path: 'my-diet-plans', component: MyDietPlansComponent, children: [
+        path: 'my-diet-plans', component: MyDietPlansComponent, canActivate: [AuthGuard, FitnessProfileGuard], children: [
             {path: '', component: NoSelectedDietPlanComponent},
             {path: ':id', component: SelectedDietPlanComponent},
         ]
     },
-    {path: 'workouts/all', component: AllWorkoutsComponent},
-    {path: 'workouts/details/:id', component: WorkoutDetailsComponent},
-    {path: 'workout-plans/all', component: AllWorkoutPlansComponent},
-    {path: 'workout-plans/details/:id', component: WorkoutPlanDetailsComponent},
-    {path: 'meals/all', component: AllMealsComponent},
-    {path: 'meals/details/:id', component: MealDetailsComponent},
-    {path: 'diet-plans/all', component: AllDietPlansComponent},
-    {path: 'diet-plans/details/:id', component: DietPlanDetailsComponent},
-    {path: 'foods/create', component: SearchFoodComponent},
-    {path: 'foods/all', component: AllFoodsComponent},
-    {path: 'foods/details/:id', component: FoodDetailsComponent},
-    {path: 'profile/:username', component: UserProfileComponent},
-    {path: 'admin-panel', component: AdminPanelComponent}
+    {path: 'workouts/all', component: AllWorkoutsComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
+    {path: 'workouts/details/:id', component: WorkoutDetailsComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
+    {path: 'workout-plans/all', component: AllWorkoutPlansComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
+    {path: 'workout-plans/details/:id', component: WorkoutPlanDetailsComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
+    {path: 'meals/all', component: AllMealsComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
+    {path: 'meals/details/:id', component: MealDetailsComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
+    {path: 'diet-plans/all', component: AllDietPlansComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
+    {path: 'diet-plans/details/:id', component: DietPlanDetailsComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
+    {path: 'foods/create', component: SearchFoodComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
+    {path: 'foods/all', component: AllFoodsComponent, canActivate: [AuthGuard, FitnessProfileGuard, FitnessProfileGuard]},
+    {path: 'foods/details/:id', component: FoodDetailsComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
+    {path: 'profile/:username', component: UserProfileComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
+    {path: 'admin-panel', component: AdminPanelComponent, canActivate: [AdminGuard, FitnessProfileGuard]}
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(appRoutes, { scrollPositionRestoration: 'disabled' })],
+    imports: [RouterModule.forRoot(appRoutes, {scrollPositionRestoration: 'disabled'})],
     exports: [RouterModule]
 })
 export class AppRoutingModule {

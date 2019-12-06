@@ -4,12 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import softuni.fitbook.domain.models.binding.ExerciseCreateBindingModel;
 import softuni.fitbook.domain.models.binding.FoodCreateBindingModel;
-import softuni.fitbook.domain.models.service.exercise.ExerciseCreateServiceModel;
 import softuni.fitbook.domain.models.service.food.FoodCreateServiceModel;
-import softuni.fitbook.domain.models.view.exercise.AllExercisesExerciseViewModel;
-import softuni.fitbook.domain.models.view.food.FoodViewModel;
+import softuni.fitbook.domain.models.response.exercise.AllExercisesResponseViewModel;
+import softuni.fitbook.domain.models.response.food.FoodResponseModel;
 import softuni.fitbook.service.FoodService;
 
 import java.util.List;
@@ -29,27 +27,27 @@ public class FoodController {
     }
 
     @PostMapping("/create")
-    public AllExercisesExerciseViewModel createExercise(@RequestPart("foodBindingModel") FoodCreateBindingModel model, @RequestPart("file") MultipartFile file) {
+    public AllExercisesResponseViewModel createExercise(@RequestPart("foodBindingModel") FoodCreateBindingModel model, @RequestPart("file") MultipartFile file) {
 
         return modelMapper.map(
-                foodService.createFood(modelMapper.map(model, FoodCreateServiceModel.class), file), AllExercisesExerciseViewModel.class);
+                foodService.createFood(modelMapper.map(model, FoodCreateServiceModel.class), file), AllExercisesResponseViewModel.class);
 
     }
 
     @GetMapping(value = "/all")
-    public List<FoodViewModel> getAllExercises() {
+    public List<FoodResponseModel> getAllExercises() {
         return foodService
                 .getAllFoods()
                 .stream()
                 .map(e -> modelMapper
-                        .map(e, FoodViewModel.class))
+                        .map(e, FoodResponseModel.class))
                 .collect(Collectors.toList());
     }
 
     @GetMapping(value = "/details/{id}")
-    public FoodViewModel exerciseDetailsById(@PathVariable(value = "id") String id) {
+    public FoodResponseModel exerciseDetailsById(@PathVariable(value = "id") String id) {
 
-        return modelMapper.map(foodService.getFoodById(id), FoodViewModel.class);
+        return modelMapper.map(foodService.getFoodById(id), FoodResponseModel.class);
 
     }
 }

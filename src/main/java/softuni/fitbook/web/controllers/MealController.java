@@ -9,7 +9,7 @@ import softuni.fitbook.domain.models.binding.meal.MealFoodBindingModel;
 import softuni.fitbook.domain.models.service.meal.MealCreateServiceModel;
 import softuni.fitbook.domain.models.service.meal.MealFoodCreateServiceModel;
 import softuni.fitbook.domain.models.service.meal.MealServiceModel;
-import softuni.fitbook.domain.models.view.meal.MealViewModel;
+import softuni.fitbook.domain.models.response.meal.MealResponseModel;
 import softuni.fitbook.service.MealService;
 
 import java.security.Principal;
@@ -30,28 +30,28 @@ public class MealController {
     }
 
     @PostMapping("/create")
-    public MealViewModel createMeal(@RequestBody MealCreateBindingModel model, Principal principal) {
+    public MealResponseModel createMeal(@RequestBody MealCreateBindingModel model, Principal principal) {
 
-        return modelMapper.map(this.mealService.createMeal(modelMapper.map(model, MealCreateServiceModel.class), principal.getName()), MealViewModel.class);
+        return modelMapper.map(this.mealService.createMeal(modelMapper.map(model, MealCreateServiceModel.class), principal.getName()), MealResponseModel.class);
 
     }
 
     @GetMapping("/my")
-    public List<MealViewModel> getLoggedInUserMeals(Principal principal) {
+    public List<MealResponseModel> getLoggedInUserMeals(Principal principal) {
 
         return this.mealService.getAllMealsByUsername(principal.getName())
                 .stream()
-                .map(s -> modelMapper.map(s, MealViewModel.class))
+                .map(s -> modelMapper.map(s, MealResponseModel.class))
                 .collect(Collectors.toList());
 
     }
 
     @PostMapping("/add-exercise/{mealId}")
-    public MealViewModel addMealExerciseToMeal(@RequestBody MealFoodBindingModel model, @PathVariable(value = "mealId") String mealId, Principal principal) {
+    public MealResponseModel addMealExerciseToMeal(@RequestBody MealFoodBindingModel model, @PathVariable(value = "mealId") String mealId, Principal principal) {
 
         return modelMapper.map(this.mealService.addMealFoodToMeal(
                 this.modelMapper.map(model, MealFoodCreateServiceModel.class)
-                , mealId, principal.getName()), MealViewModel.class);
+                , mealId, principal.getName()), MealResponseModel.class);
     }
 
 
@@ -64,34 +64,34 @@ public class MealController {
     }
 
     @PutMapping("/edit/{mealId}")
-    public MealViewModel editMeal(@PathVariable String mealId, @RequestBody MealEditBindingModel model, Principal principal) {
+    public MealResponseModel editMeal(@PathVariable String mealId, @RequestBody MealEditBindingModel model, Principal principal) {
 
         return modelMapper.map(mealService.editMealById(
                 mealId,
                 modelMapper.map(model, MealServiceModel.class),
-                principal.getName()), MealViewModel.class);
+                principal.getName()), MealResponseModel.class);
 
     }
 
     @GetMapping("/public/all")
-    public List<MealViewModel> getAllPublicMeals() {
+    public List<MealResponseModel> getAllPublicMeals() {
 
         return mealService.getAllPublicMeals()
                 .stream()
-                .map(w -> modelMapper.map(w, MealViewModel.class))
+                .map(w -> modelMapper.map(w, MealResponseModel.class))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public MealViewModel getMealById(@PathVariable(value = "id") String id) {
+    public MealResponseModel getMealById(@PathVariable(value = "id") String id) {
 
-        return modelMapper.map(mealService.getMealById(id), MealViewModel.class);
+        return modelMapper.map(mealService.getMealById(id), MealResponseModel.class);
     }
 
     @PostMapping("/copy/{mealId}")
-    public MealViewModel createMeal(@PathVariable(value = "mealId") String mealId, Principal principal) {
+    public MealResponseModel createMeal(@PathVariable(value = "mealId") String mealId, Principal principal) {
 
-        return modelMapper.map(mealService.copyMealToLoggedUserMeals(mealId, principal.getName()), MealViewModel.class);
+        return modelMapper.map(mealService.copyMealToLoggedUserMeals(mealId, principal.getName()), MealResponseModel.class);
     }
 
 }

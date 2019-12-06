@@ -179,16 +179,16 @@
                             <form #searchForm="ngForm">
                                 <input class="form-control form-control-lg form-control-borderless" id="searchInput"
                                        type="search"
-                                       placeholder="Enter food name. E.g. boiled egg."
+                                       placeholder="Enter food description. E.g. boiled egg."
                                        #inputSearch="ngModel"
-                                       name="foodName"
+                                       name="name"
                                        required
                                        [ngClass]="{'is-valid': inputSearch.valid && inputSearch.touched, 'is-invalid': inputSearch.invalid && inputSearch.touched}"
                                        [(ngModel)]="searchFoodName">
                             </form>
                         </div>
                         <div class="col-lg-2">
-                            <button class="btn btn-lg btn-success" [disabled]="!inputSearch.touched" type="submit"
+                            <button class="btn btn-lg btn-success" [disabled]="!searchFoodName || searchFoodName === ''" type="submit"
                                     (click)="onSearchHandler()">Search
                             </button>
                         </div>
@@ -200,7 +200,7 @@
 
         <hr class="my-4">
         <div class="container justify-content-center pb-0">
-            <ng-template [ngIf]="foodSearchResults.length > 0" [ngIfElse]="noSuchFoods">
+            <ng-template [ngIf]="foodSearchResults.length > 0">
 
 
                 <div class="results-container col-10 mx-auto py-2">
@@ -238,7 +238,7 @@
                                 [collectionSize]="foodSearchResults.length"></ngb-pagination>
             </ng-template>
 
-            <ng-template #noSuchFoods>
+            <ng-template [ngIf]="foodSearchResults.length === 0 && searchOccurred" #noSuchFoods>
                 <h5>There are no foods with given description.</h5>
             </ng-template>
 

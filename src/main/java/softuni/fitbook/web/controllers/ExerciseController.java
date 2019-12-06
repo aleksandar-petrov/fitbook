@@ -2,17 +2,14 @@ package softuni.fitbook.web.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import softuni.fitbook.domain.models.binding.ExerciseCreateBindingModel;
 import softuni.fitbook.domain.models.service.exercise.ExerciseCreateServiceModel;
-import softuni.fitbook.domain.models.view.exercise.AllExercisesExerciseViewModel;
+import softuni.fitbook.domain.models.response.exercise.AllExercisesResponseViewModel;
 import softuni.fitbook.service.ExerciseService;
 
-import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,27 +26,27 @@ public class ExerciseController {
     }
 
     @GetMapping(value = "/all")
-    public List<AllExercisesExerciseViewModel> getAllExercises() {
+    public List<AllExercisesResponseViewModel> getAllExercises() {
         return exerciseService
                 .getAllExercises()
                 .stream()
                 .map(e -> modelMapper
-                        .map(e, AllExercisesExerciseViewModel.class))
+                        .map(e, AllExercisesResponseViewModel.class))
                 .collect(Collectors.toList());
     }
 
     @GetMapping(value = "/details/{id}")
-    public AllExercisesExerciseViewModel exerciseDetailsById(@PathVariable(value = "id") String id) {
+    public AllExercisesResponseViewModel exerciseDetailsById(@PathVariable(value = "id") String id) {
 
-        return modelMapper.map(exerciseService.getExerciseById(id), AllExercisesExerciseViewModel.class);
+        return modelMapper.map(exerciseService.getExerciseById(id), AllExercisesResponseViewModel.class);
 
     }
 
     @PostMapping("/create")
-    public AllExercisesExerciseViewModel createExercise(@RequestPart("exerciseBindingModel") ExerciseCreateBindingModel model, @RequestPart("file") MultipartFile file) {
+    public AllExercisesResponseViewModel createExercise(@RequestPart("exerciseBindingModel") ExerciseCreateBindingModel model, @RequestPart("file") MultipartFile file) {
 
         return modelMapper.map(
-                exerciseService.createExercise(modelMapper.map(model, ExerciseCreateServiceModel.class), file), AllExercisesExerciseViewModel.class);
+                exerciseService.createExercise(modelMapper.map(model, ExerciseCreateServiceModel.class), file), AllExercisesResponseViewModel.class);
 
     }
 

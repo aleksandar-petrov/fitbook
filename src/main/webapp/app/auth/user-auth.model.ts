@@ -1,4 +1,5 @@
 export class UserAuthModel {
+
   constructor(
     public userId: string,
     public role: string,
