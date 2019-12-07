@@ -1,29 +1,31 @@
 package softuni.fitbook.web.errors;
 
+import java.util.List;
+
 public class CustomError {
 
-    private int code;
+    private int status;
 
-    private String message;
+    private List<String> errors;
 
-    public CustomError(int code, String message) {
-        this.code = code;
-        this.message = message;
+    public CustomError(int status, List<String> errors) {
+        this.status = status;
+        this.errors = errors;
     }
 
-    public int getCode() {
-        return code;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public String getMessage() {
-        return message;
+    public List<String> getErrors() {
+        return errors;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setErrors(List<String> errors) {
+        this.errors = errors;
     }
 }

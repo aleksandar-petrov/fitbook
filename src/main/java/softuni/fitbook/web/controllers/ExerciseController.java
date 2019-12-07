@@ -4,10 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import softuni.fitbook.domain.models.binding.ExerciseCreateBindingModel;
-import softuni.fitbook.domain.models.service.exercise.ExerciseCreateServiceModel;
-import softuni.fitbook.domain.models.response.exercise.AllExercisesResponseViewModel;
-import softuni.fitbook.service.ExerciseService;
+import softuni.fitbook.web.controllers.models.request.exercise.ExerciseCreateRequestModel;
+import softuni.fitbook.services.models.exercise.ExerciseCreateServiceModel;
+import softuni.fitbook.web.controllers.models.response.exercise.AllExercisesResponseViewModel;
+import softuni.fitbook.services.ExerciseService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +43,7 @@ public class ExerciseController {
     }
 
     @PostMapping("/create")
-    public AllExercisesResponseViewModel createExercise(@RequestPart("exerciseBindingModel") ExerciseCreateBindingModel model, @RequestPart("file") MultipartFile file) {
+    public AllExercisesResponseViewModel createExercise(@RequestPart("exerciseBindingModel") ExerciseCreateRequestModel model, @RequestPart("file") MultipartFile file) {
 
         return modelMapper.map(
                 exerciseService.createExercise(modelMapper.map(model, ExerciseCreateServiceModel.class), file), AllExercisesResponseViewModel.class);

@@ -5,6 +5,8 @@
   <div class="card-body">
     <h3 class="card-title">{{exercise.name}}</h3>
     <hr/>
+    <h4 class="font-weight-light">Used in <span class="font-weight-bold">{{exercise.workoutsCounter}}</span> workouts</h4>
+    <hr/>
     <h5 class="card-subtitle font-weight-light mb-3">Major Muscle Group:</h5>
     <h5 class="card-subtitle"> {{exercise.majorMuscleGroup | getConstantViewName}} </h5>
     <hr/>

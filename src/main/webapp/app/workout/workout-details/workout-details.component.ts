@@ -126,4 +126,10 @@ export class WorkoutDetailsComponent implements OnInit {
         }, (reason) => {
         });
     }
+
+    onLikeHandler() {
+        this.workoutService.likeWorkout(this.workout.id).subscribe((workout: Workout) => {
+            this.workout = workout;
+        });
+    }
 }

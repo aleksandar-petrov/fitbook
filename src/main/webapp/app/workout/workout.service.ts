@@ -63,4 +63,9 @@ export class WorkoutService {
         return this.http.post('http://localhost:8000/api/workouts/copy/' + workoutId, null);
     }
 
+    likeWorkout(workoutId: string) {
+
+        return this.http.post('http://localhost:8000/api/workouts/like/' + workoutId, null);
+    }
+
 }

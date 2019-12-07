@@ -4,14 +4,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import softuni.fitbook.domain.models.binding.workout.WorkoutCreateBindingModel;
-import softuni.fitbook.domain.models.binding.workout.WorkoutEditBindingModel;
-import softuni.fitbook.domain.models.binding.workout.WorkoutExerciseBindingModel;
-import softuni.fitbook.domain.models.service.workout.WorkoutCreateServiceModel;
-import softuni.fitbook.domain.models.service.workout.WorkoutExerciseCreateServiceModel;
-import softuni.fitbook.domain.models.service.workout.WorkoutServiceModel;
-import softuni.fitbook.domain.models.response.workout.WorkoutResponseModel;
-import softuni.fitbook.service.WorkoutService;
+import softuni.fitbook.web.controllers.models.request.workout.WorkoutCreateRequestModel;
+import softuni.fitbook.web.controllers.models.request.workout.WorkoutEditRequestModel;
+import softuni.fitbook.web.controllers.models.request.workout.WorkoutExerciseRequestModel;
+import softuni.fitbook.services.models.workout.WorkoutCreateServiceModel;
+import softuni.fitbook.services.models.workout.WorkoutExerciseCreateServiceModel;
+import softuni.fitbook.services.models.workout.WorkoutServiceModel;
+import softuni.fitbook.web.controllers.models.response.workout.WorkoutResponseModel;
+import softuni.fitbook.services.WorkoutService;
 
 import java.security.Principal;
 import java.util.List;
@@ -31,7 +31,7 @@ public class WorkoutController {
     }
 
     @PostMapping("/create")
-    public WorkoutResponseModel createWorkout(@RequestBody WorkoutCreateBindingModel model, Principal principal) {
+    public WorkoutResponseModel createWorkout(@RequestBody WorkoutCreateRequestModel model, Principal principal) {
 
         return modelMapper.map(this.workoutService.createWorkout(modelMapper.map(model, WorkoutCreateServiceModel.class), principal.getName()), WorkoutResponseModel.class);
 
@@ -40,15 +40,17 @@ public class WorkoutController {
     @GetMapping("/my")
     public List<WorkoutResponseModel> getLoggedInUserWorkouts(Principal principal) {
 
-        return this.workoutService.getAllWorkoutsByUsername(principal.getName())
+        List<WorkoutResponseModel> collect = this.workoutService.getAllWorkoutsByUsername(principal.getName())
                 .stream()
                 .map(s -> modelMapper.map(s, WorkoutResponseModel.class))
                 .collect(Collectors.toList());
 
+        return collect;
+
     }
 
     @PostMapping("/add-exercise/{workoutId}")
-    public WorkoutResponseModel addWorkoutExerciseToWorkout(@RequestBody WorkoutExerciseBindingModel model, @PathVariable(value = "workoutId") String workoutId, Principal principal) {
+    public WorkoutResponseModel addWorkoutExerciseToWorkout(@RequestBody WorkoutExerciseRequestModel model, @PathVariable(value = "workoutId") String workoutId, Principal principal) {
 
         return modelMapper.map(this.workoutService.addWorkoutExerciseToWorkout(
                 this.modelMapper.map(model, WorkoutExerciseCreateServiceModel.class)
@@ -72,7 +74,7 @@ public class WorkoutController {
     }
 
     @PutMapping("/edit/{workoutId}")
-    public WorkoutResponseModel editWorkout(@PathVariable String workoutId, @RequestBody WorkoutEditBindingModel model, Principal principal) {
+    public WorkoutResponseModel editWorkout(@PathVariable String workoutId, @RequestBody WorkoutEditRequestModel model, Principal principal) {
 
         return modelMapper.map(workoutService.editWorkoutById(
                 workoutId,
@@ -82,24 +84,31 @@ public class WorkoutController {
     }
 
     @GetMapping("/public/all")
-    public List<WorkoutResponseModel> getAllPublicWorkouts() {
+    public List<WorkoutResponseModel> getAllPublicWorkouts(Principal principal) {
 
-        return workoutService.getAllPublicWorkouts()
+        return workoutService.getAllPublicWorkouts(principal.getName())
                 .stream()
                 .map(w -> modelMapper.map(w, WorkoutResponseModel.class))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public WorkoutResponseModel getWorkoutById(@PathVariable(value = "id") String id) {
+    public WorkoutResponseModel getWorkoutById(@PathVariable(value = "id") String id, Principal principal) {
 
-        return modelMapper.map(workoutService.getWorkoutById(id), WorkoutResponseModel.class);
+        return modelMapper.map(workoutService.getWorkoutById(id, principal.getName()), WorkoutResponseModel.class);
     }
 
     @PostMapping("/copy/{workoutId}")
     public WorkoutResponseModel createWorkout(@PathVariable(value = "workoutId") String workoutId, Principal principal) {
 
         return modelMapper.map(workoutService.copyWorkoutToLoggedUserWorkouts(workoutId, principal.getName()), WorkoutResponseModel.class);
+    }
+
+    @PostMapping("/like/{workoutId}")
+    public WorkoutResponseModel likeWorkout(@PathVariable String workoutId, Principal principal) {
+
+        return modelMapper.map(workoutService.likeWorkout(workoutId, principal.getName()), WorkoutResponseModel.class);
+
     }
 
 }

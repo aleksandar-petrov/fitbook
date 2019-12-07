@@ -8,8 +8,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import softuni.fitbook.domain.entities.User;
-import softuni.fitbook.domain.models.binding.UserLoginBindingModel;
+import softuni.fitbook.config.Constants;
+import softuni.fitbook.data.models.User;
+import softuni.fitbook.data.models.UserRole;
+import softuni.fitbook.web.controllers.models.request.user.UserLoginRequestModel;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -18,6 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
@@ -30,8 +34,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
-            UserLoginBindingModel loginBindingModel = new ObjectMapper()
-                    .readValue(request.getInputStream(), UserLoginBindingModel.class);
+            UserLoginRequestModel loginBindingModel = new ObjectMapper()
+                    .readValue(request.getInputStream(), UserLoginRequestModel.class);
 
             return this.authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -47,12 +51,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         User user = ((User) authResult.getPrincipal());
-        String authority = user.getAuthorities()
-                .stream()
-                .findFirst()
-                .orElse(null)
-                .getAuthority();
-
+        String authority = extractHighestAuthorityFromAuthorities(user.getAuthorities());
         String token = Jwts.builder()
                 .setSubject(user.getUsername())
                 .setExpiration(new Date(new Date().getTime() + 864000000L))
@@ -63,5 +62,25 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 
         response.addHeader("Authorization", "Bearer " + token);
+    }
+
+    private String extractHighestAuthorityFromAuthorities(Set<UserRole> authorities) {
+
+        Set<String> allAuthoritiesAsString = authorities
+                .stream()
+                .map(UserRole::getAuthority)
+                .collect(Collectors.toSet());
+
+        if (allAuthoritiesAsString.contains(Constants.AUTHORITY_ROOT_ADMIN)) {
+            return Constants.AUTHORITY_ROOT_ADMIN;
+        } else if (allAuthoritiesAsString.contains(Constants.AUTHORITY_ADMIN)) {
+            return Constants.AUTHORITY_ADMIN;
+        } else if (allAuthoritiesAsString.contains(Constants.AUTHORITY_MODERATOR)) {
+            return Constants.AUTHORITY_MODERATOR;
+        } else if (allAuthoritiesAsString.contains(Constants.AUTHORITY_USER)) {
+            return Constants.AUTHORITY_USER;
+        } else {
+            throw new IllegalArgumentException("No such role");
+        }
     }
 }

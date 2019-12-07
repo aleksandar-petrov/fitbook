@@ -6,6 +6,7 @@ export class Exercise {
   youtubeURL: string;
   majorMuscleGroup: string;
   assistingMuscleGroups: string[];
+  workoutsCounter: number;
 
   constructor() {
     this.name = '';

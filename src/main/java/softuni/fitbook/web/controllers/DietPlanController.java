@@ -3,12 +3,12 @@ package softuni.fitbook.web.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
-import softuni.fitbook.domain.models.binding.dietPlan.DietPlanCreateBindingModel;
-import softuni.fitbook.domain.models.binding.dietPlan.DietPlanEditBindingModel;
-import softuni.fitbook.domain.models.service.dietPlan.DietPlanCreateServiceModel;
-import softuni.fitbook.domain.models.service.dietPlan.DietPlanServiceModel;
-import softuni.fitbook.domain.models.response.dietPlan.DietPlanResponseModel;
-import softuni.fitbook.service.DietPlanService;
+import softuni.fitbook.web.controllers.models.request.dietPlan.DietPlanCreateRequestModel;
+import softuni.fitbook.web.controllers.models.request.dietPlan.DietPlanEditRequestModel;
+import softuni.fitbook.services.models.dietPlan.DietPlanCreateServiceModel;
+import softuni.fitbook.services.models.dietPlan.DietPlanServiceModel;
+import softuni.fitbook.web.controllers.models.response.dietPlan.DietPlanResponseModel;
+import softuni.fitbook.services.DietPlanService;
 
 import java.security.Principal;
 import java.util.List;
@@ -27,7 +27,7 @@ public class DietPlanController {
     }
 
     @PostMapping("/create")
-    public DietPlanResponseModel createDietPlan(@RequestBody DietPlanCreateBindingModel model, Principal principal) {
+    public DietPlanResponseModel createDietPlan(@RequestBody DietPlanCreateRequestModel model, Principal principal) {
 
         DietPlanServiceModel dietPlan =
                 dietPlanService.createDietPlan(
@@ -55,7 +55,7 @@ public class DietPlanController {
     }
 
     @PutMapping("/edit/{dietPlanId}")
-    public DietPlanResponseModel editMyDietPlan(@PathVariable(value = "dietPlanId") String dietPlanId, @RequestBody DietPlanEditBindingModel model, Principal principal) {
+    public DietPlanResponseModel editMyDietPlan(@PathVariable(value = "dietPlanId") String dietPlanId, @RequestBody DietPlanEditRequestModel model, Principal principal) {
 
         return modelMapper.map(dietPlanService.editMyDietPlanById(dietPlanId, modelMapper.map(model, DietPlanServiceModel.class), principal.getName()), DietPlanResponseModel.class);
 

@@ -4,11 +4,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import softuni.fitbook.domain.models.binding.FoodCreateBindingModel;
-import softuni.fitbook.domain.models.service.food.FoodCreateServiceModel;
-import softuni.fitbook.domain.models.response.exercise.AllExercisesResponseViewModel;
-import softuni.fitbook.domain.models.response.food.FoodResponseModel;
-import softuni.fitbook.service.FoodService;
+import softuni.fitbook.web.controllers.models.request.food.FoodCreateRequestModel;
+import softuni.fitbook.services.models.food.FoodCreateServiceModel;
+import softuni.fitbook.web.controllers.models.response.exercise.AllExercisesResponseViewModel;
+import softuni.fitbook.web.controllers.models.response.food.FoodResponseModel;
+import softuni.fitbook.services.FoodService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +27,7 @@ public class FoodController {
     }
 
     @PostMapping("/create")
-    public AllExercisesResponseViewModel createExercise(@RequestPart("foodBindingModel") FoodCreateBindingModel model, @RequestPart("file") MultipartFile file) {
+    public AllExercisesResponseViewModel createExercise(@RequestPart("foodBindingModel") FoodCreateRequestModel model, @RequestPart("file") MultipartFile file) {
 
         return modelMapper.map(
                 foodService.createFood(modelMapper.map(model, FoodCreateServiceModel.class), file), AllExercisesResponseViewModel.class);

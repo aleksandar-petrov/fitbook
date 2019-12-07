@@ -3,14 +3,14 @@ package softuni.fitbook.web.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import softuni.fitbook.domain.models.binding.meal.MealCreateBindingModel;
-import softuni.fitbook.domain.models.binding.meal.MealEditBindingModel;
-import softuni.fitbook.domain.models.binding.meal.MealFoodBindingModel;
-import softuni.fitbook.domain.models.service.meal.MealCreateServiceModel;
-import softuni.fitbook.domain.models.service.meal.MealFoodCreateServiceModel;
-import softuni.fitbook.domain.models.service.meal.MealServiceModel;
-import softuni.fitbook.domain.models.response.meal.MealResponseModel;
-import softuni.fitbook.service.MealService;
+import softuni.fitbook.web.controllers.models.request.meal.MealCreateRequestModel;
+import softuni.fitbook.web.controllers.models.request.meal.MealEditRequestModel;
+import softuni.fitbook.web.controllers.models.request.meal.MealFoodRequestModel;
+import softuni.fitbook.services.models.meal.MealCreateServiceModel;
+import softuni.fitbook.services.models.meal.MealFoodCreateServiceModel;
+import softuni.fitbook.services.models.meal.MealServiceModel;
+import softuni.fitbook.web.controllers.models.response.meal.MealResponseModel;
+import softuni.fitbook.services.MealService;
 
 import java.security.Principal;
 import java.util.List;
@@ -30,7 +30,7 @@ public class MealController {
     }
 
     @PostMapping("/create")
-    public MealResponseModel createMeal(@RequestBody MealCreateBindingModel model, Principal principal) {
+    public MealResponseModel createMeal(@RequestBody MealCreateRequestModel model, Principal principal) {
 
         return modelMapper.map(this.mealService.createMeal(modelMapper.map(model, MealCreateServiceModel.class), principal.getName()), MealResponseModel.class);
 
@@ -47,7 +47,7 @@ public class MealController {
     }
 
     @PostMapping("/add-exercise/{mealId}")
-    public MealResponseModel addMealExerciseToMeal(@RequestBody MealFoodBindingModel model, @PathVariable(value = "mealId") String mealId, Principal principal) {
+    public MealResponseModel addMealExerciseToMeal(@RequestBody MealFoodRequestModel model, @PathVariable(value = "mealId") String mealId, Principal principal) {
 
         return modelMapper.map(this.mealService.addMealFoodToMeal(
                 this.modelMapper.map(model, MealFoodCreateServiceModel.class)
@@ -64,7 +64,7 @@ public class MealController {
     }
 
     @PutMapping("/edit/{mealId}")
-    public MealResponseModel editMeal(@PathVariable String mealId, @RequestBody MealEditBindingModel model, Principal principal) {
+    public MealResponseModel editMeal(@PathVariable String mealId, @RequestBody MealEditRequestModel model, Principal principal) {
 
         return modelMapper.map(mealService.editMealById(
                 mealId,

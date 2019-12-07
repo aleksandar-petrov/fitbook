@@ -5,17 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import softuni.fitbook.domain.models.binding.FitnessProfileBindingModel;
-import softuni.fitbook.domain.models.binding.UserRegisterBindingModel;
-import softuni.fitbook.domain.models.service.user.FitnessProfileServiceModel;
-import softuni.fitbook.domain.models.service.user.UserServiceModel;
-import softuni.fitbook.domain.models.response.user.AllUsersUserResponseModel;
-import softuni.fitbook.domain.models.response.user.UserResponseModel;
-import softuni.fitbook.repository.RoleRepository;
-import softuni.fitbook.service.UserService;
+import softuni.fitbook.web.controllers.models.request.user.FitnessProfileRequestModel;
+import softuni.fitbook.web.controllers.models.request.user.UserRegisterRequestModel;
+import softuni.fitbook.services.models.user.FitnessProfileServiceModel;
+import softuni.fitbook.services.models.user.UserServiceModel;
+import softuni.fitbook.web.controllers.models.response.user.AllUsersUserResponseModel;
+import softuni.fitbook.web.controllers.models.response.user.UserResponseModel;
+import softuni.fitbook.data.repositories.RoleRepository;
+import softuni.fitbook.services.UserService;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestPart("user") UserRegisterBindingModel model, @RequestPart(value = "pictureFile", required = false) MultipartFile file) throws URISyntaxException {
+    public ResponseEntity register(@RequestPart("user") UserRegisterRequestModel model, @RequestPart(value = "pictureFile", required = false) MultipartFile file) throws URISyntaxException {
         if (!model.getPassword().equals(model.getConfirmPassword())) {
             return ResponseEntity.badRequest().body("Error: Passwords do not match!");
         }
@@ -54,15 +55,15 @@ public class UserController {
     }
 
     @PostMapping("/promote")
-    public AllUsersUserResponseModel promoteUser(@RequestParam(name = "id") String id) {
+    public AllUsersUserResponseModel promoteUser(@RequestParam(name = "id") String id, Principal principal) {
 
         return modelMapper.map(userService.promoteUser(id), AllUsersUserResponseModel.class);
     }
 
     @PostMapping("/demote")
-    public AllUsersUserResponseModel demoteUser(@RequestParam(name = "id") String id) {
+    public AllUsersUserResponseModel demoteUser(@RequestParam(name = "id") String id, Principal principal) {
 
-        return modelMapper.map(userService.demoteUser(id), AllUsersUserResponseModel.class);
+        return modelMapper.map(userService.demoteUser(id, principal.getName()), AllUsersUserResponseModel.class);
     }
 
     @GetMapping(value = "/id/{id}")
@@ -83,7 +84,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/fitness-profile/set/{userId}")
-    public ResponseEntity setFitnessProfileToUserById(@PathVariable(value = "userId") String userId, @RequestBody FitnessProfileBindingModel model) {
+    public ResponseEntity setFitnessProfileToUserById(@PathVariable(value = "userId") String userId, @RequestBody FitnessProfileRequestModel model) {
 
         boolean result = userService.setFitnessProfileToUser(userId, modelMapper.map(model, FitnessProfileServiceModel.class));
 
@@ -91,7 +92,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/fitness-profile/edit/{userId}")
-    public ResponseEntity editFitnessProfileByUserId(@PathVariable(value = "userId") String userId, @RequestBody FitnessProfileBindingModel model) {
+    public ResponseEntity editFitnessProfileByUserId(@PathVariable(value = "userId") String userId, @RequestBody FitnessProfileRequestModel model) {
 
         boolean result = userService.editFitnessProfileByUserId(userId, modelMapper.map(model, FitnessProfileServiceModel.class));
 

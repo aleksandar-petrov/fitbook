@@ -3,7 +3,6 @@ package softuni.fitbook.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import softuni.fitbook.service.UserService;
+import softuni.fitbook.services.UserService;
 import softuni.fitbook.web.filters.JwtAuthenticationFilter;
 import softuni.fitbook.web.filters.JwtAuthorizationFilter;
 
@@ -39,12 +38,12 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/api/users/register", "/**").permitAll()
-                .antMatchers("/api/exercises/create").hasAnyAuthority(Constants.AUTHORITY_ROOT_ADMIN, Constants.AUTHORITY_ADMIN, Constants.AUTHORITY_MODERATOR)
-                .antMatchers("/api/users/all", "/api/users/promote", "/api/users/demote").hasAnyAuthority(Constants.AUTHORITY_ROOT_ADMIN, Constants.AUTHORITY_ADMIN)
+                .antMatchers("/api/exercises/create").hasAuthority(Constants.AUTHORITY_MODERATOR)
+                .antMatchers("/api/users/all", "/api/users/promote", "/api/users/demote").hasAuthority(Constants.AUTHORITY_ROOT_ADMIN)
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(), this.userService))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userService))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().requiresChannel()
@@ -71,7 +70,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(this.userService)
-                .passwordEncoder(this.bCryptPasswordEncoder);
+                .userDetailsService(userService)
+                .passwordEncoder(bCryptPasswordEncoder);
     }
 }

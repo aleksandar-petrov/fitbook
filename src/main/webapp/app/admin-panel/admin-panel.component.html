@@ -46,11 +46,11 @@
                                             class="btn btn-success mr-2" style="visibility: hidden">
                                         Promote
                                     </button>
-                                    <button type="button" *ngIf="user.role !== 'roleUser'"
+                                    <button type="button" *ngIf="user.role !== 'roleUser' && !(user.role === 'roleAdmin' && loggedUserRole ==='ROLE_ADMIN')"
                                             class="btn btn-danger mr-2" (click)="onDemoteHandler(user.id)">
                                         Demote
                                     </button>
-                                    <button type="button" *ngIf="user.role === 'roleUser'"
+                                    <button type="button" *ngIf="user.role === 'roleUser' || (user.role === 'roleAdmin' && loggedUserRole ==='ROLE_ADMIN')"
                                             class="btn btn-success mr-2" style="visibility: hidden">
                                         Demote
                                     </button>

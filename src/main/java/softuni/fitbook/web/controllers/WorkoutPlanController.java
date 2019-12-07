@@ -2,12 +2,12 @@ package softuni.fitbook.web.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
-import softuni.fitbook.domain.models.binding.workout.WorkoutCreateBindingModel;
-import softuni.fitbook.domain.models.binding.workoutPlan.WorkoutPlanEditBindingModel;
-import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanCreateServiceModel;
-import softuni.fitbook.domain.models.service.workoutPlan.WorkoutPlanServiceModel;
-import softuni.fitbook.domain.models.response.workoutPlan.WorkoutPlanResponseModel;
-import softuni.fitbook.service.WorkoutPlanService;
+import softuni.fitbook.web.controllers.models.request.workout.WorkoutCreateRequestModel;
+import softuni.fitbook.web.controllers.models.request.workoutPlan.WorkoutPlanEditRequestModel;
+import softuni.fitbook.services.models.workoutPlan.WorkoutPlanCreateServiceModel;
+import softuni.fitbook.services.models.workoutPlan.WorkoutPlanServiceModel;
+import softuni.fitbook.web.controllers.models.response.workoutPlan.WorkoutPlanResponseModel;
+import softuni.fitbook.services.WorkoutPlanService;
 
 import java.security.Principal;
 import java.util.List;
@@ -26,7 +26,7 @@ public class WorkoutPlanController {
     }
 
     @PostMapping("/create")
-    public WorkoutPlanResponseModel createWorkoutPlan(@RequestBody WorkoutCreateBindingModel model, Principal principal) {
+    public WorkoutPlanResponseModel createWorkoutPlan(@RequestBody WorkoutCreateRequestModel model, Principal principal) {
 
         WorkoutPlanServiceModel workoutPlan =
                 workoutPlanService.createWorkoutPlan(
@@ -54,7 +54,7 @@ public class WorkoutPlanController {
     }
 
     @PutMapping("/edit/{workoutPlanId}")
-    public WorkoutPlanResponseModel editMyWorkoutPlan(@PathVariable(value = "workoutPlanId") String workoutPlanId, @RequestBody WorkoutPlanEditBindingModel model, Principal principal) {
+    public WorkoutPlanResponseModel editMyWorkoutPlan(@PathVariable(value = "workoutPlanId") String workoutPlanId, @RequestBody WorkoutPlanEditRequestModel model, Principal principal) {
 
         return modelMapper.map(workoutPlanService.editMyWorkoutPlanById(workoutPlanId, modelMapper.map(model, WorkoutPlanServiceModel.class), principal.getName()), WorkoutPlanResponseModel.class);
 

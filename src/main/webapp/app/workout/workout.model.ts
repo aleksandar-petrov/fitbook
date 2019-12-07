@@ -8,4 +8,6 @@ export class Workout {
     isPublic: boolean;
     creator: Creator;
     isCopied: boolean;
+    likesCount: number;
+    isLiked: boolean;
 }
