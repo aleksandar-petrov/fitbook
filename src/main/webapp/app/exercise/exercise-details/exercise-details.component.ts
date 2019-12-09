@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {ExerciseService} from "../exercise.service";
 import {Exercise} from "../exercise.model";
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {WorkoutExerciseBindingModel} from "../all-exercises/workout-exercise-binding.model";
 import {Workout} from "../../workout/workout.model";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";

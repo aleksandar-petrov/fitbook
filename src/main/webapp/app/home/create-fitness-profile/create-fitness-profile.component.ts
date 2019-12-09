@@ -1,9 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {UserModel} from '../../user/user.model';
+import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../user/user.service';
-import {FitnessProfileModel} from '../../user/fitness-profile.model';
 import {FitnessProfileBindingModel} from './fitness-profile-binding.model';
-import {HttpHeaders} from '@angular/common/http';
 
 @Component({
   selector: 'app-create-fitness-profile',

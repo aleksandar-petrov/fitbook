@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {Workout} from "../../workout/workout.model";
-import {WorkoutService} from "../../workout/workout.service";
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {GetConstantViewNamePipe} from "../../get-constant-view-name.pipe";

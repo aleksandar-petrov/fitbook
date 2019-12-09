@@ -1,5 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({name: 'commentDate'})
 export class CommentDatePipe implements PipeTransform {

@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {UserService} from '../user.service';
+import {Component, OnInit} from '@angular/core';
 import {SigninBindingModel} from './signin-binding.model';
-import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {HttpErrorResponse} from '@angular/common/http';
 import {AuthService} from '../../auth/auth.service';
 import {Router} from '@angular/router';
 

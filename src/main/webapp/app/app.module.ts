@@ -11,7 +11,7 @@ import {GuestNavbarComponent} from './navbar/guest-navbar/guest-navbar.component
 import {LoggedNavbarComponent} from './navbar/logged-navbar/logged-navbar.component';
 import {FoodComponent} from './food/food.component';
 import {AllExercisesComponent} from './exercise/all-exercises/all-exercises.component';
-import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {ExerciseCardComponent} from './exercise/exercise-card/exercise-card.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {GetConstantViewNamePipe} from './get-constant-view-name.pipe';

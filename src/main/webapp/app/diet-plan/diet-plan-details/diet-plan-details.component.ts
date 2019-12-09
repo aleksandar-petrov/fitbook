@@ -1,6 +1,5 @@
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {GetConstantViewNamePipe} from "../../get-constant-view-name.pipe";
 import {Component, OnInit} from "@angular/core";
 import {DietPlan} from "../diet-plan.model";
 import {DietPlanService} from "../diet-plan.service";

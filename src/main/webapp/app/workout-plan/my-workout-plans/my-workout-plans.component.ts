@@ -1,9 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Workout} from "../../workout/workout.model";
-import {WorkoutBindingModel} from "../../workout/workout-binding-model";
 import {WorkoutPlanBindingModel} from "../workout-plan-binding-model";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {WorkoutService} from "../../workout/workout.service";
 import {AuthService} from "../../auth/auth.service";
 import {ActivatedRoute, NavigationEnd, Params, Router, RouterEvent} from "@angular/router";
 import {WorkoutPlanService} from "../workout-plan.service";

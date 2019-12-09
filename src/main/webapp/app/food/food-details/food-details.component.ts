@@ -1,11 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {Exercise} from "../../exercise/exercise.model";
-import {WorkoutExerciseBindingModel} from "../../exercise/all-exercises/workout-exercise-binding.model";
-import {Workout} from "../../workout/workout.model";
-import {ExerciseService} from "../../exercise/exercise.service";
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Params, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {WorkoutService} from "../../workout/workout.service";
 import {FoodService} from "../food.service";
 import {Food} from "../food.model";
 import {MealFoodBindingModel} from "../../meal/meal-food-binding-model";

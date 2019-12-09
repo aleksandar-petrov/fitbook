@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {WorkoutService} from "../workout.service";
 import {Workout} from "../workout.model";
-import {Exercise} from "../../exercise/exercise.model";
-import {WorkoutExerciseBindingModel} from "../../exercise/all-exercises/workout-exercise-binding.model";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Router} from "@angular/router";
 

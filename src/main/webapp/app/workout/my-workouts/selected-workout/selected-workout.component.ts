@@ -1,10 +1,9 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Workout} from "../../workout.model";
-import {ActivatedRoute, Params, Router, UrlSegment} from "@angular/router";
-import {DragDropModule, moveItemInArray} from '@angular/cdk/drag-drop';
+import {ActivatedRoute, Params, Router} from "@angular/router";
+import {moveItemInArray} from '@angular/cdk/drag-drop';
 import {WorkoutService} from "../../workout.service";
 import {GetConstantViewNamePipe} from "../../../get-constant-view-name.pipe";
-import {WorkoutBindingModel} from "../../workout-binding-model";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({

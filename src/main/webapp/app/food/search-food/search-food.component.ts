@@ -1,9 +1,8 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FoodService} from "../food.service";
 import {Food} from "../food.model";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FoodBindingModel} from "../food-binding.model";
-import {Exercise} from "../../exercise/exercise.model";
 import {Router} from "@angular/router";
 
 @Component({

@@ -1,8 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Exercise} from "../../exercise/exercise.model";
-import {SelectedMuscleGroupsModel} from "../../exercise/selected-muscle-groups.model";
-import {WorkoutExerciseBindingModel} from "../../exercise/all-exercises/workout-exercise-binding.model";
-import {Workout} from "../../workout/workout.model";
 import {Food} from "../food.model";
 import {MealFoodBindingModel} from "../../meal/meal-food-binding-model";
 import {Meal} from "../../meal/meal.model";

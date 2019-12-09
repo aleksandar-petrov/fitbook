@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {DietPlanBindingModel} from "./diet-plan-binding-model";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {DietPlan} from "./diet-plan.model";
+import {AppSettings} from "../app-settings";
 
 
 @Injectable({
@@ -16,57 +17,57 @@ export class DietPlanService {
 
     createDietPlan(dietPlanBindingModel: DietPlanBindingModel) {
 
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/diet-plans/create`, dietPlanBindingModel);
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/diet-plans/create`, dietPlanBindingModel);
 
     }
 
     getLoggedInUserDietPlans() {
 
-        return this.http.get(`${CONSTANTS.DOMAIN}/api/diet-plans/my`);
+        return this.http.get(`${AppSettings.API_ENDPOINT}/api/diet-plans/my`);
 
     }
 
 
     deleteMyDietPlan(dietPlanId: string) {
 
-        return this.http.delete(`${CONSTANTS.DOMAIN}/api/diet-plans/delete/` + dietPlanId);
+        return this.http.delete(`${AppSettings.API_ENDPOINT}/api/diet-plans/delete/` + dietPlanId);
 
     }
 
     editMyDietPlan(dietPlanId: string, dietPlanEditBindingModel: DietPlan) {
 
-        return this.http.put(`${CONSTANTS.DOMAIN}/api/diet-plans/edit/` + dietPlanId, dietPlanEditBindingModel);
+        return this.http.put(`${AppSettings.API_ENDPOINT}/api/diet-plans/edit/` + dietPlanId, dietPlanEditBindingModel);
 
     }
 
     getAllPublicDietPlans() {
 
-        return this.http.get(`${CONSTANTS.DOMAIN}/api/diet-plans/public/all`);
+        return this.http.get(`${AppSettings.API_ENDPOINT}/api/diet-plans/public/all`);
 
     }
 
     getDietPlanById(dietPlanId: string) {
 
-        return this.http.get(`${CONSTANTS.DOMAIN}/api/diet-plans/` + dietPlanId);
+        return this.http.get(`${AppSettings.API_ENDPOINT}/api/diet-plans/` + dietPlanId);
 
     }
 
     copyDietPlanToMyDietPlans(dietPlanId: string) {
 
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/diet-plans/copy/` + dietPlanId, null);
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/diet-plans/copy/` + dietPlanId, null);
     }
 
     addMealFromMyMealsToMyDietPlan(dietPlanId: string, mealId: string) {
 
         const params = new HttpParams().append('mealId', mealId);
 
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/diet-plans/add-meal/` + dietPlanId, null, {params: params});
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/diet-plans/add-meal/` + dietPlanId, null, {params: params});
 
     }
 
     exportDietPlanToExcel(dietPlanId: string) {
 
-        return this.http.get(`${CONSTANTS.DOMAIN}/api/diet-plans/export/excel/` + dietPlanId, {responseType: "blob"});
+        return this.http.get(`${AppSettings.API_ENDPOINT}/api/diet-plans/export/excel/` + dietPlanId, {responseType: "blob"});
     }
 
 }

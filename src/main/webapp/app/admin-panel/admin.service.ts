@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {AppSettings} from "../app-settings";
 
 
 @Injectable({
@@ -16,7 +17,7 @@ export class AdminService {
 
     fetchAllUsers() {
 
-        return this.http.get(`${CONSTANTS.DOMAIN}/api/users/all`);
+        return this.http.get(`${AppSettings.API_ENDPOINT}/api/users/all`);
 
     }
 
@@ -25,11 +26,11 @@ export class AdminService {
     promoteUser(userId: string) {
 
 
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/users/promote`, null, {params: new HttpParams().append('id', userId)});
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/users/promote`, null, {params: new HttpParams().append('id', userId)});
     }
 
     demoteUser(userId: string) {
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/users/demote`, null, {params: new HttpParams().append('id', userId)});
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/users/demote`, null, {params: new HttpParams().append('id', userId)});
     }
 
 

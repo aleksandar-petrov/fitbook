@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {CommentModel} from './comment.model'
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {CommentBindingModel} from "./comment-binding.model";
+import {AppSettings} from "../app-settings";
 
 
 @Injectable({
@@ -24,13 +24,13 @@ export class CommentService {
 
     commentWorkout(workoutId: string, comment: CommentBindingModel) {
 
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/workouts/comment/` + workoutId, comment, {headers: this.contentTypeJsonHeaders});
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/workouts/comment/` + workoutId, comment, {headers: this.contentTypeJsonHeaders});
 
     }
 
     deleteWorkoutComment(commentId: string) {
 
-        return this.http.delete(`${CONSTANTS.DOMAIN}/api/workouts/comment/delete/` + commentId, );
+        return this.http.delete(`${AppSettings.API_ENDPOINT}/api/workouts/comment/delete/` + commentId, );
     }
 
 

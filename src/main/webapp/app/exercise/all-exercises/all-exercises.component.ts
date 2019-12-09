@@ -6,7 +6,6 @@ import {WorkoutExerciseBindingModel} from "./workout-exercise-binding.model";
 import {Workout} from "../../workout/workout.model";
 import {WorkoutService} from "../../workout/workout.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {WorkoutBindingModel} from "../../workout/workout-binding-model";
 import {Router} from "@angular/router";
 
 @Component({

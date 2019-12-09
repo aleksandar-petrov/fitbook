@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {WorkoutBindingModel} from './workout-binding-model';
 import {WorkoutExerciseBindingModel} from '../exercise/all-exercises/workout-exercise-binding.model';
 import {Workout} from "./workout.model";
+import {AppSettings} from "../app-settings";
 
 
 @Injectable({
@@ -17,55 +18,55 @@ export class WorkoutService {
 
     createWorkout(workoutCreateModel: WorkoutBindingModel) {
 
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/workouts/create`, workoutCreateModel);
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/workouts/create`, workoutCreateModel);
     }
 
     addWorkoutExerciseToWorkout(workoutExerciseBindingModel: WorkoutExerciseBindingModel, workoutId: string) {
 
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/workouts/add-exercise/` + workoutId, workoutExerciseBindingModel);
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/workouts/add-exercise/` + workoutId, workoutExerciseBindingModel);
     }
 
 
     fetchAllPublicWorkouts() {
 
-        return this.http.get(`${CONSTANTS.DOMAIN}/api/workouts/public/all`);
+        return this.http.get(`${AppSettings.API_ENDPOINT}/api/workouts/public/all`);
     }
 
     fetchWorkoutById(id: string) {
 
-        return this.http.get(`${CONSTANTS.DOMAIN}/api/workouts/` + id);
+        return this.http.get(`${AppSettings.API_ENDPOINT}/api/workouts/` + id);
     }
 
     getLoggedInUserWorkouts() {
 
-        return this.http.get(`${CONSTANTS.DOMAIN}/api/workouts/my/`);
+        return this.http.get(`${AppSettings.API_ENDPOINT}/api/workouts/my/`);
     }
 
 
     deleteWorkoutExerciseFromWorkout(workoutId: string, exerciseId: string) {
 
         const params = new HttpParams().append('exerciseId', exerciseId);
-        return this.http.delete(`${CONSTANTS.DOMAIN}/api/workouts/delete-exercise/` + workoutId, {params: params});
+        return this.http.delete(`${AppSettings.API_ENDPOINT}/api/workouts/delete-exercise/` + workoutId, {params: params});
     }
 
     deleteWorkoutById(workoutId: string) {
 
-        return this.http.delete(`${CONSTANTS.DOMAIN}/api/workouts/delete/` + workoutId);
+        return this.http.delete(`${AppSettings.API_ENDPOINT}/api/workouts/delete/` + workoutId);
     }
 
     editWorkoutById(workoutId: string, workoutBindingModel: Workout) {
 
-        return this.http.put(`${CONSTANTS.DOMAIN}/api/workouts/edit/` + workoutId, workoutBindingModel);
+        return this.http.put(`${AppSettings.API_ENDPOINT}/api/workouts/edit/` + workoutId, workoutBindingModel);
     }
 
     copyWorkoutToLoggedUserWorkouts(workoutId: string) {
 
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/workouts/copy/` + workoutId, null);
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/workouts/copy/` + workoutId, null);
     }
 
     likeWorkout(workoutId: string) {
 
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/workouts/like/` + workoutId, null);
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/workouts/like/` + workoutId, null);
     }
 
 }

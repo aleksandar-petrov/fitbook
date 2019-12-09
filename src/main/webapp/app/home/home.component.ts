@@ -1,8 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
-import {UserModel} from '../user/user.model';
 import {UserService} from '../user/user.service';
-import has = Reflect.has;
 
 @Component({
   selector: 'app-home',

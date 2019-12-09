@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Workout} from "../../workout/workout.model";
 import {Meal} from "../meal.model";
 
 @Component({

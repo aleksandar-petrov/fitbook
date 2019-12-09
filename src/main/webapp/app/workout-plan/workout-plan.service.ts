@@ -1,10 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {WorkoutBindingModel} from '../workout/workout-binding-model';
-import {WorkoutExerciseBindingModel} from '../exercise/all-exercises/workout-exercise-binding.model';
-import {Workout} from "../workout/workout.model";
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {WorkoutPlanBindingModel} from "./workout-plan-binding-model";
 import {WorkoutPlan} from "./workout-plan.model";
+import {AppSettings} from "../app-settings";
 
 
 @Injectable({
@@ -19,57 +17,57 @@ export class WorkoutPlanService {
 
     createWorkoutPlan(workoutPlanBindingModel: WorkoutPlanBindingModel) {
 
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/workout-plans/create`, workoutPlanBindingModel);
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/workout-plans/create`, workoutPlanBindingModel);
 
     }
 
     getLoggedInUserWorkoutPlans() {
 
-        return this.http.get(`${CONSTANTS.DOMAIN}/api/workout-plans/my`);
+        return this.http.get(`${AppSettings.API_ENDPOINT}/api/workout-plans/my`);
 
     }
 
 
     deleteMyWorkoutPlan(workoutPlanId: string) {
 
-        return this.http.delete(`${CONSTANTS.DOMAIN}/api/workout-plans/delete/` + workoutPlanId);
+        return this.http.delete(`${AppSettings.API_ENDPOINT}/api/workout-plans/delete/` + workoutPlanId);
 
     }
 
     editMyWorkoutPlan(workoutPlanId: string, workoutPlanEditBindingModel: WorkoutPlan) {
 
-        return this.http.put(`${CONSTANTS.DOMAIN}/api/workout-plans/edit/` + workoutPlanId, workoutPlanEditBindingModel);
+        return this.http.put(`${AppSettings.API_ENDPOINT}/api/workout-plans/edit/` + workoutPlanId, workoutPlanEditBindingModel);
 
     }
 
     getAllPublicWorkoutPlans() {
 
-        return this.http.get(`${CONSTANTS.DOMAIN}/api/workout-plans/public/all`);
+        return this.http.get(`${AppSettings.API_ENDPOINT}/api/workout-plans/public/all`);
 
     }
 
     getWorkoutPlanById(workoutPlanId: string) {
 
-        return this.http.get(`${CONSTANTS.DOMAIN}/api/workout-plans/` + workoutPlanId);
+        return this.http.get(`${AppSettings.API_ENDPOINT}/api/workout-plans/` + workoutPlanId);
 
     }
 
     copyWorkoutPlanToMyWorkoutPlans(workoutPlanId: string) {
 
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/workout-plans/copy/` + workoutPlanId, null);
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/workout-plans/copy/` + workoutPlanId, null);
     }
 
     addWorkoutFromMyWorkoutsToMyWorkoutPlan(workoutPlanId: string, workoutId: string) {
 
         const params = new HttpParams().append('workoutId', workoutId);
 
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/workout-plans/add-workout/` + workoutPlanId, null, {params: params});
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/workout-plans/add-workout/` + workoutPlanId, null, {params: params});
 
     }
 
     exportWorkoutPlanToExcel(workoutPlanId: string) {
 
-        return this.http.get(`${CONSTANTS.DOMAIN}/api/workout-plans/export/excel/` + workoutPlanId, {responseType: "blob"});
+        return this.http.get(`${AppSettings.API_ENDPOINT}/api/workout-plans/export/excel/` + workoutPlanId, {responseType: "blob"});
     }
 
 }

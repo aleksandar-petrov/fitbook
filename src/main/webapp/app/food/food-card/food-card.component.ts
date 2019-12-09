@@ -1,6 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Exercise} from "../../exercise/exercise.model";
-import {GetConstantViewNamePipe} from "../../get-constant-view-name.pipe";
 import {Food} from "../food.model";
 
 @Component({

@@ -3,7 +3,6 @@ import {Meal} from "../meal.model";
 import {MealService} from "../meal.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {GetConstantViewNamePipe} from "../../get-constant-view-name.pipe";
 
 @Component({
     selector: 'app-meal-details',

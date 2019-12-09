@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import {IndexComponent} from './index/index.component';
 import {AllExercisesComponent} from './exercise/all-exercises/all-exercises.component';
 import {CreateExerciseComponent} from './exercise/create-exercise/create-exercise.component';

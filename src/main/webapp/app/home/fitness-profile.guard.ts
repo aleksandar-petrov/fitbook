@@ -1,13 +1,6 @@
-import {
-    CanActivate,
-    ActivatedRouteSnapshot,
-    RouterStateSnapshot,
-    Router,
-    UrlTree
-} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {map, tap, take} from 'rxjs/operators';
 import {UserService} from "../user/user.service";
 
 @Injectable({providedIn: 'root'})

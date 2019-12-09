@@ -3,7 +3,6 @@ import {Meal} from "../../meal.model";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {MealService} from "../../meal.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {Food} from "../../../food/food.model";
 import {MealFood} from "../../meal-food.model";
 
 

@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 import {Exercise} from './exercise.model';
+import {AppSettings} from "../app-settings";
 
 @Injectable({
   providedIn: 'root',
@@ -20,16 +21,16 @@ export class ExerciseService {
 
   createExercise(formData: FormData) {
 
-    return this.http.post(`${CONSTANTS.DOMAIN}/api/exercises/create`, formData);
+    return this.http.post(`${AppSettings.API_ENDPOINT}/api/exercises/create`, formData);
   }
 
 
   fetchAllExercises() {
-    return this.http.get(`${CONSTANTS.DOMAIN}/api/exercises/all`);
+    return this.http.get(`${AppSettings.API_ENDPOINT}/api/exercises/all`);
   }
 
   getExerciseById(exerciseId: string) {
-    return this.http.get(`${CONSTANTS.DOMAIN}/api/exercises/details/` + exerciseId);
+    return this.http.get(`${AppSettings.API_ENDPOINT}/api/exercises/details/` + exerciseId);
   }
 
   getExercises() {

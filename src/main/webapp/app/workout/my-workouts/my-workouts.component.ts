@@ -3,7 +3,6 @@ import {Workout} from "../workout.model";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {WorkoutBindingModel} from "../workout-binding-model";
 import {WorkoutService} from "../workout.service";
-import {UserService} from "../../user/user.service";
 import {AuthService} from "../../auth/auth.service";
 import {ActivatedRoute, NavigationEnd, Params, Router, RouterEvent} from "@angular/router";
 import {filter} from "rxjs/operators";

@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {throwError, BehaviorSubject} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 
 import {UserAuthModel} from './user-auth.model';
 import {SigninBindingModel} from '../user/signin/signin-binding.model';
-import {UserModel} from "../user/user.model";
+import {AppSettings} from "../app-settings";
 
 export interface AuthResponseData {
     kind: string;
@@ -27,7 +27,7 @@ export class AuthService {
 
     register(formData: FormData) {
 
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/users/register`, formData);
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/users/register`, formData);
     }
 
     signin(signinBindingModel: SigninBindingModel) {
@@ -36,7 +36,7 @@ export class AuthService {
             'Content-Type': 'application/json',
         });
 
-        return this.http.post(`${CONSTANTS.DOMAIN}/api/users/signin`, signinBindingModel, {
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/users/signin`, signinBindingModel, {
             headers: headers,
             observe: "response"
         });
