@@ -24,13 +24,13 @@ export class CommentService {
 
     commentWorkout(workoutId: string, comment: CommentBindingModel) {
 
-        return this.http.post("http://localhost:8000/api/workouts/comment/" + workoutId, comment, {headers: this.contentTypeJsonHeaders});
+        return this.http.post(`${CONSTANTS.DOMAIN}/api/workouts/comment/` + workoutId, comment, {headers: this.contentTypeJsonHeaders});
 
     }
 
     deleteWorkoutComment(commentId: string) {
 
-        return this.http.delete("http://localhost:8000/api/workouts/comment/delete/" + commentId, );
+        return this.http.delete(`${CONSTANTS.DOMAIN}/api/workouts/comment/delete/` + commentId, );
     }
 
 

@@ -27,7 +27,7 @@ export class AuthService {
 
     register(formData: FormData) {
 
-        return this.http.post("http://localhost:8000/api/users/register", formData);
+        return this.http.post(`${CONSTANTS.DOMAIN}/api/users/register`, formData);
     }
 
     signin(signinBindingModel: SigninBindingModel) {
@@ -36,7 +36,7 @@ export class AuthService {
             'Content-Type': 'application/json',
         });
 
-        return this.http.post("http://localhost:8000/api/users/signin", signinBindingModel, {
+        return this.http.post(`${CONSTANTS.DOMAIN}/api/users/signin`, signinBindingModel, {
             headers: headers,
             observe: "response"
         });

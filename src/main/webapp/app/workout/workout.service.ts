@@ -17,55 +17,55 @@ export class WorkoutService {
 
     createWorkout(workoutCreateModel: WorkoutBindingModel) {
 
-        return this.http.post('http://localhost:8000/api/workouts/create', workoutCreateModel);
+        return this.http.post(`${CONSTANTS.DOMAIN}/api/workouts/create`, workoutCreateModel);
     }
 
     addWorkoutExerciseToWorkout(workoutExerciseBindingModel: WorkoutExerciseBindingModel, workoutId: string) {
 
-        return this.http.post('http://localhost:8000/api/workouts/add-exercise/' + workoutId, workoutExerciseBindingModel);
+        return this.http.post(`${CONSTANTS.DOMAIN}/api/workouts/add-exercise/` + workoutId, workoutExerciseBindingModel);
     }
 
 
     fetchAllPublicWorkouts() {
 
-        return this.http.get('http://localhost:8000/api/workouts/public/all');
+        return this.http.get(`${CONSTANTS.DOMAIN}/api/workouts/public/all`);
     }
 
     fetchWorkoutById(id: string) {
 
-        return this.http.get('http://localhost:8000/api/workouts/' + id);
+        return this.http.get(`${CONSTANTS.DOMAIN}/api/workouts/` + id);
     }
 
     getLoggedInUserWorkouts() {
 
-        return this.http.get('http://localhost:8000/api/workouts/my/');
+        return this.http.get(`${CONSTANTS.DOMAIN}/api/workouts/my/`);
     }
 
 
     deleteWorkoutExerciseFromWorkout(workoutId: string, exerciseId: string) {
 
         const params = new HttpParams().append('exerciseId', exerciseId);
-        return this.http.delete('http://localhost:8000/api/workouts/delete-exercise/' + workoutId, {params: params});
+        return this.http.delete(`${CONSTANTS.DOMAIN}/api/workouts/delete-exercise/` + workoutId, {params: params});
     }
 
     deleteWorkoutById(workoutId: string) {
 
-        return this.http.delete('http://localhost:8000/api/workouts/delete/' + workoutId);
+        return this.http.delete(`${CONSTANTS.DOMAIN}/api/workouts/delete/` + workoutId);
     }
 
     editWorkoutById(workoutId: string, workoutBindingModel: Workout) {
 
-        return this.http.put('http://localhost:8000/api/workouts/edit/' + workoutId, workoutBindingModel);
+        return this.http.put(`${CONSTANTS.DOMAIN}/api/workouts/edit/` + workoutId, workoutBindingModel);
     }
 
     copyWorkoutToLoggedUserWorkouts(workoutId: string) {
 
-        return this.http.post('http://localhost:8000/api/workouts/copy/' + workoutId, null);
+        return this.http.post(`${CONSTANTS.DOMAIN}/api/workouts/copy/` + workoutId, null);
     }
 
     likeWorkout(workoutId: string) {
 
-        return this.http.post('http://localhost:8000/api/workouts/like/' + workoutId, null);
+        return this.http.post(`${CONSTANTS.DOMAIN}/api/workouts/like/` + workoutId, null);
     }
 
 }

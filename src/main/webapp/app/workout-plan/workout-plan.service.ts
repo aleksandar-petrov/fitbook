@@ -19,57 +19,57 @@ export class WorkoutPlanService {
 
     createWorkoutPlan(workoutPlanBindingModel: WorkoutPlanBindingModel) {
 
-        return this.http.post('http://localhost:8000/api/workout-plans/create', workoutPlanBindingModel);
+        return this.http.post(`${CONSTANTS.DOMAIN}/api/workout-plans/create`, workoutPlanBindingModel);
 
     }
 
     getLoggedInUserWorkoutPlans() {
 
-        return this.http.get('http://localhost:8000/api/workout-plans/my');
+        return this.http.get(`${CONSTANTS.DOMAIN}/api/workout-plans/my`);
 
     }
 
 
     deleteMyWorkoutPlan(workoutPlanId: string) {
 
-        return this.http.delete('http://localhost:8000/api/workout-plans/delete/' + workoutPlanId);
+        return this.http.delete(`${CONSTANTS.DOMAIN}/api/workout-plans/delete/` + workoutPlanId);
 
     }
 
     editMyWorkoutPlan(workoutPlanId: string, workoutPlanEditBindingModel: WorkoutPlan) {
 
-        return this.http.put('http://localhost:8000/api/workout-plans/edit/' + workoutPlanId, workoutPlanEditBindingModel);
+        return this.http.put(`${CONSTANTS.DOMAIN}/api/workout-plans/edit/` + workoutPlanId, workoutPlanEditBindingModel);
 
     }
 
     getAllPublicWorkoutPlans() {
 
-        return this.http.get('http://localhost:8000/api/workout-plans/public/all');
+        return this.http.get(`${CONSTANTS.DOMAIN}/api/workout-plans/public/all`);
 
     }
 
     getWorkoutPlanById(workoutPlanId: string) {
 
-        return this.http.get('http://localhost:8000/api/workout-plans/' + workoutPlanId);
+        return this.http.get(`${CONSTANTS.DOMAIN}/api/workout-plans/` + workoutPlanId);
 
     }
 
     copyWorkoutPlanToMyWorkoutPlans(workoutPlanId: string) {
 
-        return this.http.post('http://localhost:8000/api/workout-plans/copy/' + workoutPlanId, null);
+        return this.http.post(`${CONSTANTS.DOMAIN}/api/workout-plans/copy/` + workoutPlanId, null);
     }
 
     addWorkoutFromMyWorkoutsToMyWorkoutPlan(workoutPlanId: string, workoutId: string) {
 
         const params = new HttpParams().append('workoutId', workoutId);
 
-        return this.http.post('http://localhost:8000/api/workout-plans/add-workout/' + workoutPlanId, null, {params: params});
+        return this.http.post(`${CONSTANTS.DOMAIN}/api/workout-plans/add-workout/` + workoutPlanId, null, {params: params});
 
     }
 
     exportWorkoutPlanToExcel(workoutPlanId: string) {
 
-        return this.http.get('http://localhost:8000/api/workout-plans/export/excel/' + workoutPlanId, {responseType: "blob"});
+        return this.http.get(`${CONSTANTS.DOMAIN}/api/workout-plans/export/excel/` + workoutPlanId, {responseType: "blob"});
     }
 
 }
