@@ -3,14 +3,17 @@ package softuni.fitbook.web.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import softuni.fitbook.web.controllers.models.request.CommentRequestModel;
 import softuni.fitbook.web.controllers.models.request.meal.MealCreateRequestModel;
 import softuni.fitbook.web.controllers.models.request.meal.MealEditRequestModel;
 import softuni.fitbook.web.controllers.models.request.meal.MealFoodRequestModel;
 import softuni.fitbook.services.models.meal.MealCreateServiceModel;
 import softuni.fitbook.services.models.meal.MealFoodCreateServiceModel;
 import softuni.fitbook.services.models.meal.MealServiceModel;
+import softuni.fitbook.web.controllers.models.response.CommentResponseModel;
 import softuni.fitbook.web.controllers.models.response.meal.MealResponseModel;
 import softuni.fitbook.services.MealService;
+
 
 import java.security.Principal;
 import java.util.List;
@@ -92,6 +95,28 @@ public class MealController {
     public MealResponseModel createMeal(@PathVariable(value = "mealId") String mealId, Principal principal) {
 
         return modelMapper.map(mealService.copyMealToLoggedUserMeals(mealId, principal.getName()), MealResponseModel.class);
+    }
+
+    @PostMapping("/like/{mealId}")
+    public MealResponseModel likeMeal(@PathVariable String mealId, Principal principal) {
+
+        return modelMapper.map(mealService.likeMeal(mealId, principal.getName()), MealResponseModel.class);
+
+    }
+
+    @PostMapping("/comment/{mealId}")
+    public CommentResponseModel commentMeal(@PathVariable String mealId, @RequestBody CommentRequestModel model, Principal principal) {
+
+        return modelMapper.map(mealService.commentMeal(mealId, model, principal.getName()), CommentResponseModel.class);
+
+    }
+
+    @DeleteMapping("/comment/delete/{commentId}")
+    public boolean deleteMealCommentFromMeal(@PathVariable String commentId, Principal principal) {
+
+        mealService.deleteMealComment(commentId, principal.getName());
+
+        return true;
     }
 
 }

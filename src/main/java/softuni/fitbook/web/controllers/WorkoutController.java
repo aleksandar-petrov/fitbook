@@ -4,12 +4,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import softuni.fitbook.web.controllers.models.request.CommentRequestModel;
 import softuni.fitbook.web.controllers.models.request.workout.WorkoutCreateRequestModel;
 import softuni.fitbook.web.controllers.models.request.workout.WorkoutEditRequestModel;
 import softuni.fitbook.web.controllers.models.request.workout.WorkoutExerciseRequestModel;
 import softuni.fitbook.services.models.workout.WorkoutCreateServiceModel;
 import softuni.fitbook.services.models.workout.WorkoutExerciseCreateServiceModel;
 import softuni.fitbook.services.models.workout.WorkoutServiceModel;
+import softuni.fitbook.web.controllers.models.response.CommentResponseModel;
 import softuni.fitbook.web.controllers.models.response.workout.WorkoutResponseModel;
 import softuni.fitbook.services.WorkoutService;
 
@@ -109,6 +111,21 @@ public class WorkoutController {
 
         return modelMapper.map(workoutService.likeWorkout(workoutId, principal.getName()), WorkoutResponseModel.class);
 
+    }
+
+    @PostMapping("/comment/{workoutId}")
+    public CommentResponseModel commentWorkout(@PathVariable String workoutId, @RequestBody CommentRequestModel model, Principal principal) {
+
+        return modelMapper.map(workoutService.commentWorkout(workoutId, model, principal.getName()), CommentResponseModel.class);
+
+    }
+
+    @DeleteMapping("/comment/delete/{commentId}")
+    public boolean deleteWorkoutCommentFromWorkout(@PathVariable String commentId, Principal principal) {
+
+        workoutService.deleteWorkoutComment(commentId, principal.getName());
+
+        return true;
     }
 
 }

@@ -4,12 +4,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import softuni.fitbook.data.models.*;
+import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.services.models.CreatorServiceModel;
 import softuni.fitbook.services.models.meal.MealCreateServiceModel;
 import softuni.fitbook.services.models.meal.MealFoodCreateServiceModel;
 import softuni.fitbook.services.models.meal.MealServiceModel;
 import softuni.fitbook.data.repositories.*;
 import softuni.fitbook.services.MealService;
+import softuni.fitbook.web.controllers.models.request.CommentRequestModel;
 import softuni.fitbook.web.errors.exceptions.NotFoundException;
 
 import javax.persistence.PreRemove;
@@ -282,6 +284,21 @@ public class MealServiceImpl implements MealService {
         meal.setFoods(foods);
 
         return meal;
+    }
+
+    @Override
+    public MealServiceModel likeMeal(String mealId, String username) {
+        return null;
+    }
+
+    @Override
+    public CommentServiceModel commentMeal(String mealId, CommentRequestModel model, String name) {
+        return null;
+    }
+
+    @Override
+    public void deleteMealComment(String commentId, String username) {
+
     }
 
     private void setMealFoodInitialValues(MealFood mealFood) {

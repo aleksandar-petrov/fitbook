@@ -4,12 +4,23 @@ import softuni.fitbook.data.models.UserProfile;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @MappedSuperclass
 public abstract class Comment extends BaseEntity {
 
+    private String comment;
     private UserProfile userProfile;
-    private LocalDate date;
+    private LocalDateTime postedOn;
+
+    @Column(name = "comment", length = 10000)
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_profile_id", referencedColumnName = "id")
@@ -21,12 +32,12 @@ public abstract class Comment extends BaseEntity {
         this.userProfile = userProfile;
     }
 
-    @Column(name = "date")
-    public LocalDate getDate() {
-        return date;
+    @Column(name = "posted_on")
+    public LocalDateTime getPostedOn() {
+        return postedOn;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setPostedOn(LocalDateTime postedOn) {
+        this.postedOn = postedOn;
     }
 }

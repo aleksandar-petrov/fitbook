@@ -4,6 +4,13 @@ import {WorkoutService} from "../workout.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {GetConstantViewNamePipe} from "../../get-constant-view-name.pipe";
+import {CommentService} from "../../comment/comment.service";
+import {CommentBindingModel} from "../../comment/comment-binding.model";
+import {CommentModel} from "../../comment/comment.model";
+import {UserAuthModel} from "../../auth/user-auth.model";
+import {AuthService} from "../../auth/auth.service";
+import {UserService} from "../../user/user.service";
+import {UserModel} from "../../user/user.model";
 
 @Component({
     selector: 'app-workout-details',
@@ -17,8 +24,16 @@ export class WorkoutDetailsComponent implements OnInit {
     exercisesSets: any[];
     customColors: any[];
 
+    commentBindingModel: CommentBindingModel;
+    workoutComments: CommentModel[];
+    isLoggedInUserModerator: boolean;
+    loggedInUserUsername: string;
+
 
     constructor(private workoutService: WorkoutService,
+                private commentService: CommentService,
+                private userService: UserService,
+                private authService: AuthService,
                 private route: ActivatedRoute,
                 private modalService: NgbModal,
                 private router: Router,
@@ -28,6 +43,19 @@ export class WorkoutDetailsComponent implements OnInit {
     ngOnInit() {
 
         this.workout = new Workout();
+
+
+        this.commentBindingModel = new CommentBindingModel();
+        this.workoutComments = [];
+        this.authService.user.subscribe((user: UserAuthModel) => {
+            this.isLoggedInUserModerator = this.authService.isUserModerator(user.role);
+        });
+
+        this.userService.getLoggedInUserObservable().subscribe((user: UserModel) => {
+            if (user) {
+                this.loggedInUserUsername = user.username;
+            }
+        });
 
         this.route.params.subscribe((params: Params) => {
                 this.workoutId = params['id'];
@@ -45,6 +73,7 @@ export class WorkoutDetailsComponent implements OnInit {
                 this.workout
                     .exercises
                     .sort((e1, e2) => e1.orderIndex - e2.orderIndex);
+                this.workoutComments = workout.comments;
 
                 this.calculateExercisesSets();
             }
@@ -131,5 +160,24 @@ export class WorkoutDetailsComponent implements OnInit {
         this.workoutService.likeWorkout(this.workout.id).subscribe((workout: Workout) => {
             this.workout = workout;
         });
+    }
+
+    onPostHandler() {
+
+        console.log(this.commentBindingModel);
+
+        this.commentService.commentWorkout(this.workout.id, this.commentBindingModel).subscribe((comment: CommentModel) => {
+            this.commentBindingModel = new CommentBindingModel();
+            this.workoutComments.push(comment);
+        });
+    }
+
+    onDeleteCommentHandler(id: string) {
+
+        this.commentService.deleteWorkoutComment(id).subscribe(() => {
+            this.fetchWorkoutDetails();
+        })
+
+
     }
 }

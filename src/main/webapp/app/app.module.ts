@@ -43,22 +43,23 @@ import {AllWorkoutPlansComponent} from './workout-plan/all-workout-plans/all-wor
 import {WorkoutPlanDetailsComponent} from './workout-plan/workout-plan-details/workout-plan-details.component';
 import {WorkoutPlanCardComponent} from './workout-plan/workout-plan-card/workout-plan-card.component';
 import {SearchFoodComponent} from './food/search-food/search-food.component';
-import { AdminPanelComponent } from './admin-panel/admin-panel.component';
-import { FoodDetailsComponent } from './food/food-details/food-details.component';
-import { AllMealsComponent } from './meal/all-meals/all-meals.component';
-import { MyMealsComponent } from './meal/my-meals/my-meals.component';
-import { MealCardComponent } from './meal/meal-card/meal-card.component';
-import { MealDetailsComponent } from './meal/meal-details/meal-details.component';
-import { AllFoodsComponent } from './food/all-foods/all-foods.component';
-import { FoodCardComponent } from './food/food-card/food-card.component';
-import { SelectedMealComponent } from './meal/my-meals/selected-meal/selected-meal.component';
-import { NoSelectedMealComponent } from './meal/my-meals/no-selected-meal/no-selected-meal.component';
-import { AllDietPlansComponent } from './diet-plan/all-diet-plans/all-diet-plans.component';
-import { MyDietPlansComponent } from './diet-plan/my-diet-plans/my-diet-plans.component';
-import { DietPlanDetailsComponent } from './diet-plan/diet-plan-details/diet-plan-details.component';
-import { DietPlanCardComponent } from './diet-plan/diet-plan-card/diet-plan-card.component';
-import { NoSelectedDietPlanComponent } from './diet-plan/my-diet-plans/no-selected-diet-plan/no-selected-diet-plan.component';
-import { SelectedDietPlanComponent } from './diet-plan/my-diet-plans/selected-diet-plan/selected-diet-plan.component';
+import {AdminPanelComponent} from './admin-panel/admin-panel.component';
+import {FoodDetailsComponent} from './food/food-details/food-details.component';
+import {AllMealsComponent} from './meal/all-meals/all-meals.component';
+import {MyMealsComponent} from './meal/my-meals/my-meals.component';
+import {MealCardComponent} from './meal/meal-card/meal-card.component';
+import {MealDetailsComponent} from './meal/meal-details/meal-details.component';
+import {AllFoodsComponent} from './food/all-foods/all-foods.component';
+import {FoodCardComponent} from './food/food-card/food-card.component';
+import {SelectedMealComponent} from './meal/my-meals/selected-meal/selected-meal.component';
+import {NoSelectedMealComponent} from './meal/my-meals/no-selected-meal/no-selected-meal.component';
+import {AllDietPlansComponent} from './diet-plan/all-diet-plans/all-diet-plans.component';
+import {MyDietPlansComponent} from './diet-plan/my-diet-plans/my-diet-plans.component';
+import {DietPlanDetailsComponent} from './diet-plan/diet-plan-details/diet-plan-details.component';
+import {DietPlanCardComponent} from './diet-plan/diet-plan-card/diet-plan-card.component';
+import {NoSelectedDietPlanComponent} from './diet-plan/my-diet-plans/no-selected-diet-plan/no-selected-diet-plan.component';
+import {SelectedDietPlanComponent} from './diet-plan/my-diet-plans/selected-diet-plan/selected-diet-plan.component';
+import {CommentDatePipe} from "./comment/comment-date.pipe";
 
 @NgModule({
     declarations: [
@@ -110,7 +111,8 @@ import { SelectedDietPlanComponent } from './diet-plan/my-diet-plans/selected-di
         DietPlanDetailsComponent,
         DietPlanCardComponent,
         NoSelectedDietPlanComponent,
-        SelectedDietPlanComponent
+        SelectedDietPlanComponent,
+        CommentDatePipe
     ],
     imports: [
         BrowserModule,
@@ -125,7 +127,7 @@ import { SelectedDietPlanComponent } from './diet-plan/my-diet-plans/selected-di
         BrowserAnimationsModule,
         NgxChartsModule
     ],
-    providers: [SafePipe, GetConstantViewNamePipe, {
+    providers: [SafePipe, GetConstantViewNamePipe, CommentDatePipe, {
         provide: HTTP_INTERCEPTORS,
         useClass: AuthInterceptorService,
         multi: true

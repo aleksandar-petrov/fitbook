@@ -1,9 +1,11 @@
 package softuni.fitbook.services;
 
 import softuni.fitbook.data.models.Meal;
+import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.services.models.meal.MealCreateServiceModel;
 import softuni.fitbook.services.models.meal.MealFoodCreateServiceModel;
 import softuni.fitbook.services.models.meal.MealServiceModel;
+import softuni.fitbook.web.controllers.models.request.CommentRequestModel;
 
 import java.util.List;
 
@@ -30,4 +32,10 @@ public interface MealService {
     MealServiceModel mapMealToMealServiceModel(Meal meal);
 
     Meal getMealCopy(Meal source);
+
+    MealServiceModel likeMeal(String mealId, String username);
+
+    CommentServiceModel commentMeal(String mealId, CommentRequestModel model, String name);
+
+    void deleteMealComment(String commentId, String username);
 }

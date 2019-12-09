@@ -122,5 +122,11 @@ export class AuthService {
         localStorage.setItem('userData', JSON.stringify(localStorageUser));
     }
 
+    isUserModerator(userRole: string) {
+
+        return userRole === 'ROLE_ROOT_ADMIN' || userRole === 'ROLE_ADMIN' || userRole === 'ROLE_MODERATOR';
+
+    }
+
 
 }

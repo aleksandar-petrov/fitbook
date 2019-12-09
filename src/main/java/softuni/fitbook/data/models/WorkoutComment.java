@@ -9,7 +9,6 @@ import javax.persistence.*;
 public class WorkoutComment extends Comment {
 
     private Workout workout;
-    private String comment;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "workout_id", referencedColumnName = "id")
@@ -21,11 +20,4 @@ public class WorkoutComment extends Comment {
         this.workout = workout;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
 }

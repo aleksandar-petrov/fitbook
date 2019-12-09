@@ -1,5 +1,6 @@
 import {WorkoutExercise} from "./workout-exercise.model";
 import {Creator} from "../creator-model";
+import {CommentModel} from "../comment/comment.model";
 
 export class Workout {
     id: string;
@@ -10,4 +11,5 @@ export class Workout {
     isCopied: boolean;
     likesCount: number;
     isLiked: boolean;
+    comments: CommentModel[];
 }
