@@ -1,5 +1,6 @@
 package softuni.fitbook.web.interceptors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import softuni.fitbook.services.LogService;
@@ -16,6 +17,7 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
 
     private final LogService logService;
 
+    @Autowired
     public LoggingInterceptor(LogService logService) {
         this.logService = logService;
     }
@@ -29,7 +31,10 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
         String method = request.getMethod();
         Principal userPrincipal = request.getUserPrincipal();
 
-        logService.createLog(new LogServiceModel(requestURI, method, LocalDateTime.now(), userPrincipal.getName()));
+        String username = userPrincipal == null ? "GUEST" : userPrincipal.getName();
+
+        logService.createLog(
+                new LogServiceModel(requestURI, method, LocalDateTime.now(), username));
 
         return super.preHandle(request, response, handler);
     }
