@@ -1,8 +1,14 @@
 package softuni.fitbook.services.models.workout;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class WorkoutCreateServiceModel {
 
+  @NotBlank
   private String name;
+
+  @NotNull
   private Boolean isPublic;
 
   public WorkoutCreateServiceModel() {

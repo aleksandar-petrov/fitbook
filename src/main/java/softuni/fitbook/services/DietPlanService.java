@@ -1,8 +1,10 @@
 package softuni.fitbook.services;
 
 
+import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.services.models.dietPlan.DietPlanCreateServiceModel;
 import softuni.fitbook.services.models.dietPlan.DietPlanServiceModel;
+import softuni.fitbook.web.controllers.models.request.CommentRequestModel;
 
 import java.util.List;
 
@@ -18,12 +20,18 @@ public interface DietPlanService {
 
     DietPlanServiceModel editMyDietPlanById(String dietPlanId, DietPlanServiceModel model, String username);
 
-    List<DietPlanServiceModel> getAllPublicDietPlans();
+    List<DietPlanServiceModel> getAllPublicDietPlans(String username);
 
     DietPlanServiceModel copyDietPlanToLoggedUserDietPlans(String dietPlanId, String username);
 
-    DietPlanServiceModel getDietPlanById(String id);
+    DietPlanServiceModel getDietPlanById(String id, String username);
 
     byte[] exportDietPlanToExcel(String dietPlanId);
+
+    DietPlanServiceModel likeDietPlan(String dietPlanId, String username);
+
+    CommentServiceModel commentDietPlan(String dietPlanId, CommentRequestModel model, String username);
+
+    void deleteDietPlanComment(String commentId, String username);
 
 }

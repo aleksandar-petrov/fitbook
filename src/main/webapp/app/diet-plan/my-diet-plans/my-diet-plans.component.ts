@@ -14,6 +14,8 @@ import {DietPlan} from "../diet-plan.model";
 })
 export class MyDietPlansComponent implements OnInit {
 
+  loading: boolean;
+
   dietPlans: DietPlan[];
   selectedDietPlanId: string;
   dietPlanBindingModel: DietPlanBindingModel;
@@ -46,8 +48,12 @@ export class MyDietPlansComponent implements OnInit {
   }
 
   fetchDietPlans() {
+
+    this.loading = true;
+
     this.dietPlanService.getLoggedInUserDietPlans().subscribe((dietPlans: DietPlan[]) => {
       this.dietPlans = dietPlans;
+      this.loading = false;
     })
   }
 
@@ -59,6 +65,9 @@ export class MyDietPlansComponent implements OnInit {
 
   open(content) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+
+      this.loading = true;
+
       this.dietPlanService.createDietPlan(this.dietPlanBindingModel)
           .subscribe((dietPlan: DietPlan) => {
             if (dietPlan) {

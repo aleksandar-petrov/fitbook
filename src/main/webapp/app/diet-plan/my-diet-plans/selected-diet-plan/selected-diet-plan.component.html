@@ -1,5 +1,9 @@
 <div class="selected-diet-plan">
 
+    <div *ngIf="loading" class="loader-container">
+        <img src="assets/static/images/global-loader.gif" alt="Loader">
+    </div>
+
     <ng-template #addMealToDietPlanModal let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title2">Add Meal To Diet Plan</h4>

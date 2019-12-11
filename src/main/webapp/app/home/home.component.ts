@@ -9,17 +9,20 @@ import {UserService} from '../user/user.service';
 export class HomeComponent implements OnInit {
 
   hasFitnessProfile: boolean;
+  loading: boolean;
 
   constructor(private userService: UserService) {
   }
 
   ngOnInit() {
+
+    this.loading = true;
     this.userService.getLoggedInUserObservable().subscribe(user => {
 
-      console.log("laina");
 
       if (user) {
         this.hasFitnessProfile = !!user.fitnessProfile;
+        this.loading = false;
       }
     });
 

@@ -14,6 +14,8 @@ public class WorkoutPlan extends BaseEntity {
     private List<WorkoutPlanWorkout> workouts;
     private UserProfile userProfile;
     private Boolean isCopied;
+    private List<WorkoutPlanLike> likes;
+    private List<WorkoutPlanComment> comments;
 
     @Column(name = "name")
     public String getName() {
@@ -60,6 +62,24 @@ public class WorkoutPlan extends BaseEntity {
 
     public void setIsCopied(Boolean copied) {
         isCopied = copied;
+    }
+
+    @OneToMany(mappedBy = "workoutPlan")
+    public List<WorkoutPlanLike> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<WorkoutPlanLike> likes) {
+        this.likes = likes;
+    }
+
+    @OneToMany(mappedBy = "workoutPlan")
+    public List<WorkoutPlanComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<WorkoutPlanComment> comments) {
+        this.comments = comments;
     }
 
 }

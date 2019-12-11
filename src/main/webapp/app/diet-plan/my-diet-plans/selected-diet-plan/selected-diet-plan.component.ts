@@ -18,6 +18,8 @@ import {NutritionGoal} from "../../../user/nutrition-goal.model";
 })
 export class SelectedDietPlanComponent implements OnInit {
 
+    loading: boolean;
+
     @Output() mealDelete: EventEmitter<any> = new EventEmitter();
 
     selectedDietPlan: DietPlan;
@@ -46,6 +48,8 @@ export class SelectedDietPlanComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        this.loading = true;
 
         this.selectedDietPlan = new DietPlan();
         this.selectedMealForModal = new Meal();
@@ -120,6 +124,7 @@ export class SelectedDietPlanComponent implements OnInit {
             if (dietPlans) {
                 this.selectedDietPlan = dietPlans.find(w => w.id === this.dietPlanId);
                 this.makeChartDataForMacroNutrients();
+                this.loading = false;
             }
         });
     }
@@ -135,9 +140,12 @@ export class SelectedDietPlanComponent implements OnInit {
 
     onSaveHandler() {
 
+        this.loading = true;
+
         this.dietPlanService.editMyDietPlan(this.dietPlanId, this.editDietPlanBindingModel).subscribe((dietPlan: DietPlan) => {
             this.selectedDietPlan = dietPlan;
             this.makeChartDataForMacroNutrients
+            this.loading = false;
         });
 
         this.router.navigate(['./'], {relativeTo: this.route})

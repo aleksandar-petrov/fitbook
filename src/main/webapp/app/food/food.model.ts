@@ -7,6 +7,7 @@ export class Food {
   carbohydratesPerHundred: number;
   fatsPerHundred: number;
   caloriesPerHundred: number;
+  mealsCounter: number;
 
   constructor() {
     this.name = '';

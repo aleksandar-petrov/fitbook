@@ -1,2 +1,8 @@
-<app-create-fitness-profile *ngIf="!hasFitnessProfile"></app-create-fitness-profile>
-<app-my-profile *ngIf="hasFitnessProfile"></app-my-profile>
+<div *ngIf="loading" class="loader-container">
+    <img src="assets/static/images/global-loader.gif" alt="Loader">
+</div>
+
+<div *ngIf="loading" class="jumbotron" style="height: 100vh"></div>
+
+<app-create-fitness-profile *ngIf="!hasFitnessProfile && !loading"></app-create-fitness-profile>
+<app-my-profile *ngIf="hasFitnessProfile && !loading"></app-my-profile>

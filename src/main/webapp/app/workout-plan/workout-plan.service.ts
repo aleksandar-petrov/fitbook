@@ -70,4 +70,9 @@ export class WorkoutPlanService {
         return this.http.get(`${AppSettings.API_ENDPOINT}/api/workout-plans/export/excel/` + workoutPlanId, {responseType: "blob"});
     }
 
+    likeWorkoutPlan(workoutPlanId: string) {
+
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/workout-plans/like/` + workoutPlanId, null);
+    }
+
 }

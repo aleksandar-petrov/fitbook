@@ -77,18 +77,18 @@ public class MealController {
     }
 
     @GetMapping("/public/all")
-    public List<MealResponseModel> getAllPublicMeals() {
+    public List<MealResponseModel> getAllPublicMeals(Principal principal) {
 
-        return mealService.getAllPublicMeals()
+        return mealService.getAllPublicMeals(principal.getName())
                 .stream()
                 .map(w -> modelMapper.map(w, MealResponseModel.class))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public MealResponseModel getMealById(@PathVariable(value = "id") String id) {
+    public MealResponseModel getMealById(@PathVariable(value = "id") String id, Principal principal) {
 
-        return modelMapper.map(mealService.getMealById(id), MealResponseModel.class);
+        return modelMapper.map(mealService.getMealById(id, principal.getName()), MealResponseModel.class);
     }
 
     @PostMapping("/copy/{mealId}")
@@ -112,11 +112,9 @@ public class MealController {
     }
 
     @DeleteMapping("/comment/delete/{commentId}")
-    public boolean deleteMealCommentFromMeal(@PathVariable String commentId, Principal principal) {
+    public void deleteMealCommentFromMeal(@PathVariable String commentId, Principal principal) {
 
         mealService.deleteMealComment(commentId, principal.getName());
-
-        return true;
     }
 
 }

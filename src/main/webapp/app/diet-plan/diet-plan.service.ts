@@ -70,4 +70,9 @@ export class DietPlanService {
         return this.http.get(`${AppSettings.API_ENDPOINT}/api/diet-plans/export/excel/` + dietPlanId, {responseType: "blob"});
     }
 
+    likeDietPlan(dietPlanId: string) {
+
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/diet-plans/like/` + dietPlanId, null);
+    }
+
 }

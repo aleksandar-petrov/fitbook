@@ -4,6 +4,14 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {GetConstantViewNamePipe} from "../../get-constant-view-name.pipe";
 import {WorkoutPlan} from "../workout-plan.model";
 import {WorkoutPlanService} from "../workout-plan.service";
+import {CommentModel} from "../../comment/comment.model";
+import {CommentBindingModel} from "../../comment/comment-binding.model";
+import {CommentService} from "../../comment/comment.service";
+
+import {UserAuthModel} from "../../auth/user-auth.model";
+import {UserModel} from "../../user/user.model";
+import {AuthService} from "../../auth/auth.service";
+import {UserService} from "../../user/user.service";
 
 @Component({
   selector: 'app-workout-plan-details',
@@ -17,8 +25,16 @@ export class WorkoutPlanDetailsComponent implements OnInit {
   exercisesSets: any[];
   customColors: any[];
 
+  commentBindingModel: CommentBindingModel;
+  workoutPlanComments: CommentModel[];
+  isLoggedInUserModerator: boolean;
+  loggedInUserUsername: string;
+
 
   constructor(private workoutPlanService: WorkoutPlanService,
+              private authService: AuthService,
+              private userService: UserService,
+              private commentService: CommentService,
               private route: ActivatedRoute,
               private modalService: NgbModal,
               private router: Router,
@@ -28,6 +44,18 @@ export class WorkoutPlanDetailsComponent implements OnInit {
   ngOnInit() {
 
     this.workoutPlan = new WorkoutPlan();
+
+    this.commentBindingModel = new CommentBindingModel();
+    this.workoutPlanComments = [];
+    this.authService.user.subscribe((user: UserAuthModel) => {
+      this.isLoggedInUserModerator = this.authService.isUserModerator(user.role);
+    });
+
+    this.userService.getLoggedInUserObservable().subscribe((user: UserModel) => {
+      if (user) {
+        this.loggedInUserUsername = user.username;
+      }
+    });
 
     this.route.params.subscribe((params: Params) => {
 
@@ -42,6 +70,7 @@ export class WorkoutPlanDetailsComponent implements OnInit {
     this.workoutPlanService.getWorkoutPlanById(this.workoutPlanId).subscribe((workoutPlan: WorkoutPlan) => {
       if (workoutPlan) {
         this.workoutPlan = workoutPlan;
+        this.workoutPlanComments = workoutPlan.comments;
         this.calculateExercisesSets();
       }
     });
@@ -139,6 +168,29 @@ export class WorkoutPlanDetailsComponent implements OnInit {
       anchor.click();
 
     })
+  }
+
+  onLikeHandler() {
+    this.workoutPlanService.likeWorkoutPlan(this.workoutPlan.id).subscribe((workoutPlan: WorkoutPlan) => {
+      this.workoutPlan = workoutPlan;
+    });
+  }
+
+  onPostHandler() {
+
+
+    this.commentService.commentWorkoutPlan(this.workoutPlan.id, this.commentBindingModel).subscribe((comment: CommentModel) => {
+      this.commentBindingModel = new CommentBindingModel();
+      this.workoutPlanComments.push(comment);
+    });
+  }
+
+  onDeleteCommentHandler(id: string) {
+
+    this.commentService.deleteWorkoutPlanComment(id).subscribe(() => {
+      this.fetchWorkoutPlanDetails();
+    })
+
   }
 
 }

@@ -18,6 +18,8 @@ public class DietPlan extends BaseEntity {
     private Integer totalCarbohydrates;
     private Integer totalFats;
     private Integer totalCalories;
+    private List<DietPlanLike> likes;
+    private List<DietPlanComment> comments;
 
     @Column(name = "name")
     public String getName() {
@@ -100,5 +102,23 @@ public class DietPlan extends BaseEntity {
 
     public void setTotalCalories(Integer totalCalories) {
         this.totalCalories = totalCalories;
+    }
+
+    @OneToMany(mappedBy = "dietPlan")
+    public List<DietPlanLike> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<DietPlanLike> likes) {
+        this.likes = likes;
+    }
+
+    @OneToMany(mappedBy = "dietPlan")
+    public List<DietPlanComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<DietPlanComment> comments) {
+        this.comments = comments;
     }
 }

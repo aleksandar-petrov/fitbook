@@ -1,5 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {DietPlan} from "../diet-plan.model";
+import {Workout} from "../../workout/workout.model";
+import {DietPlanService} from "../diet-plan.service";
 
 @Component({
   selector: 'app-diet-plan-card',
@@ -12,7 +14,7 @@ export class DietPlanCardComponent implements OnInit {
   @Output() modalOpen: EventEmitter<any> = new EventEmitter();
   macroNutrientsData: any[];
 
-  constructor() { }
+  constructor(private dietPlanService: DietPlanService) { }
 
   ngOnInit() {
     this.makeChartDataForMacroNutrients();
@@ -40,6 +42,12 @@ export class DietPlanCardComponent implements OnInit {
 
   copyToMyDietPlansHandler(id: string) {
     this.modalOpen.emit(id);
+  }
+
+  onLikeHandler() {
+    this.dietPlanService.likeDietPlan(this.dietPlan.id).subscribe((dietPlan: DietPlan) => {
+      this.dietPlan = dietPlan;
+    });
   }
 
 }

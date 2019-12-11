@@ -164,8 +164,6 @@ export class WorkoutDetailsComponent implements OnInit {
 
     onPostHandler() {
 
-        console.log(this.commentBindingModel);
-
         this.commentService.commentWorkout(this.workout.id, this.commentBindingModel).subscribe((comment: CommentModel) => {
             this.commentBindingModel = new CommentBindingModel();
             this.workoutComments.push(comment);
@@ -177,7 +175,6 @@ export class WorkoutDetailsComponent implements OnInit {
         this.commentService.deleteWorkoutComment(id).subscribe(() => {
             this.fetchWorkoutDetails();
         })
-
 
     }
 }

@@ -1,11 +1,27 @@
 package softuni.fitbook.services.models.food;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class FoodCreateServiceModel {
 
+    @NotBlank
     private String name;
+
+    @NotBlank
     private String description;
+
+    @NotNull
+    @Min(0)
     private Integer proteinPerHundred;
+
+    @NotNull
+    @Min(0)
     private Integer carbohydratesPerHundred;
+
+    @NotNull
+    @Min(0)
     private Integer fatsPerHundred;
 
     public FoodCreateServiceModel() {

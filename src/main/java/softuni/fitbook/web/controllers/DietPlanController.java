@@ -2,13 +2,14 @@ package softuni.fitbook.web.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
-
-import softuni.fitbook.web.controllers.models.request.dietPlan.DietPlanCreateRequestModel;
-import softuni.fitbook.web.controllers.models.request.dietPlan.DietPlanEditRequestModel;
+import softuni.fitbook.services.DietPlanService;
 import softuni.fitbook.services.models.dietPlan.DietPlanCreateServiceModel;
 import softuni.fitbook.services.models.dietPlan.DietPlanServiceModel;
+import softuni.fitbook.web.controllers.models.request.CommentRequestModel;
+import softuni.fitbook.web.controllers.models.request.dietPlan.DietPlanCreateRequestModel;
+import softuni.fitbook.web.controllers.models.request.dietPlan.DietPlanEditRequestModel;
+import softuni.fitbook.web.controllers.models.response.CommentResponseModel;
 import softuni.fitbook.web.controllers.models.response.dietPlan.DietPlanResponseModel;
-import softuni.fitbook.services.DietPlanService;
 
 import java.security.Principal;
 import java.util.List;
@@ -62,20 +63,20 @@ public class DietPlanController {
     }
 
     @GetMapping("/public/all")
-    public List<DietPlanResponseModel> getAllPublicDietPlans() {
+    public List<DietPlanResponseModel> getAllPublicDietPlans(Principal principal) {
 
         return dietPlanService
-                .getAllPublicDietPlans()
+                .getAllPublicDietPlans(principal.getName())
                 .stream()
                 .map(w -> modelMapper.map(w, DietPlanResponseModel.class))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public DietPlanResponseModel getDietPlanById(@PathVariable(value = "id") String id) {
+    public DietPlanResponseModel getDietPlanById(@PathVariable(value = "id") String id, Principal principal) {
 
         return modelMapper.map(
-                dietPlanService.getDietPlanById(id),
+                dietPlanService.getDietPlanById(id, principal.getName()),
                 DietPlanResponseModel.class);
 
     }
@@ -97,6 +98,26 @@ public class DietPlanController {
     public byte[] exportDietPlanToExcel(@PathVariable(value = "dietPlanId") String dietPlanId) {
 
         return dietPlanService.exportDietPlanToExcel(dietPlanId);
+    }
+
+    @PostMapping("/like/{dietPlanId}")
+    public DietPlanResponseModel likeDietPlan(@PathVariable String dietPlanId, Principal principal) {
+
+        return modelMapper.map(dietPlanService.likeDietPlan(dietPlanId, principal.getName()), DietPlanResponseModel.class);
+
+    }
+
+    @PostMapping("/comment/{dietPlanId}")
+    public CommentResponseModel commentDietPlan(@PathVariable String dietPlanId, @RequestBody CommentRequestModel model, Principal principal) {
+
+        return modelMapper.map(dietPlanService.commentDietPlan(dietPlanId, model, principal.getName()), CommentResponseModel.class);
+
+    }
+
+    @DeleteMapping("/comment/delete/{commentId}")
+    public void deleteDietPlanCommentFromDietPlan(@PathVariable String commentId, Principal principal) {
+
+        dietPlanService.deleteDietPlanComment(commentId, principal.getName());
     }
 
 

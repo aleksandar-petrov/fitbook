@@ -1,5 +1,6 @@
 import {Creator} from "../creator-model";
 import {MealFood} from "./meal-food.model";
+import {CommentModel} from "../comment/comment.model";
 
 export class Meal {
     id: string;
@@ -12,4 +13,7 @@ export class Meal {
     totalProtein: number;
     totalCarbohydrates: number;
     totalFats: number;
+    likesCount: number;
+    isLiked: boolean;
+    comments: CommentModel[];
 }

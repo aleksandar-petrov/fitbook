@@ -1,8 +1,13 @@
 package softuni.fitbook.services.models.meal;
 
+import javax.validation.constraints.NotBlank;
+
 public class MealCreateServiceModel {
 
+    @NotBlank
     private String name;
+
+    @NotBlank
     private Boolean isPublic;
 
     public MealCreateServiceModel() {

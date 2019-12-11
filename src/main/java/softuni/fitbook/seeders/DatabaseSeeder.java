@@ -18,12 +18,10 @@ import java.util.List;
 public class DatabaseSeeder {
 
     private final RoleRepository roleRepository;
-    private final ExerciseRepository exerciseRepository;
 
     @Autowired
     public DatabaseSeeder(RoleRepository roleRepository, ExerciseRepository exerciseRepository, Cloudinary cloudinary) {
         this.roleRepository = roleRepository;
-        this.exerciseRepository = exerciseRepository;
     }
 
     @EventListener

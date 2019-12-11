@@ -1,6 +1,7 @@
 package softuni.fitbook.web.controllers.models.response.dietPlan;
 
 import softuni.fitbook.services.models.CreatorServiceModel;
+import softuni.fitbook.web.controllers.models.response.CommentResponseModel;
 
 import java.util.List;
 
@@ -16,6 +17,9 @@ public class DietPlanResponseModel {
     private Integer totalCarbohydrates;
     private Integer totalFats;
     private Integer totalCalories;
+    private Long likesCount;
+    private Boolean isLiked;
+    private List<CommentResponseModel> comments;
 
     public DietPlanResponseModel() {
     }
@@ -98,5 +102,29 @@ public class DietPlanResponseModel {
 
     public void setTotalCalories(Integer totalCalories) {
         this.totalCalories = totalCalories;
+    }
+
+    public Long getLikesCount() {
+        return likesCount;
+    }
+
+    public void setLikesCount(Long likesCount) {
+        this.likesCount = likesCount;
+    }
+
+    public Boolean getIsLiked() {
+        return isLiked;
+    }
+
+    public void setIsLiked(Boolean liked) {
+        isLiked = liked;
+    }
+
+    public List<CommentResponseModel> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentResponseModel> comments) {
+        this.comments = comments;
     }
 }

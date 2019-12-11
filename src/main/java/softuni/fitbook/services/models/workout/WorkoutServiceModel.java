@@ -3,17 +3,23 @@ package softuni.fitbook.services.models.workout;
 import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.services.models.CreatorServiceModel;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class WorkoutServiceModel {
 
     private String id;
+
+    @NotBlank
     private String name;
+
+    @NotNull
     private Boolean isPublic;
     private List<WorkoutExerciseServiceModel> exercises;
     private CreatorServiceModel creator;
     private Boolean isCopied;
-    private Integer likesCount;
+    private Long likesCount;
     private Boolean isLiked;
     private List<CommentServiceModel> comments;
 
@@ -69,11 +75,11 @@ public class WorkoutServiceModel {
         isCopied = copied;
     }
 
-    public Integer getLikesCount() {
+    public Long getLikesCount() {
         return likesCount;
     }
 
-    public void setLikesCount(Integer likesCount) {
+    public void setLikesCount(Long likesCount) {
         this.likesCount = likesCount;
     }
 

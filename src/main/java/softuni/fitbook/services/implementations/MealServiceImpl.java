@@ -3,6 +3,7 @@ package softuni.fitbook.services.implementations;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import softuni.fitbook.config.Constants;
 import softuni.fitbook.data.models.*;
 import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.services.models.CreatorServiceModel;
@@ -12,13 +13,17 @@ import softuni.fitbook.services.models.meal.MealServiceModel;
 import softuni.fitbook.data.repositories.*;
 import softuni.fitbook.services.MealService;
 import softuni.fitbook.web.controllers.models.request.CommentRequestModel;
+import softuni.fitbook.web.errors.exceptions.NoPrivilegesException;
 import softuni.fitbook.web.errors.exceptions.NotFoundException;
 
 import javax.persistence.PreRemove;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,19 +35,25 @@ public class MealServiceImpl implements MealService {
     private final DietPlanMealRepository dietPlanMealRepository;
     private final MealFoodRepository mealFoodRepository;
     private final FoodRepository foodRepository;
+    private final MealLikeRepository mealLikeRepository;
+    private final MealCommentRepository mealCommentRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public MealServiceImpl(MealRepository mealRepository, ModelMapper modelMapper, UserRepository userRepository, DietPlanMealRepository dietPlanMealRepository, MealFoodRepository mealFoodRepository, FoodRepository foodRepository) {
+    public MealServiceImpl(MealRepository mealRepository, ModelMapper modelMapper, UserRepository userRepository, DietPlanMealRepository dietPlanMealRepository, MealFoodRepository mealFoodRepository, FoodRepository foodRepository, MealLikeRepository mealLikeRepository, MealCommentRepository mealCommentRepository, RoleRepository roleRepository) {
         this.mealRepository = mealRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.dietPlanMealRepository = dietPlanMealRepository;
         this.mealFoodRepository = mealFoodRepository;
         this.foodRepository = foodRepository;
+        this.mealLikeRepository = mealLikeRepository;
+        this.mealCommentRepository = mealCommentRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
-    public MealServiceModel createMeal(MealCreateServiceModel model, String username) {
+    public MealServiceModel createMeal(@Valid MealCreateServiceModel model, String username) {
 
         Meal meal = modelMapper.map(model, Meal.class);
 
@@ -66,7 +77,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public MealServiceModel addMealFoodToMeal(MealFoodCreateServiceModel model, String mealId, String username) {
+    public MealServiceModel addMealFoodToMeal(@Valid MealFoodCreateServiceModel model, String mealId, String username) {
 
         Meal meal = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("No such user with given username."))
@@ -148,7 +159,7 @@ public class MealServiceImpl implements MealService {
 
     @Override
 
-    public MealServiceModel editMealById(String mealId, MealServiceModel model, String username) {
+    public MealServiceModel editMealById(String mealId, @Valid MealServiceModel model, String username) {
 
         Meal oldMeal = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("No such user with given username."))
@@ -208,24 +219,43 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public List<MealServiceModel> getAllPublicMeals() {
+    public List<MealServiceModel> getAllPublicMeals(String username) {
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+
+        List<MealLike> mealLikes = user.getUserProfile().getMealLikes();
 
         return mealRepository
                 .findAllPublicNotCopiedNotEmpty()
                 .stream()
-                .map(this::mapMealToMealServiceModel)
-                .sorted(Comparator.comparing(MealServiceModel::getName))
+                .map(meal -> {
+                    MealServiceModel mealServiceModel = mapMealToMealServiceModel(meal);
+                    mealServiceModel.setIsLiked(isMealLiked(meal.getId(), mealLikes));
+                    return mealServiceModel;
+                })
                 .collect(Collectors.toList());
+
+    }
+
+    private Boolean isMealLiked(String mealId, List<MealLike> likes) {
+
+        return !likes.isEmpty() && likes
+                .stream()
+                .anyMatch(l -> l.getMeal().getId().equals(mealId));
 
     }
 
     @Override
     public MealServiceModel copyMealToLoggedUserMeals(String mealId, String username) {
 
-        User user = this.userRepository.findByUsername(username)
+        User user = this.userRepository
+                .findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("No such user with given username."));
 
-        Meal meal = mealRepository.findById(mealId).orElseThrow(() -> new NotFoundException("No such meal with given ID."));
+        Meal meal = mealRepository
+                .findById(mealId)
+                .orElseThrow(() -> new NotFoundException("No such meal with given ID."));
 
         Meal copy = getMealCopy(meal);
         copy.setUserProfile(user.getUserProfile());
@@ -236,10 +266,39 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public MealServiceModel getMealById(String id) {
+    public MealServiceModel getMealById(String id, String username) {
 
-        return mapMealToMealServiceModel(mealRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("No such meal with given ID.")));
+        Meal meal = mealRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("No such meal with given ID."));
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+
+        List<MealLike> mealLikes = user.getUserProfile().getMealLikes();
+
+        MealServiceModel mealServiceModel = mapMealToMealServiceModel(meal);
+
+        mealServiceModel.setIsLiked(isMealLiked(id, mealLikes));
+
+        mealServiceModel.setComments(meal
+                .getComments()
+                .stream()
+                .map(c -> {
+                    CommentServiceModel comment = modelMapper.map(c, CommentServiceModel.class);
+
+                    User commentUser = userRepository.findByUserProfileId(c.getUserProfile().getId())
+                            .orElseThrow(() -> new NotFoundException("No such user with given user profile ID."));
+
+                    comment.setUsername(commentUser.getUsername());
+                    comment.setProfilePictureURL(commentUser.getUserProfile().getProfilePictureURL());
+
+                    return comment;
+
+                })
+                .sorted(Comparator.comparing(CommentServiceModel::getPostedOn))
+                .collect(Collectors.toList()));
+
+        return mealServiceModel;
 
     }
 
@@ -249,6 +308,8 @@ public class MealServiceImpl implements MealService {
 
         CreatorServiceModel creator = modelMapper.map(userRepository.findByUserProfileId(meal.getUserProfile().getId()).orElseThrow(() -> new NotFoundException("No such user with given User Profile ID.")), CreatorServiceModel.class);
         model.setCreator(creator);
+
+        model.setLikesCount((long) meal.getLikes().size());
 
         model.getFoods().sort(Comparator.comparing(f -> f.getFood().getName()));
 
@@ -266,6 +327,8 @@ public class MealServiceImpl implements MealService {
         meal.setTotalProtein(source.getTotalProtein());
         meal.setTotalCarbohydrates(source.getTotalCarbohydrates());
         meal.setTotalFats(source.getTotalFats());
+        meal.setLikes(new ArrayList<>());
+        meal.setComments(new ArrayList<>());
 
         List<MealFood> foods = source.getFoods()
                 .stream()
@@ -287,17 +350,106 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
+    @Transactional
     public MealServiceModel likeMeal(String mealId, String username) {
-        return null;
+
+        UserProfile userProfile = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("No such user with given username."))
+                .getUserProfile();
+
+        Meal meal = mealRepository
+                .findById(mealId)
+                .orElseThrow(() -> new NotFoundException("No such meal with given ID."));
+
+        Optional<MealLike> likeOptional = meal.getLikes()
+                .stream()
+                .filter(l -> l.getUserProfile().equals(userProfile))
+                .findFirst();
+
+
+        boolean liked = false;
+
+        if (likeOptional.isEmpty()) {
+
+            MealLike like = new MealLike();
+            like.setUserProfile(userProfile);
+            like.setMeal(meal);
+            liked = true;
+            mealLikeRepository.save(like);
+
+            meal.getLikes().add(like);
+            mealRepository.save(meal);
+        } else {
+
+            MealLike mealLike = likeOptional.get();
+
+            mealLike.setMeal(null);
+            mealLike.setUserProfile(null);
+
+            meal.getLikes().remove(mealLike);
+            mealRepository.save(meal);
+            mealLikeRepository.deleteById(mealLike.getId());
+        }
+
+
+        MealServiceModel mealServiceModel = mapMealToMealServiceModel(meal);
+        mealServiceModel.setIsLiked(liked);
+
+        return mealServiceModel;
     }
 
     @Override
-    public CommentServiceModel commentMeal(String mealId, CommentRequestModel model, String name) {
-        return null;
+    public CommentServiceModel commentMeal(String mealId, CommentRequestModel model, String username) {
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+
+        Meal meal = mealRepository
+                .findById(mealId)
+                .orElseThrow(() -> new NotFoundException("No such meal with given ID."));
+
+
+        MealComment mealComment = modelMapper.map(model, MealComment.class);
+        mealComment.setPostedOn(LocalDateTime.now());
+        mealComment.setMeal(meal);
+        mealComment.setUserProfile(user.getUserProfile());
+
+        mealCommentRepository.save(mealComment);
+
+        CommentServiceModel comment = modelMapper.map(mealComment, CommentServiceModel.class);
+        comment.setUsername(username);
+        comment.setProfilePictureURL(user.getUserProfile().getProfilePictureURL());
+
+        return comment;
     }
 
     @Override
+    @Transactional
     public void deleteMealComment(String commentId, String username) {
+
+        MealComment comment = mealCommentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundException("No such comment with given ID."));
+
+        UserRole moderatorRole = roleRepository.getByAuthority(Constants.AUTHORITY_MODERATOR);
+
+        Meal meal = comment.getMeal();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+
+        if (!user.getAuthorities().contains(moderatorRole) &&
+                !meal.getUserProfile().getId().equals(user.getUserProfile().getId()) &&
+                !comment.getUserProfile().getId().equals(user.getUserProfile().getId())) {
+
+            throw new NoPrivilegesException("You do not have privileges to delete this comment.");
+        }
+
+        comment.setUserProfile(null);
+        comment.setMeal(null);
+
+
+        mealCommentRepository.deleteById(comment.getId());
 
     }
 

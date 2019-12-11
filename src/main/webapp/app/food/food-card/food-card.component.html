@@ -6,12 +6,15 @@
         <h3 class="card-title">{{food.name}}</h3>
         <hr/>
 
+        <h3 class="font-weight-light">Used in <span class="font-weight-bold">{{food.mealsCounter}}</span> meals</h3>
+        <hr/>
+
         <h4 class="card-title">Nutrition Per 100 g</h4>
         <h5 class="card-subtitle font-weight-light mb-1">Protein: {{food.proteinPerHundred}}</h5>
         <h5 class="card-subtitle font-weight-light mb-1">Carbohydrates: {{food.carbohydratesPerHundred}}</h5>
         <h5 class="card-subtitle font-weight-light mb-1">Fats: {{food.fatsPerHundred}}</h5>
         <hr/>
-        <h5 class="card-subtitle font-weight-light mb-3">Calories: {{food.caloriesPerHundred}}</h5>
+        <h4 class="card-subtitle font-weight-bold mb-3">Calories: {{food.caloriesPerHundred}}</h4>
         <hr class="mb-5"/>
         <div class="buttons-wrapper left">
             <button type="button" class="btn btn-sm btn-success" (click)="addToMealHandler(food.id)">Add to meal

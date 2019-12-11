@@ -1,6 +1,7 @@
 package softuni.fitbook.web.controllers.models.response.workoutPlan;
 
 import softuni.fitbook.services.models.CreatorServiceModel;
+import softuni.fitbook.web.controllers.models.response.CommentResponseModel;
 
 import java.util.List;
 
@@ -12,6 +13,9 @@ public class WorkoutPlanResponseModel {
   private List<WorkoutPlanWorkoutResponseModel> workouts;
   private CreatorServiceModel creator;
   private Boolean isCopied;
+  private Long likesCount;
+  private Boolean isLiked;
+  private List<CommentResponseModel> comments;
 
   public WorkoutPlanResponseModel() {
   }
@@ -62,5 +66,29 @@ public class WorkoutPlanResponseModel {
 
   public void setIsCopied(Boolean copied) {
     isCopied = copied;
+  }
+
+  public Long getLikesCount() {
+    return likesCount;
+  }
+
+  public void setLikesCount(Long likesCount) {
+    this.likesCount = likesCount;
+  }
+
+  public Boolean getIsLiked() {
+    return isLiked;
+  }
+
+  public void setIsLiked(Boolean liked) {
+    isLiked = liked;
+  }
+
+  public List<CommentResponseModel> getComments() {
+    return comments;
+  }
+
+  public void setComments(List<CommentResponseModel> comments) {
+    this.comments = comments;
   }
 }

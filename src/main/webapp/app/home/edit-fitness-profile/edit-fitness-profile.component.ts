@@ -11,6 +11,8 @@ import {Router} from "@angular/router";
 })
 export class EditFitnessProfileComponent implements OnInit {
 
+  loading: boolean;
+
   userGender: string;
   fitnessProfileBindingModel: FitnessProfileBindingModel;
   currentFitnessProfile: FitnessProfileModel;
@@ -48,12 +50,16 @@ export class EditFitnessProfileComponent implements OnInit {
 
   onSubmit() {
 
+
+
     if (!this.formChanged) {
       this.router.navigate(['/home']);
     }
 
+    this.loading = true;
     this.userService.updateFitnessProfileOnLoggedInUser(this.fitnessProfileBindingModel).subscribe(data => {
       if (data) {
+        this.userService.loggedUser.next(null);
         this.userService.loadLoggedUser();
         this.router.navigate(['/home']);
       }

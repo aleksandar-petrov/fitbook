@@ -1,5 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {WorkoutPlan} from "../workout-plan.model";
+import {Meal} from "../../meal/meal.model";
+import {WorkoutPlanService} from "../workout-plan.service";
 
 @Component({
     selector: 'app-workout-plan-card',
@@ -30,7 +32,7 @@ export class WorkoutPlanCardComponent implements OnInit {
     };
     focusedMuscleGroup: string;
 
-    constructor() {
+    constructor(private workoutPlanService: WorkoutPlanService) {
     }
 
     ngOnInit() {
@@ -62,6 +64,12 @@ export class WorkoutPlanCardComponent implements OnInit {
                 });
             });
         }
+    }
+
+    onLikeHandler() {
+        this.workoutPlanService.likeWorkoutPlan(this.workoutPlan.id).subscribe((workoutPlan: WorkoutPlan) => {
+            this.workoutPlan = workoutPlan;
+        });
     }
 
 

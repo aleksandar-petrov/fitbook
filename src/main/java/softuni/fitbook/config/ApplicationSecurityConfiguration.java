@@ -37,9 +37,19 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/api/users/register", "/**").permitAll()
+                .antMatchers("/api/users/register", "/api/users/signin").permitAll()
+                .antMatchers("/",
+                "/favicon.ico",
+                "/**/*.png",
+                "/**/*.gif",
+                "/**/*.svg",
+                "/**/*.jpg",
+                "/**/*.html",
+                "/**/*.css",
+                "/**/*.js")
+                .permitAll()
                 .antMatchers("/api/exercises/create").hasAuthority(Constants.AUTHORITY_MODERATOR)
-                .antMatchers("/api/users/all", "/api/users/promote", "/api/users/demote").hasAuthority(Constants.AUTHORITY_ROOT_ADMIN)
+                .antMatchers("/api/users/all", "/api/users/promote", "/api/users/demote").hasAuthority(Constants.AUTHORITY_ADMIN)
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))

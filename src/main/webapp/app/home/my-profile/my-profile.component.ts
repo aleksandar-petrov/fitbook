@@ -10,6 +10,8 @@ import {FitnessProfileModel} from '../../user/fitness-profile.model';
 })
 export class MyProfileComponent implements OnInit {
 
+  loading: boolean = true;
+
   loggedUser: UserModel;
   loggedUserFitnessProfile: FitnessProfileModel;
   loggedUserFirstName: string;
@@ -21,16 +23,19 @@ export class MyProfileComponent implements OnInit {
 
   ngOnInit() {
 
+    this.loading = true;
+
     this.loggedUser = new UserModel();
     this.loggedUserFitnessProfile = new FitnessProfileModel();
 
     this.userService.getLoggedInUserObservable().subscribe(user => {
-      console.log(user);
       if (user) {
         this.loggedUser = user;
         this.loggedUserFirstName = user.firstName;
         this.loggedUserFitnessProfile = user.fitnessProfile;
         this.makeChartDataForMacroNutrients();
+
+        this.loading = false;
       }
     });
   }

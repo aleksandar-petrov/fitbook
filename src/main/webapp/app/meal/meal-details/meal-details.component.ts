@@ -3,6 +3,13 @@ import {Meal} from "../meal.model";
 import {MealService} from "../meal.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {CommentModel} from "../../comment/comment.model";
+import {CommentBindingModel} from "../../comment/comment-binding.model";
+import {CommentService} from "../../comment/comment.service";
+import {UserAuthModel} from "../../auth/user-auth.model";
+import {UserModel} from "../../user/user.model";
+import {AuthService} from "../../auth/auth.service";
+import {UserService} from "../../user/user.service";
 
 @Component({
     selector: 'app-meal-details',
@@ -15,8 +22,16 @@ export class MealDetailsComponent implements OnInit {
     mealId: string;
     macroNutrientsData: any[];
 
+    commentBindingModel: CommentBindingModel;
+    mealComments: CommentModel[];
+    isLoggedInUserModerator: boolean;
+    loggedInUserUsername: string;
+
 
     constructor(private mealService: MealService,
+                private authService: AuthService,
+                private userService: UserService,
+                private commentService: CommentService,
                 private route: ActivatedRoute,
                 private modalService: NgbModal,
                 private router: Router) {
@@ -25,6 +40,18 @@ export class MealDetailsComponent implements OnInit {
     ngOnInit() {
 
         this.meal = new Meal();
+
+        this.commentBindingModel = new CommentBindingModel();
+        this.mealComments = [];
+        this.authService.user.subscribe((user: UserAuthModel) => {
+            this.isLoggedInUserModerator = this.authService.isUserModerator(user.role);
+        });
+
+        this.userService.getLoggedInUserObservable().subscribe((user: UserModel) => {
+            if (user) {
+                this.loggedInUserUsername = user.username;
+            }
+        });
 
         this.route.params.subscribe((params: Params) => {
                 this.mealId = params['id'];
@@ -38,6 +65,7 @@ export class MealDetailsComponent implements OnInit {
         this.mealService.fetchMealById(this.mealId).subscribe((meal: Meal) => {
             if (meal) {
                 this.meal = meal;
+                this.mealComments = meal.comments;
 
                 this.makeChartDataForMacroNutrients();
             }
@@ -86,6 +114,29 @@ export class MealDetailsComponent implements OnInit {
             });
         }, (reason) => {
         });
+    }
+
+    onLikeHandler() {
+        this.mealService.likeMeal(this.meal.id).subscribe((meal: Meal) => {
+            this.meal = meal;
+        });
+    }
+
+    onPostHandler() {
+
+
+        this.commentService.commentMeal(this.meal.id, this.commentBindingModel).subscribe((comment: CommentModel) => {
+            this.commentBindingModel = new CommentBindingModel();
+            this.mealComments.push(comment);
+        });
+    }
+
+    onDeleteCommentHandler(id: string) {
+
+        this.commentService.deleteMealComment(id).subscribe(() => {
+            this.fetchMealDetails();
+        })
+
     }
 
 }

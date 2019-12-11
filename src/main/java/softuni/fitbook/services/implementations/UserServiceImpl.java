@@ -20,6 +20,7 @@ import softuni.fitbook.services.EnumParserService;
 import softuni.fitbook.services.FileUploaderService;
 import softuni.fitbook.web.errors.exceptions.NotFoundException;
 
+import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -102,7 +103,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean createUser(UserServiceModel userServiceModel, MultipartFile file) {
+    public boolean createUser(@Valid UserServiceModel userServiceModel, MultipartFile file) {
         User userEntity = modelMapper.map(userServiceModel, User.class);
         UserProfile userProfileEntity = modelMapper.map(userServiceModel, UserProfile.class);
 

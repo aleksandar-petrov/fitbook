@@ -1,5 +1,6 @@
 import {Creator} from "../creator-model";
 import {DietPlanMeal} from "./diet-plan-meal.model";
+import {CommentModel} from "../comment/comment.model";
 
 export class DietPlan {
     id: string;
@@ -12,4 +13,7 @@ export class DietPlan {
     totalCarbohydrates: number;
     totalFats: number;
     totalCalories: number;
+    likesCount: number;
+    isLiked: boolean;
+    comments: CommentModel[];
 }

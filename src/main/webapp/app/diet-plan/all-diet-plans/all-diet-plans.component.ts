@@ -11,6 +11,8 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 })
 export class AllDietPlansComponent implements OnInit {
 
+  loading: boolean;
+
   dietPlans: DietPlan[];
   filteredDietPlans: DietPlan[];
   page: number = 1;
@@ -24,11 +26,15 @@ export class AllDietPlansComponent implements OnInit {
 
   ngOnInit() {
 
+    this.loading = true;
+
     this.dietPlanService.getAllPublicDietPlans().subscribe((dietPlans: DietPlan[]) => {
       if (dietPlans) {
         this.dietPlans = dietPlans;
         this.filteredDietPlans = JSON.parse(JSON.stringify(dietPlans));
       }
+
+      this.loading = false;
     });
 
 
@@ -40,11 +46,14 @@ export class AllDietPlansComponent implements OnInit {
 
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: "lg", scrollable: true}).result.then((result) => {
 
+      this.loading = true;
       this.dietPlanService.copyDietPlanToMyDietPlans(dietPlanId).subscribe((dietPlan : DietPlan) => {
+        this.loading = false;
         this.router.navigate(['my-diet-plans', dietPlan.id])
       });
     }, (reason) => {
     });
   }
+
 
 }

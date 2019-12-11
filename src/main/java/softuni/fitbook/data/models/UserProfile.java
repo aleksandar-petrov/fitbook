@@ -30,6 +30,12 @@ public class UserProfile extends BaseEntity {
 
     private List<WorkoutLike> workoutLikes;
 
+    private List<WorkoutPlanLike> workoutPlanLikes;
+
+    private List<MealLike> mealLikes;
+
+    private List<DietPlanLike> dietPlanLikes;
+
     @Column(name = "first_name")
     public String getFirstName() {
         return firstName;
@@ -139,5 +145,44 @@ public class UserProfile extends BaseEntity {
 
     public void setWorkoutLikes(List<WorkoutLike> workoutLikes) {
         this.workoutLikes = workoutLikes;
+    }
+
+    @OneToMany(
+            mappedBy = "userProfile",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    public List<WorkoutPlanLike> getWorkoutPlanLikes() {
+        return workoutPlanLikes;
+    }
+
+    public void setWorkoutPlanLikes(List<WorkoutPlanLike> workoutPlanLikes) {
+        this.workoutPlanLikes = workoutPlanLikes;
+    }
+
+    @OneToMany(
+            mappedBy = "userProfile",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    public List<MealLike> getMealLikes() {
+        return mealLikes;
+    }
+
+    public void setMealLikes(List<MealLike> mealLikes) {
+        this.mealLikes = mealLikes;
+    }
+
+    @OneToMany(
+            mappedBy = "userProfile",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    public List<DietPlanLike> getDietPlanLikes() {
+        return dietPlanLikes;
+    }
+
+    public void setDietPlanLikes(List<DietPlanLike> dietPlanLikes) {
+        this.dietPlanLikes = dietPlanLikes;
     }
 }

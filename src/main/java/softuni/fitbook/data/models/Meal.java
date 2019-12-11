@@ -18,6 +18,8 @@ public class Meal extends BaseEntity {
     private Integer totalCarbohydrates;
     private Integer totalFats;
     private Integer totalCalories;
+    private List<MealLike> likes;
+    private List<MealComment> comments;
 
     public Meal() {
     }
@@ -103,5 +105,23 @@ public class Meal extends BaseEntity {
 
     public void setTotalCalories(Integer totalCalories) {
         this.totalCalories = totalCalories;
+    }
+
+    @OneToMany(mappedBy = "meal")
+    public List<MealLike> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<MealLike> likes) {
+        this.likes = likes;
+    }
+
+    @OneToMany(mappedBy = "meal")
+    public List<MealComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<MealComment> comments) {
+        this.comments = comments;
     }
 }

@@ -16,6 +16,7 @@ import softuni.fitbook.web.errors.exceptions.NoPrivilegesException;
 import softuni.fitbook.web.errors.exceptions.NotFoundException;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -52,7 +53,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public WorkoutServiceModel createWorkout(WorkoutCreateServiceModel model, String username) {
+    public WorkoutServiceModel createWorkout(@Valid WorkoutCreateServiceModel model, String username) {
 
 
         Workout workout = modelMapper.map(model, Workout.class);
@@ -195,7 +196,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     @Transactional
-    public WorkoutServiceModel editWorkoutById(String workoutId, WorkoutServiceModel model, String username) {
+    public WorkoutServiceModel editWorkoutById(String workoutId, @Valid WorkoutServiceModel model, String username) {
 
         Workout oldWorkout = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("No such user with given username."))
@@ -425,7 +426,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         if (!user.getAuthorities().contains(moderatorRole) &&
                 !workout.getUserProfile().getId().equals(user.getUserProfile().getId()) &&
-                    !comment.getUserProfile().getId().equals(user.getUserProfile().getId())) {
+                !comment.getUserProfile().getId().equals(user.getUserProfile().getId())) {
 
             throw new NoPrivilegesException("You do not have privileges to delete this comment.");
         }
@@ -445,6 +446,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         workout.setIsCopied(true);
         workout.setIsPublic(false);
         workout.setLikes(new ArrayList<>());
+        workout.setComments(new ArrayList<>());
         List<WorkoutExercise> exercises = source.getExercises()
                 .stream()
                 .map(e -> {
@@ -469,7 +471,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         CreatorServiceModel creator = modelMapper.map(userRepository.findByUserProfileId(workout.getUserProfile().getId()).orElseThrow(() -> new NotFoundException("No such user with given User Profile ID.")), CreatorServiceModel.class);
         model.setCreator(creator);
 
-        model.setLikesCount(workout.getLikes().size());
+        model.setLikesCount((long) workout.getLikes().size());
 
         model.setExercises(workout.getExercises()
                 .stream()

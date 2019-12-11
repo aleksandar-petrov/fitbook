@@ -2,10 +2,18 @@ package softuni.fitbook.services.models.dietPlan;
 
 import softuni.fitbook.services.models.meal.MealServiceModel;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class DietPlanMealServiceModel {
 
+    @NotBlank
     private String id;
+
+    @NotNull
     private Integer orderIndex;
+
+    @NotNull
     private MealServiceModel meal;
 
     public DietPlanMealServiceModel() {

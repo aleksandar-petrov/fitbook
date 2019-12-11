@@ -3,6 +3,13 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Component, OnInit} from "@angular/core";
 import {DietPlan} from "../diet-plan.model";
 import {DietPlanService} from "../diet-plan.service";
+import {CommentModel} from "../../comment/comment.model";
+import {CommentBindingModel} from "../../comment/comment-binding.model";
+import {AuthService} from "../../auth/auth.service";
+import {UserService} from "../../user/user.service";
+import {CommentService} from "../../comment/comment.service";
+import {UserAuthModel} from "../../auth/user-auth.model";
+import {UserModel} from "../../user/user.model";
 
 @Component({
     selector: 'app-diet-plan-details',
@@ -11,14 +18,24 @@ import {DietPlanService} from "../diet-plan.service";
 })
 export class DietPlanDetailsComponent implements OnInit {
 
+    loading: boolean;
+
     dietPlan: DietPlan;
     dietPlanId: string;
     exercisesSets: any[];
     customColors: any[];
     macroNutrientsData: any[];
 
+    commentBindingModel: CommentBindingModel;
+    dietPlanComments: CommentModel[];
+    isLoggedInUserModerator: boolean;
+    loggedInUserUsername: string;
+
 
     constructor(private dietPlanService: DietPlanService,
+                private authService: AuthService,
+                private userService: UserService,
+                private commentService: CommentService,
                 private route: ActivatedRoute,
                 private modalService: NgbModal,
                 private router: Router) {
@@ -27,6 +44,18 @@ export class DietPlanDetailsComponent implements OnInit {
     ngOnInit() {
 
         this.dietPlan = new DietPlan();
+
+        this.commentBindingModel = new CommentBindingModel();
+        this.dietPlanComments = [];
+        this.authService.user.subscribe((user: UserAuthModel) => {
+            this.isLoggedInUserModerator = this.authService.isUserModerator(user.role);
+        });
+
+        this.userService.getLoggedInUserObservable().subscribe((user: UserModel) => {
+            if (user) {
+                this.loggedInUserUsername = user.username;
+            }
+        });
 
         this.route.params.subscribe((params: Params) => {
 
@@ -38,10 +67,16 @@ export class DietPlanDetailsComponent implements OnInit {
     }
 
     fetchDietPlanDetails(): void {
+
+        this.loading = true;
+
         this.dietPlanService.getDietPlanById(this.dietPlanId).subscribe((dietPlan: DietPlan) => {
             if (dietPlan) {
                 this.dietPlan = dietPlan;
+                this.dietPlanComments = dietPlan.comments;
                 this.makeChartDataForMacroNutrients();
+
+                this.loading = false;
             }
         });
     }
@@ -85,7 +120,10 @@ export class DietPlanDetailsComponent implements OnInit {
 
         this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: "lg"}).result.then((result) => {
 
+            this.loading = true;
+
             this.dietPlanService.copyDietPlanToMyDietPlans(this.dietPlanId).subscribe((dietPlan: DietPlan) => {
+                this.loading = false;
                 this.router.navigate(['my-diet-plans/', dietPlan.id])
             });
         }, (reason) => {
@@ -102,6 +140,29 @@ export class DietPlanDetailsComponent implements OnInit {
             anchor.click();
 
         })
+    }
+
+    onLikeHandler() {
+        this.dietPlanService.likeDietPlan(this.dietPlan.id).subscribe((dietPlan: DietPlan) => {
+            this.dietPlan = dietPlan;
+        });
+    }
+
+    onPostHandler() {
+
+
+        this.commentService.commentDietPlan(this.dietPlan.id, this.commentBindingModel).subscribe((comment: CommentModel) => {
+            this.commentBindingModel = new CommentBindingModel();
+            this.dietPlanComments.push(comment);
+        });
+    }
+
+    onDeleteCommentHandler(id: string) {
+
+        this.commentService.deleteDietPlanComment(id).subscribe(() => {
+            this.fetchDietPlanDetails();
+        })
+
     }
 
 }

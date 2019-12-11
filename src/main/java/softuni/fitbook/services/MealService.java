@@ -23,11 +23,11 @@ public interface MealService {
 
     MealServiceModel editMealById(String mealId, MealServiceModel model, String username);
 
-    List<MealServiceModel> getAllPublicMeals();
+    List<MealServiceModel> getAllPublicMeals(String username);
 
     MealServiceModel copyMealToLoggedUserMeals(String mealId, String username);
 
-    MealServiceModel getMealById(String id);
+    MealServiceModel getMealById(String id, String username);
 
     MealServiceModel mapMealToMealServiceModel(Meal meal);
 
@@ -35,7 +35,7 @@ public interface MealService {
 
     MealServiceModel likeMeal(String mealId, String username);
 
-    CommentServiceModel commentMeal(String mealId, CommentRequestModel model, String name);
+    CommentServiceModel commentMeal(String mealId, CommentRequestModel model, String username);
 
     void deleteMealComment(String commentId, String username);
 }

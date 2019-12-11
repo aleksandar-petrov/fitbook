@@ -9,6 +9,8 @@ import {FitnessProfileBindingModel} from './fitness-profile-binding.model';
 })
 export class CreateFitnessProfileComponent implements OnInit {
 
+  loading: boolean;
+
   userGender: string;
   userFirstName: string;
   fitnessProfileBindingModel: FitnessProfileBindingModel;
@@ -38,9 +40,12 @@ export class CreateFitnessProfileComponent implements OnInit {
 
   onSubmit() {
 
+    this.loading = true;
+
     this.userService.setFitnessProfileToLoggedInUser(this.fitnessProfileBindingModel).subscribe(data => {
       if (data) {
         this.userService.loadLoggedUser();
+        this.loading = false;
       }
     });
   }

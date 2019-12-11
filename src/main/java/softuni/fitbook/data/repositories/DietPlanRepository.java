@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface DietPlanRepository extends JpaRepository<DietPlan, String> {
 
-    @Query(value = "SELECT d FROM DietPlan d WHERE d.isPublic = true AND d.isCopied = false AND d.meals.size > 0")
+    @Query(value = "SELECT d FROM DietPlan d WHERE d.isPublic = true AND d.isCopied = false AND d.meals.size > 0 ORDER BY d.likes.size DESC, d.name ASC")
     List<DietPlan> findAllPublicNotCopiedNotEmpty();
 
 }

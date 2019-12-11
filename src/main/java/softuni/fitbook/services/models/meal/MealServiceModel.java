@@ -1,21 +1,32 @@
 package softuni.fitbook.services.models.meal;
 
+import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.services.models.CreatorServiceModel;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class MealServiceModel {
 
+    @NotBlank
     private String id;
+    @NotBlank
     private String name;
+    @NotNull
     private Boolean isPublic;
+
     private List<MealFoodServiceModel> foods;
+
     private Boolean isCopied;
     private CreatorServiceModel creator;
     private Integer totalProtein;
     private Integer totalCarbohydrates;
     private Integer totalFats;
     private Integer totalCalories;
+    private Long likesCount;
+    private Boolean isLiked;
+    private List<CommentServiceModel> comments;
 
 
     public MealServiceModel() {
@@ -100,5 +111,29 @@ public class MealServiceModel {
 
     public void setTotalCalories(Integer totalCalories) {
         this.totalCalories = totalCalories;
+    }
+
+    public Long getLikesCount() {
+        return likesCount;
+    }
+
+    public void setLikesCount(Long likesCount) {
+        this.likesCount = likesCount;
+    }
+
+    public Boolean getIsLiked() {
+        return isLiked;
+    }
+
+    public void setIsLiked(Boolean liked) {
+        isLiked = liked;
+    }
+
+    public List<CommentServiceModel> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentServiceModel> comments) {
+        this.comments = comments;
     }
 }

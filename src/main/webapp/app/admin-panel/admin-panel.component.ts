@@ -11,6 +11,8 @@ import {UserAuthModel} from "../auth/user-auth.model";
 })
 export class AdminPanelComponent implements OnInit {
 
+    loading: boolean;
+
     users: AllUserModel[];
     loggedUserRole: string;
 
@@ -22,35 +24,44 @@ export class AdminPanelComponent implements OnInit {
 
     ngOnInit() {
 
+        this.loading = true;
+
         this.adminService.fetchAllUsers().subscribe((users: AllUserModel[]) => {
             this.users = users;
+            this.loading = false;
         });
 
         this.authService.user.subscribe((user: UserAuthModel) => {
-           this.loggedUserRole = user.role;
+            this.loggedUserRole = user.role;
         });
 
     }
 
-  onPromoteHandler(userId: string) {
+    onPromoteHandler(userId: string) {
 
-      this.adminService.promoteUser(userId)
-          .subscribe(data => {
-            this.adminService.fetchAllUsers().subscribe((users: AllUserModel[]) => {
-              this.users = users;
-            });
-          })
+        this.loading = true;
 
-  }
+        this.adminService.promoteUser(userId)
+            .subscribe(data => {
+                this.adminService.fetchAllUsers().subscribe((users: AllUserModel[]) => {
+                    this.users = users;
+                    this.loading = false;
+                });
+            })
 
-  onDemoteHandler(userId: string) {
+    }
 
-    this.adminService.demoteUser(userId)
-        .subscribe(data => {
-          this.adminService.fetchAllUsers().subscribe((users: AllUserModel[]) => {
-            this.users = users;
-          });
-        })
+    onDemoteHandler(userId: string) {
 
-  }
+        this.loading = true;
+
+        this.adminService.demoteUser(userId)
+            .subscribe(data => {
+                this.adminService.fetchAllUsers().subscribe((users: AllUserModel[]) => {
+                    this.users = users;
+                    this.loading = false;
+                });
+            })
+
+    }
 }

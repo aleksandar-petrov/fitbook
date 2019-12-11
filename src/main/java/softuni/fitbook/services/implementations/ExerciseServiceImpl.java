@@ -15,6 +15,7 @@ import softuni.fitbook.services.ExerciseService;
 import softuni.fitbook.services.EnumParserService;
 import softuni.fitbook.services.FileUploaderService;
 
+import javax.validation.Valid;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -77,7 +78,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public ExerciseServiceModel createExercise(ExerciseCreateServiceModel model, MultipartFile pictureFile) {
+    public ExerciseServiceModel createExercise(@Valid ExerciseCreateServiceModel model, MultipartFile pictureFile) {
 
         Exercise exercise = modelMapper.map(model, Exercise.class);
 

@@ -10,6 +10,7 @@ public class FoodServiceModel {
     private Integer carbohydratesPerHundred;
     private Integer fatsPerHundred;
     private Integer caloriesPerHundred;
+    private Long mealsCounter;
 
     public FoodServiceModel() {
     }
@@ -76,5 +77,13 @@ public class FoodServiceModel {
 
     public void setCaloriesPerHundred(Integer caloriesPerHundred) {
         this.caloriesPerHundred = caloriesPerHundred;
+    }
+
+    public Long getMealsCounter() {
+        return mealsCounter;
+    }
+
+    public void setMealsCounter(Long mealsCounter) {
+        this.mealsCounter = mealsCounter;
     }
 }

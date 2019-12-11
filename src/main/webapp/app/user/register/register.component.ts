@@ -11,12 +11,14 @@ import {AuthService} from '../../auth/auth.service';
 })
 export class RegisterComponent implements OnInit {
 
+  loading: boolean;
+
   registerBindingModel: RegisterBindingModel;
   userProfilePictureFile: File;
   usernameTaken = false;
   emailTaken = false;
   passwordsMatch = false;
-  regexPattern = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\\])";
+  regexPattern = "(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\\])";
   @ViewChild('chooseFileLabel', {static: false}) chooseFileLabelRef: ElementRef;
   file: any;
 
@@ -31,6 +33,8 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
 
+    this.loading = true;
+
     const formData = new FormData();
     const userBlob = new Blob([JSON.stringify(this.registerBindingModel)], {type: 'application/json'});
     formData.append("user", userBlob);
@@ -39,6 +43,8 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register(formData).subscribe(data => {
       if (data) {
+
+        this.loading = false;
         this.router.navigate(['/signin']);
       }
     })

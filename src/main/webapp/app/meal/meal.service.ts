@@ -63,4 +63,9 @@ export class MealService {
         return this.http.post(`${AppSettings.API_ENDPOINT}/api/meals/copy/` + mealId, null);
     }
 
+    likeMeal(mealId: string) {
+
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/meals/like/` + mealId, null);
+    }
+
 }

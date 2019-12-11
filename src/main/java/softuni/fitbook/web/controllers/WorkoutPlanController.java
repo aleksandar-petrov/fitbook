@@ -2,10 +2,12 @@ package softuni.fitbook.web.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
+import softuni.fitbook.web.controllers.models.request.CommentRequestModel;
 import softuni.fitbook.web.controllers.models.request.workout.WorkoutCreateRequestModel;
 import softuni.fitbook.web.controllers.models.request.workoutPlan.WorkoutPlanEditRequestModel;
 import softuni.fitbook.services.models.workoutPlan.WorkoutPlanCreateServiceModel;
 import softuni.fitbook.services.models.workoutPlan.WorkoutPlanServiceModel;
+import softuni.fitbook.web.controllers.models.response.CommentResponseModel;
 import softuni.fitbook.web.controllers.models.response.workoutPlan.WorkoutPlanResponseModel;
 import softuni.fitbook.services.WorkoutPlanService;
 
@@ -61,20 +63,20 @@ public class WorkoutPlanController {
     }
 
     @GetMapping("/public/all")
-    public List<WorkoutPlanResponseModel> getAllPublicWorkoutPlans() {
+    public List<WorkoutPlanResponseModel> getAllPublicWorkoutPlans(Principal principal) {
 
         return workoutPlanService
-                .getAllPublicWorkoutPlans()
+                .getAllPublicWorkoutPlans(principal.getName())
                 .stream()
                 .map(w -> modelMapper.map(w, WorkoutPlanResponseModel.class))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public WorkoutPlanResponseModel getWorkoutPlanById(@PathVariable(value = "id") String id) {
+    public WorkoutPlanResponseModel getWorkoutPlanById(@PathVariable(value = "id") String id, Principal principal) {
 
         return modelMapper.map(
-                workoutPlanService.getWorkoutPlanById(id),
+                workoutPlanService.getWorkoutPlanById(id, principal.getName()),
                 WorkoutPlanResponseModel.class);
 
     }
@@ -96,6 +98,26 @@ public class WorkoutPlanController {
     public byte[] exportWorkoutPlanToExcel(@PathVariable(value = "workoutPlanId") String workoutPlanId) {
 
         return workoutPlanService.exportWorkoutPlanToExcel(workoutPlanId);
+    }
+
+    @PostMapping("/like/{workoutPlanId}")
+    public WorkoutPlanResponseModel likeWorkoutPlan(@PathVariable String workoutPlanId, Principal principal) {
+
+        return modelMapper.map(workoutPlanService.likeWorkoutPlan(workoutPlanId, principal.getName()), WorkoutPlanResponseModel.class);
+
+    }
+
+    @PostMapping("/comment/{workoutPlanId}")
+    public CommentResponseModel commentWorkoutPlan(@PathVariable String workoutPlanId, @RequestBody CommentRequestModel model, Principal principal) {
+
+        return modelMapper.map(workoutPlanService.commentWorkoutPlan(workoutPlanId, model, principal.getName()), CommentResponseModel.class);
+
+    }
+
+    @DeleteMapping("/comment/delete/{commentId}")
+    public void deleteWorkoutPlanCommentFromWorkoutPlan(@PathVariable String commentId, Principal principal) {
+
+        workoutPlanService.deleteWorkoutPlanComment(commentId, principal.getName());
     }
 
 

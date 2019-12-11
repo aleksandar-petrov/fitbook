@@ -1,208 +1,208 @@
 
 main {
-  margin-top: 4em;
+    margin-top: 4em;
 }
 
 
 .jumbotron {
-  text-align: center;
-  padding-top: 2rem;
-  /*padding-bottom: 10rem;*/
-  background-image: url('assets/static/images/background.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
+    text-align: center;
+    padding-top: 2rem;
+    /*padding-bottom: 10rem;*/
+    background-image: url('assets/static/images/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
 
 }
 
 .jumbotron .btn {
-  padding: 0.5em 1em;
+    padding: 0.5em 1em;
 }
 
 #urlInput {
-  display: none;
+    display: none;
 }
 
 #çhooseFileLabel {
-  border-radius: 1rem;
-  overflow: hidden;
+    border-radius: 1rem;
+    overflow: hidden;
 }
 
 #çhooseFileLabel::after {
-  display: inline-block;
-  height: auto;
-  border-top-right-radius: 1rem;
-  border-bottom-right-radius: 1rem;
+    display: inline-block;
+    height: auto;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
 }
 
 svg.body-model * {
-  fill: none;
-  stroke: red;
-  stroke-opacity: 0.5;
-  pointer-events: all;
+    fill: none;
+    stroke: red;
+    stroke-opacity: 0.5;
+    pointer-events: all;
 }
 
 svg.body-model .is-focused {
-  fill: greenyellow;
-  fill-opacity: 0.4;
+    fill: greenyellow;
+    fill-opacity: 0.4;
 }
 
 svg.body-model .major-muscle-group {
-  fill: red;
-  fill-opacity: 0.4;
+    fill: red;
+    fill-opacity: 0.4;
 }
 
 svg.body-model .assisting-muscle-group {
-  fill: yellow;
-  fill-opacity: 0.4;
+    fill: yellow;
+    fill-opacity: 0.4;
 }
 
 .card-signin {
-  border: 0;
-  border-radius: 1rem;
-  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    border: 0;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
 }
 
 .card-signin .card-title {
-  margin-bottom: 2rem;
-  font-weight: 300;
-  font-size: 1.5rem;
+    margin-bottom: 2rem;
+    font-weight: 300;
+    font-size: 1.5rem;
 }
 
 .card-signin .card-body {
-  padding: 2rem;
+    padding: 2rem;
 }
 
 .form-signin {
-  width: 100%;
+    width: 100%;
 }
 
 .form-signin .btn {
-  font-size: 80%;
-  border-radius: 5rem;
-  letter-spacing: .1rem;
-  font-weight: bold;
-  padding: 1rem;
-  transition: all 0.2s;
+    font-size: 80%;
+    border-radius: 5rem;
+    letter-spacing: .1rem;
+    font-weight: bold;
+    padding: 1rem;
+    transition: all 0.2s;
 }
 
 .form-label-group {
-  position: relative;
-  margin-bottom: 1rem;
+    position: relative;
+    margin-bottom: 1rem;
 }
 
 .form-label-group input,
 .form-label-group select {
-  height: auto;
-  border-radius: 2rem;
+    height: auto;
+    border-radius: 2rem;
 }
 
 .btn-facebook {
-  color: white;
-  background-color: #3b5998;
+    color: white;
+    background-color: #3b5998;
 }
 
 .btn-facebook:hover {
-  transition: 0.5s ease;
-  background-color: #334772;
-  color: white;
+    transition: 0.5s ease;
+    background-color: #334772;
+    color: white;
 }
 
 .form-signin label {
-  padding-left: 0.5em;
+    padding-left: 0.5em;
 }
 
 .form-signin p {
-  text-align: center;
-  margin-top: 0.5em;
+    text-align: center;
+    margin-top: 0.5em;
 }
 
 .loader {
-  border-radius: 30px;
-  margin: 5em auto;
-  text-align: center;
-  vertical-align: middle;
+    border-radius: 30px;
+    margin: 5em auto;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .pie-label {
-  font-size: 20px !important;
-  color: white !important;
+    font-size: 20px !important;
+    color: white !important;
 }
 
 .chart-container {
-  overflow: hidden;
+    overflow: hidden;
 }
 
 .button-like {
-  border: 2px solid #8a8a8a;
-  background-color: transparent;
-  text-decoration: none;
-  padding: 1rem;
-  position: relative;
-  vertical-align: middle;
-  text-align: center;
-  display: inline-block;
-  border-radius: 3rem;
-  color: #8a8a8a;
-  transition: all ease 0.4s;
+    border: 2px solid #8a8a8a;
+    background-color: transparent;
+    text-decoration: none;
+    padding: 1rem;
+    position: relative;
+    vertical-align: middle;
+    text-align: center;
+    display: inline-block;
+    border-radius: 3rem;
+    color: #8a8a8a;
+    transition: all ease 0.4s;
 }
 
 .button-like span {
-  margin-left: 0.5rem;
+    margin-left: 0.5rem;
 }
 
 .button-like .fa,
 .button-like span {
-  transition: all ease 0.4s;
+    transition: all ease 0.4s;
 }
 
 .button-like:focus {
-  background-color: transparent;
-  outline: none;
+    background-color: transparent;
+    outline: none;
 }
 
 .button-like:focus .fa,
 .button-like:focus span {
-  color: #8a8a8a;
+    color: #8a8a8a;
 }
 
 .button-like:hover {
-  border-color: #cc4b37;
-  background-color: transparent;
+    border-color: #cc4b37;
+    background-color: transparent;
 }
 
 .button-like:hover .fa,
 .button-like:hover span {
-  color: #cc4b37;
+    color: #cc4b37;
 }
 
 .liked {
-  background-color: #cc4b37;
-  border-color: #cc4b37;
+    background-color: #cc4b37;
+    border-color: #cc4b37;
 }
 
 .liked .fa,
 .liked span {
-  color: #fefefe;
+    color: #fefefe;
 }
 
 .liked:focus {
-  background-color: #cc4b37;
-  outline: none;
+    background-color: #cc4b37;
+    outline: none;
 }
 
 .liked:focus .fa,
 .liked:focus span {
-  color: #fefefe;
+    color: #fefefe;
 }
 
 .liked:hover {
-  background-color: #cc4b37;
-  border-color: #cc4b37;
+    background-color: #cc4b37;
+    border-color: #cc4b37;
 }
 
 .liked:hover .fa,
 .liked:hover span {
-  color: #fefefe;
+    color: #fefefe;
 }
 
 /*.comment-wrapper .panel-body {*/
@@ -211,34 +211,54 @@ svg.body-model .assisting-muscle-group {
 /*}*/
 
 .comment-wrapper .media-list .media img {
-  width:80px;
-  height:80px;
-  border:2px solid #e5e7e8;
-  border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    border: 2px solid #e5e7e8;
+    border-radius: 50%;
 }
 
 .comment-wrapper .media-list .media {
-  border-bottom:1px solid #ccc;
-  margin-bottom:25px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 25px;
 }
 
 .comment {
-  width: 85%;
-  margin-right: 2em;
+    width: 85%;
+    margin-right: 2em;
 }
 
 .media-body {
 }
 
 .comment-delete-btn {
-  position: absolute;
-  bottom: 1em;
-  right: 0;
+    position: absolute;
+    bottom: 1em;
+    right: 0;
 
 }
 
 .media {
-  position: relative;
+    position: relative;
+}
+
+.loader-container {
+    z-index: 100;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.7);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.loader-container img {
+    display: block;
+    margin: 200px auto auto;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 

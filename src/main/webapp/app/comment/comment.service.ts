@@ -33,6 +33,41 @@ export class CommentService {
         return this.http.delete(`${AppSettings.API_ENDPOINT}/api/workouts/comment/delete/` + commentId, );
     }
 
+    commentMeal(mealId: string, comment: CommentBindingModel) {
+
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/meals/comment/` + mealId, comment, {headers: this.contentTypeJsonHeaders});
+
+    }
+
+    deleteMealComment(commentId: string) {
+
+        return this.http.delete(`${AppSettings.API_ENDPOINT}/api/meals/comment/delete/` + commentId, );
+    }
+
+    commentDietPlan(dietPlanId: string, comment: CommentBindingModel) {
+
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/diet-plans/comment/` + dietPlanId, comment, {headers: this.contentTypeJsonHeaders});
+
+    }
+
+    deleteDietPlanComment(commentId: string) {
+
+        return this.http.delete(`${AppSettings.API_ENDPOINT}/api/diet-plans/comment/delete/` + commentId, );
+
+    }
+
+    commentWorkoutPlan(workoutPlanId: string, comment: CommentBindingModel) {
+
+        return this.http.post(`${AppSettings.API_ENDPOINT}/api/workout-plans/comment/` + workoutPlanId, comment, {headers: this.contentTypeJsonHeaders});
+
+    }
+
+    deleteWorkoutPlanComment(commentId: string) {
+
+        return this.http.delete(`${AppSettings.API_ENDPOINT}/api/workout-plans/comment/delete/` + commentId, );
+
+    }
+
 
 
 

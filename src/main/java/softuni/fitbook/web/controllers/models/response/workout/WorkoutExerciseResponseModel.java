@@ -10,6 +10,7 @@ public class WorkoutExerciseResponseModel {
   private Integer sets;
   private AllExercisesResponseViewModel exercise;
 
+
   public WorkoutExerciseResponseModel() {
   }
 
