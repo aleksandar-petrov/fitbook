@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class LogServiceModel {
 
+    private String id;
     private String requestURI;
     private String method;
     private LocalDateTime dateTime;
@@ -17,6 +18,14 @@ public class LogServiceModel {
         this.method = method;
         this.dateTime = dateTime;
         this.username = username;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getRequestURI() {

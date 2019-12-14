@@ -66,7 +66,7 @@ public class Exercise extends BaseEntity {
         this.majorMuscleGroup = majorMuscleGroup;
     }
 
-    @ElementCollection(targetClass = Muscle.class)
+    @ElementCollection(targetClass = Muscle.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "exercises_assisting_muscles",
             joinColumns = @JoinColumn(name = "exercise_id"))
     @Column(name = "assisting_muscle")

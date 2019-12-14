@@ -5,12 +5,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 import softuni.fitbook.services.models.user.AllUsersUserServiceModel;
 import softuni.fitbook.services.models.user.FitnessProfileServiceModel;
+import softuni.fitbook.services.models.user.UserRegisterServiceModel;
 import softuni.fitbook.services.models.user.UserServiceModel;
 
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
-  boolean createUser(UserServiceModel userServiceModel, MultipartFile file);
+  boolean createUser(UserRegisterServiceModel userServiceModel, MultipartFile file);
 
   List<AllUsersUserServiceModel> getAll();
 

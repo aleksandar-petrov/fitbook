@@ -2,6 +2,7 @@ package softuni.fitbook.services.implementations;
 
 import com.google.common.base.CaseFormat;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,9 +19,11 @@ import softuni.fitbook.data.models.enumerations.*;
 import softuni.fitbook.services.*;
 import softuni.fitbook.services.models.user.AllUsersUserServiceModel;
 import softuni.fitbook.services.models.user.FitnessProfileServiceModel;
+import softuni.fitbook.services.models.user.UserRegisterServiceModel;
 import softuni.fitbook.services.models.user.UserServiceModel;
 import softuni.fitbook.data.repositories.*;
 import softuni.fitbook.web.errors.exceptions.NotFoundException;
+import softuni.fitbook.web.errors.exceptions.PasswordsDoNotMatchException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -107,7 +110,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean createUser(UserServiceModel userServiceModel, MultipartFile file) {
+    public boolean createUser(UserRegisterServiceModel userServiceModel, MultipartFile file) {
+
+        if (!userServiceModel.getPassword().equals(userServiceModel.getConfirmPassword())) {
+            throw new PasswordsDoNotMatchException(ErrorConstants.PASSWORDS_MUST_MATCH);
+        }
 
         validationService.validate(userServiceModel);
 

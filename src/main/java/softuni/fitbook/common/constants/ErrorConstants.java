@@ -24,4 +24,5 @@ public class ErrorConstants {
     public static final String ADMIN_DEMOTE_CONFLICT = "ADMIN cannot be demoted by other ADMIN.";
     public static final String USER_DEMOTE = "There is no role lower than USER";
     public static final String NO_SUCH_COMMENT_ENTITY_TYPE = "No such comment entity type.";
+    public static final String PASSWORDS_MUST_MATCH = "Password and Confirm Password must match.";
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import softuni.fitbook.services.models.user.UserRegisterServiceModel;
 import softuni.fitbook.web.controllers.models.request.user.FitnessProfileRequestModel;
 import softuni.fitbook.web.controllers.models.request.user.UserRegisterRequestModel;
 import softuni.fitbook.services.models.user.FitnessProfileServiceModel;
@@ -35,13 +36,10 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestPart("user") UserRegisterRequestModel model, @RequestPart(value = "pictureFile", required = false) MultipartFile file) throws URISyntaxException {
-        if (!model.getPassword().equals(model.getConfirmPassword())) {
-            return ResponseEntity.badRequest().body("Error: Passwords do not match!");
-        }
 
         boolean result = userService
                 .createUser(modelMapper
-                        .map(model, UserServiceModel.class), file);
+                        .map(model, UserRegisterServiceModel.class), file);
 
         return ResponseEntity.created(new URI("/users/register")).body(result);
     }
@@ -76,9 +74,8 @@ public class UserController {
 
     @GetMapping(value = "/username/{username}")
     public UserResponseModel getUserByUsername(@PathVariable(value = "username") String username) {
-        UserResponseModel map = modelMapper
+        return modelMapper
                 .map(userService.getByUsername(username), UserResponseModel.class);
-        return map;
 
 
     }
