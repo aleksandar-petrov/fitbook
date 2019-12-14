@@ -102,7 +102,7 @@
         </div>
     </ng-template>
 
-
+    <form #editForm="ngForm">
     <h2 *ngIf="!editMode" class="pt-3 font-weight-light">{{selectedWorkoutPlan.name}}</h2>
     <div class="py-3 mx-auto col-5" *ngIf="editMode"><input type="text" value="{{editWorkoutPlanBindingModel.name}}"
                                                             class="form-control form-control-lg text-center"
@@ -111,7 +111,7 @@
                                                             required
                                                             [ngClass]="{'is-valid': inputName.valid && inputName.touched,
                          'is-invalid': inputName.invalid && inputName.touched}"
-                                                            [(ngModel)]="editWorkoutPlanBindingModel.name"></div>
+                                                            [(ngModel)]="editWorkoutPlanBindingModel.name"></div></form>
     <h4 class="pb-3 font-weight-light" *ngIf="!editMode && !selectedWorkoutPlan.isCopied">
         ({{selectedWorkoutPlan.isPublic ? 'Public' : 'Private'}})</h4>
     <h4 class="pb-3 font-weight-light" *ngIf="selectedWorkoutPlan.isCopied">(Copy)</h4>
@@ -235,7 +235,7 @@
 
 
     <div class="workout-actions-edit" *ngIf="editMode">
-        <button type="link" class="btn btn-success my-3 mx-2" (click)="onSaveHandler()">
+        <button type="link" [disabled]="editForm.invalid" class="btn btn-success my-3 mx-2" (click)="onSaveHandler()">
             Save
         </button>
         <button type="link" class="btn btn-danger my-3 mx-2" routerLink="./">Cancel</button>

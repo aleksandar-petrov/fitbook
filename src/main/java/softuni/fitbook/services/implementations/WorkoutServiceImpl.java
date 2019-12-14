@@ -3,20 +3,22 @@ package softuni.fitbook.services.implementations;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import softuni.fitbook.config.Constants;
+import softuni.fitbook.common.constants.AuthorityConstants;
+import softuni.fitbook.common.constants.ErrorConstants;
+import softuni.fitbook.common.constants.TypeConstants;
 import softuni.fitbook.data.models.*;
+import softuni.fitbook.services.ValidationService;
+import softuni.fitbook.services.models.CommentInfoServiceModel;
 import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.services.models.CreatorServiceModel;
 import softuni.fitbook.services.models.workout.*;
 import softuni.fitbook.data.repositories.*;
 import softuni.fitbook.services.ExerciseService;
 import softuni.fitbook.services.WorkoutService;
-import softuni.fitbook.web.controllers.models.request.CommentRequestModel;
 import softuni.fitbook.web.errors.exceptions.NoPrivilegesException;
 import softuni.fitbook.web.errors.exceptions.NotFoundException;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -37,9 +39,10 @@ public class WorkoutServiceImpl implements WorkoutService {
     private final WorkoutLikeRepository workoutLikeRepository;
     private final WorkoutCommentRepository workoutCommentRepository;
     private final RoleRepository roleRepository;
+    private final ValidationService validationService;
 
     @Autowired
-    public WorkoutServiceImpl(WorkoutRepository workoutRepository, UserRepository userRepository, WorkoutExercisesRepository workoutExercisesRepository, WorkoutPlanWorkoutRepository workoutPlanWorkoutRepository, ExerciseRepository exerciseRepository, ExerciseService exerciseService, ModelMapper modelMapper, WorkoutLikeRepository workoutLikeRepository, WorkoutCommentRepository workoutCommentRepository, RoleRepository roleRepository) {
+    public WorkoutServiceImpl(WorkoutRepository workoutRepository, UserRepository userRepository, WorkoutExercisesRepository workoutExercisesRepository, WorkoutPlanWorkoutRepository workoutPlanWorkoutRepository, ExerciseRepository exerciseRepository, ExerciseService exerciseService, ModelMapper modelMapper, WorkoutLikeRepository workoutLikeRepository, WorkoutCommentRepository workoutCommentRepository, RoleRepository roleRepository, ValidationService validationService) {
         this.workoutRepository = workoutRepository;
         this.userRepository = userRepository;
         this.workoutExerciseRepository = workoutExercisesRepository;
@@ -50,16 +53,18 @@ public class WorkoutServiceImpl implements WorkoutService {
         this.workoutLikeRepository = workoutLikeRepository;
         this.workoutCommentRepository = workoutCommentRepository;
         this.roleRepository = roleRepository;
+        this.validationService = validationService;
     }
 
     @Override
-    public WorkoutServiceModel createWorkout(@Valid WorkoutCreateServiceModel model, String username) {
+    public WorkoutServiceModel createWorkout(WorkoutCreateServiceModel model, String username) {
 
+        validationService.validate(model);
 
         Workout workout = modelMapper.map(model, Workout.class);
 
         User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new NotFoundException("No such user with given username.")
+                () -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME)
         );
 
         workout.setUserProfile(user.getUserProfile());
@@ -75,19 +80,19 @@ public class WorkoutServiceImpl implements WorkoutService {
 
 
         Workout workout = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."))
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME))
                 .getUserProfile()
                 .getWorkouts()
                 .stream()
                 .filter(w -> w.getId().equals(workoutId))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("No such workout with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_WORKOUT_WITH_GIVEN_ID));
 
 
         WorkoutExercise workoutExercise = modelMapper.map(model, WorkoutExercise.class);
 
         Exercise exercise = exerciseRepository.findById(model.getExerciseId())
-                .orElseThrow(() -> new NotFoundException("No such exercise with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_EXERCISE_WITH_GIVEN_ID));
 
         workoutExercise.setExercise(exercise);
 
@@ -120,19 +125,19 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Transactional
     public WorkoutServiceModel deleteWorkoutExerciseFromWorkout(String workoutId, String exerciseId, String username) {
         Workout workout = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."))
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME))
                 .getUserProfile()
                 .getWorkouts()
                 .stream()
                 .filter(w -> w.getId().equals(workoutId))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("No such workout with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_WORKOUT_WITH_GIVEN_ID));
 
         WorkoutExercise workoutExercise = workout.getExercises()
                 .stream()
                 .filter(e -> e.getId().equals(exerciseId))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("No such workout exercise with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_WORKOUT_EXERCISE_WITH_GIVEN_ID));
 
         workout.getExercises().remove(workoutExercise);
 
@@ -168,7 +173,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public void deleteWorkoutById(String workoutId, String username) {
 
         UserProfile userProfile = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."))
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME))
                 .getUserProfile();
 
         Workout workout = userProfile
@@ -176,7 +181,7 @@ public class WorkoutServiceImpl implements WorkoutService {
                 .stream()
                 .filter(w -> w.getId().equals(workoutId))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("No such workout with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_WORKOUT_WITH_GIVEN_ID));
 
         workoutPlanWorkoutRepository.findAllByWorkoutId(workoutId)
                 .forEach(wpw -> {
@@ -191,21 +196,38 @@ public class WorkoutServiceImpl implements WorkoutService {
                     workoutExerciseRepository.delete(e);
                 });
 
+        workout.getLikes()
+                .forEach(like -> {
+                    like.setUserProfile(null);
+                    like.setWorkout(null);
+                    workoutLikeRepository.delete(like);
+                });
+
+        workout.getComments()
+                .forEach(comment -> {
+                    comment.setUserProfile(null);
+                    comment.setWorkout(null);
+                    workoutCommentRepository.delete(comment);
+                });
+
         userProfile.getWorkouts().remove(workout);
+
     }
 
     @Override
     @Transactional
-    public WorkoutServiceModel editWorkoutById(String workoutId, @Valid WorkoutServiceModel model, String username) {
+    public WorkoutServiceModel editWorkoutById(String workoutId, WorkoutServiceModel model, String username) {
+
+        validationService.validate(model);
 
         Workout oldWorkout = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."))
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME))
                 .getUserProfile()
                 .getWorkouts()
                 .stream()
                 .filter(w -> w.getId().equals(workoutId))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("No such workout with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_WORKOUT_WITH_GIVEN_ID));
 
         Workout editedWorkout = modelMapper.map(model, Workout.class);
 
@@ -259,7 +281,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public List<WorkoutServiceModel> getAllPublicWorkouts(String username) {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME));
 
         List<WorkoutLike> workoutLikes = user.getUserProfile().getWorkoutLikes();
 
@@ -284,9 +306,9 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public WorkoutServiceModel copyWorkoutToLoggedUserWorkouts(String workoutId, String username) {
 
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("No such user with given username."));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME));
 
-        Workout workout = workoutRepository.findById(workoutId).orElseThrow(() -> new NotFoundException("No such workout with given ID."));
+        Workout workout = workoutRepository.findById(workoutId).orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_WORKOUT_WITH_GIVEN_ID));
 
         Workout copy = getWorkoutCopy(workout);
         copy.setUserProfile(user.getUserProfile());
@@ -300,14 +322,14 @@ public class WorkoutServiceImpl implements WorkoutService {
     public WorkoutServiceModel getWorkoutById(String id, String username) {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME));
 
         List<WorkoutLike> workoutLikes = user.getUserProfile().getWorkoutLikes();
 
 
         Workout workout = workoutRepository
                 .findById(id)
-                .orElseThrow(() -> new NotFoundException("No such workout with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_WORKOUT_WITH_GIVEN_ID));
 
 
         WorkoutServiceModel workoutServiceModel = mapWorkoutToWorkoutServiceModel(workout);
@@ -321,7 +343,7 @@ public class WorkoutServiceImpl implements WorkoutService {
                     CommentServiceModel comment = modelMapper.map(c, CommentServiceModel.class);
 
                     User commentUser = userRepository.findByUserProfileId(c.getUserProfile().getId())
-                            .orElseThrow(() -> new NotFoundException("No such user profile with given user profile ID."));
+                            .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USER_PROFILE_ID));
 
                     comment.setUsername(commentUser.getUsername());
                     comment.setProfilePictureURL(commentUser.getUserProfile().getProfilePictureURL());
@@ -342,12 +364,12 @@ public class WorkoutServiceImpl implements WorkoutService {
 
         UserProfile userProfile = userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."))
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME))
                 .getUserProfile();
 
         Workout workout = workoutRepository
                 .findById(workoutId)
-                .orElseThrow(() -> new NotFoundException("No such workout with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_WORKOUT_WITH_GIVEN_ID));
 
         Optional<WorkoutLike> likeOptional = workout.getLikes()
                 .stream()
@@ -387,14 +409,16 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public CommentServiceModel commentWorkout(String workoutId, CommentRequestModel model, String username) {
+    public CommentServiceModel commentWorkout(String workoutId, CommentServiceModel model, String username) {
+
+        validationService.validate(model);
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME));
 
         Workout workout = workoutRepository
                 .findById(workoutId)
-                .orElseThrow(() -> new NotFoundException("No such workout with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_WORKOUT_WITH_GIVEN_ID));
 
 
         WorkoutComment workoutComment = modelMapper.map(model, WorkoutComment.class);
@@ -415,20 +439,20 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Transactional
     public void deleteWorkoutComment(String commentId, String username) {
         WorkoutComment comment = workoutCommentRepository.findById(commentId)
-                .orElseThrow(() -> new NotFoundException("No such comment with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_COMMENT_WITH_GIVEN_ID));
 
-        UserRole moderatorRole = roleRepository.getByAuthority(Constants.AUTHORITY_MODERATOR);
+        UserRole moderatorRole = roleRepository.getByAuthority(AuthorityConstants.AUTHORITY_MODERATOR);
 
         Workout workout = comment.getWorkout();
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME));
 
         if (!user.getAuthorities().contains(moderatorRole) &&
                 !workout.getUserProfile().getId().equals(user.getUserProfile().getId()) &&
                 !comment.getUserProfile().getId().equals(user.getUserProfile().getId())) {
 
-            throw new NoPrivilegesException("You do not have privileges to delete this comment.");
+            throw new NoPrivilegesException(ErrorConstants.NO_PRESENT_PRIVILEGES_DELETE_COMMENT);
         }
 
         comment.setUserProfile(null);
@@ -436,6 +460,29 @@ public class WorkoutServiceImpl implements WorkoutService {
 
 
         workoutCommentRepository.deleteById(comment.getId());
+
+    }
+
+    @Override
+    public CommentInfoServiceModel getCommentInfoByWorkoutId(String workoutId, String username) {
+
+        Workout workout = workoutRepository
+                .findById(workoutId)
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_WORKOUT_WITH_GIVEN_ID));
+
+        User workoutOwnerUser = userRepository
+                .findByUserProfileId(workout.getUserProfile().getId())
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USER_PROFILE_ID));
+
+        CommentInfoServiceModel model = new CommentInfoServiceModel();
+        model.setCommentatorUsername(username);
+        model.setOwnerFirstName(workout.getUserProfile().getFirstName());
+        model.setOwnerUsername(workoutOwnerUser.getUsername());
+        model.setOwnerEmail(workoutOwnerUser.getEmail());
+        model.setEntityType(TypeConstants.WORKOUT);
+        model.setEntityName(workout.getName());
+
+        return model;
 
     }
 
@@ -468,7 +515,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public WorkoutServiceModel mapWorkoutToWorkoutServiceModel(Workout workout) {
 
         WorkoutServiceModel model = modelMapper.map(workout, WorkoutServiceModel.class);
-        CreatorServiceModel creator = modelMapper.map(userRepository.findByUserProfileId(workout.getUserProfile().getId()).orElseThrow(() -> new NotFoundException("No such user with given User Profile ID.")), CreatorServiceModel.class);
+        CreatorServiceModel creator = modelMapper.map(userRepository.findByUserProfileId(workout.getUserProfile().getId()).orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USER_PROFILE_ID)), CreatorServiceModel.class);
         model.setCreator(creator);
 
         model.setLikesCount((long) workout.getLikes().size());

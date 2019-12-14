@@ -1,14 +1,16 @@
 package softuni.fitbook.services.models.workout;
 
+import softuni.fitbook.common.constants.ValidationConstants;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class WorkoutCreateServiceModel {
 
-  @NotBlank
+  @NotBlank(message = ValidationConstants.NAME_REQUIRED)
   private String name;
 
-  @NotNull
+  @NotNull(message = ValidationConstants.STATUS_REQUIRED)
   private Boolean isPublic;
 
   public WorkoutCreateServiceModel() {

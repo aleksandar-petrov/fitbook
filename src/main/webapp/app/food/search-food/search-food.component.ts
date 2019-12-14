@@ -4,6 +4,7 @@ import {Food} from "../food.model";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FoodBindingModel} from "../food-binding.model";
 import {Router} from "@angular/router";
+import {Title} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-search-food',
@@ -27,10 +28,13 @@ export class SearchFoodComponent implements OnInit {
     file: any;
 
 
-    constructor(private foodService: FoodService, private modalService: NgbModal, private router: Router) {
+    constructor(private foodService: FoodService, private modalService: NgbModal, private router: Router, private titleService: Title) {
     }
 
     ngOnInit() {
+
+        this.titleService.setTitle( 'FitBook' + '- Create Food' );
+
         this.foodBindingModel = new FoodBindingModel();
     }
 

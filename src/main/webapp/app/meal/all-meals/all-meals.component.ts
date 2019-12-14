@@ -4,6 +4,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Router} from "@angular/router";
 import {Meal} from "../meal.model";
 import {MealService} from "../meal.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-all-meals',
@@ -20,10 +21,12 @@ export class AllMealsComponent implements OnInit {
   selectedMealId: string;
   selectedMealForModal: Meal;
 
-  constructor(private mealService: MealService, private modalService: NgbModal, private router: Router) {
+  constructor(private mealService: MealService, private modalService: NgbModal, private router: Router, private titleService: Title) {
   }
 
   ngOnInit() {
+
+    this.titleService.setTitle( 'FitBook' + '- All Meals' );
 
     this.mealService.fetchAllPublicMeals().subscribe((meals: Meal[]) => {
       if (meals) {

@@ -19,7 +19,7 @@
                   <label for="inputFirstName">First name</label>
                   <input type="text" id="inputFirstName" class="form-control"
                          placeholder="First name" name="firstName" #inputFirstName="ngModel" required autofocus
-                         pattern="([A-Z][A-Za-z0-9\. -]+)"
+                         pattern="([A-Z][A-Za-z. -]+)"
                          [ngClass]="{'is-valid': inputFirstName.valid && inputFirstName.touched,
                          'is-invalid': inputFirstName.invalid && inputFirstName.touched}"
                          [(ngModel)]="registerBindingModel.firstName">
@@ -34,7 +34,7 @@
                   <input type="text" id="inputLastName" class="form-control"
                          placeholder="Last name" name="lastName" #inputLastName="ngModel"
                          required
-                         pattern="([A-Z][A-Za-z0-9\. -]+)"
+                         pattern="([A-Z][A-Za-z. -]+)"
                          [ngClass]="{'is-valid': inputLastName.valid && inputLastName.touched,
                          'is-invalid': inputLastName.invalid && inputLastName.touched}"
                          [(ngModel)]="registerBindingModel.lastName">
@@ -121,7 +121,7 @@
                   <label for="inputPassword">Password</label>
                   <input type="password" id="inputPassword" class="form-control"
                          name="password" placeholder="Password" #inputPassword="ngModel"
-                         [minLength]="6"
+                         pattern=".{6,}"
                          required
                          [ngClass]="{'is-valid': inputPassword.valid && inputPassword.touched,
                          'is-invalid': inputPassword.invalid && inputPassword.touched}"
@@ -138,9 +138,9 @@
                   <input type="password" id="inputConfirmPassword" class="form-control"
                          name="confirmPassword" placeholder="Confirm password" #inputConfirmPassword="ngModel"
                          required
-                         [ngClass]="{'is-valid': inputConfirmPassword.valid &&
+                         [ngClass]="{'is-valid': inputConfirmPassword.valid && inputPassword.valid &&
                          inputConfirmPassword.touched && passwordsMatch,
-                         'is-invalid': (inputConfirmPassword.invalid || !passwordsMatch) && inputConfirmPassword.touched}"
+                         'is-invalid': (inputConfirmPassword.invalid || !passwordsMatch || inputPassword.invalid) && inputConfirmPassword.touched}"
                          [(ngModel)]="registerBindingModel.confirmPassword"
                   (change)="onPasswordChange()">
                   <div class="valid-feedback"></div>

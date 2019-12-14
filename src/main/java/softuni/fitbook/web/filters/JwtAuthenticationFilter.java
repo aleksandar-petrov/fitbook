@@ -8,7 +8,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import softuni.fitbook.config.Constants;
+import softuni.fitbook.common.constants.AuthConstants;
+import softuni.fitbook.common.constants.AuthorityConstants;
+import softuni.fitbook.common.constants.ErrorConstants;
 import softuni.fitbook.data.models.User;
 import softuni.fitbook.data.models.UserRole;
 import softuni.fitbook.web.controllers.models.request.user.UserLoginRequestModel;
@@ -57,11 +59,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setExpiration(new Date(new Date().getTime() + 864000000L))
                 .claim("role", authority)
                 .claim("userId", user.getId())
-                .signWith(SignatureAlgorithm.HS256, "Secret".getBytes())
+                .signWith(SignatureAlgorithm.HS256, AuthConstants.SIGNING_KEY.getBytes())
                 .compact();
 
 
-        response.addHeader("Authorization", "Bearer " + token);
+        response.addHeader(AuthConstants.AUTHORIZATION_HEADER, AuthConstants.AUTHORIZATION_HEADER_BEGINNING + token);
     }
 
     private String extractHighestAuthorityFromAuthorities(Set<UserRole> authorities) {
@@ -71,16 +73,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .map(UserRole::getAuthority)
                 .collect(Collectors.toSet());
 
-        if (allAuthoritiesAsString.contains(Constants.AUTHORITY_ROOT_ADMIN)) {
-            return Constants.AUTHORITY_ROOT_ADMIN;
-        } else if (allAuthoritiesAsString.contains(Constants.AUTHORITY_ADMIN)) {
-            return Constants.AUTHORITY_ADMIN;
-        } else if (allAuthoritiesAsString.contains(Constants.AUTHORITY_MODERATOR)) {
-            return Constants.AUTHORITY_MODERATOR;
-        } else if (allAuthoritiesAsString.contains(Constants.AUTHORITY_USER)) {
-            return Constants.AUTHORITY_USER;
+        if (allAuthoritiesAsString.contains(AuthorityConstants.AUTHORITY_ROOT_ADMIN)) {
+            return AuthorityConstants.AUTHORITY_ROOT_ADMIN;
+        } else if (allAuthoritiesAsString.contains(AuthorityConstants.AUTHORITY_ADMIN)) {
+            return AuthorityConstants.AUTHORITY_ADMIN;
+        } else if (allAuthoritiesAsString.contains(AuthorityConstants.AUTHORITY_MODERATOR)) {
+            return AuthorityConstants.AUTHORITY_MODERATOR;
+        } else if (allAuthoritiesAsString.contains(AuthorityConstants.AUTHORITY_USER)) {
+            return AuthorityConstants.AUTHORITY_USER;
         } else {
-            throw new IllegalArgumentException("No such role");
+            throw new IllegalArgumentException(ErrorConstants.NO_SUCH_ROLE);
         }
     }
 }

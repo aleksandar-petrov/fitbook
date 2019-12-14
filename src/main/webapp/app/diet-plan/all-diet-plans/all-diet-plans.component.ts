@@ -3,6 +3,7 @@ import {DietPlanService} from "../diet-plan.service";
 import {Router} from "@angular/router";
 import {DietPlan} from "../diet-plan.model";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-all-diet-plans',
@@ -21,10 +22,12 @@ export class AllDietPlansComponent implements OnInit {
   selectedDietPlanId: string;
   selectedDietPlanForModal: DietPlan;
 
-  constructor(private dietPlanService: DietPlanService, private modalService: NgbModal, private router: Router) {
+  constructor(private dietPlanService: DietPlanService, private modalService: NgbModal, private router: Router, private titleService: Title) {
   }
 
   ngOnInit() {
+
+    this.titleService.setTitle( 'FitBook' + '- All Diet Plans' );
 
     this.loading = true;
 

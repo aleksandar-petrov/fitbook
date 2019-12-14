@@ -36,7 +36,7 @@ public class UserProfile extends BaseEntity {
 
     private List<DietPlanLike> dietPlanLikes;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     public String getFirstName() {
         return firstName;
     }
@@ -45,7 +45,7 @@ public class UserProfile extends BaseEntity {
         this.firstName = firstName;
     }
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     public String getLastName() {
         return lastName;
     }

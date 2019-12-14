@@ -1,11 +1,16 @@
 package softuni.fitbook.services.models;
 
+import softuni.fitbook.common.constants.ValidationConstants;
+
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class CommentServiceModel {
 
     private String id;
+
+    @NotBlank(message = ValidationConstants.COMMENT_REQUIRED)
     private String comment;
     private LocalDateTime postedOn;
     private String username;

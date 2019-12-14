@@ -1,27 +1,29 @@
 package softuni.fitbook.services.models.food;
 
+import softuni.fitbook.common.constants.ValidationConstants;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class FoodCreateServiceModel {
 
-    @NotBlank
+    @NotBlank(message = ValidationConstants.NAME_REQUIRED)
     private String name;
 
-    @NotBlank
+    @NotBlank(message = ValidationConstants.DESCRIPTION_REQUIRED)
     private String description;
 
-    @NotNull
-    @Min(0)
+    @NotNull(message = ValidationConstants.PROTEIN_PER_100_REQUIRED)
+    @Min(value = 0, message = ValidationConstants.PROTEIN_PER_100_NON_NEGATIVE_NUMBER)
     private Integer proteinPerHundred;
 
-    @NotNull
-    @Min(0)
+    @NotNull(message = ValidationConstants.CARBOHYDRATES_PER_100_REQUIRED)
+    @Min(value = 0, message = ValidationConstants.CARBOHYDRATES_PER_100_NON_NEGATIVE_NUMBER)
     private Integer carbohydratesPerHundred;
 
-    @NotNull
-    @Min(0)
+    @NotNull(message = ValidationConstants.FATS_PER_100_REQUIRED)
+    @Min(value = 0, message = ValidationConstants.FATS_PER_100_NON_NEGATIVE_NUMBER)
     private Integer fatsPerHundred;
 
     public FoodCreateServiceModel() {

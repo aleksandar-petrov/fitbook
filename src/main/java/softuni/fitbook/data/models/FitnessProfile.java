@@ -24,7 +24,7 @@ public class FitnessProfile extends BaseEntity {
     public FitnessProfile() {
     }
 
-    @Column(name = "weight")
+    @Column(name = "weight", nullable = false)
     public Integer getWeight() {
         return weight;
     }
@@ -33,7 +33,7 @@ public class FitnessProfile extends BaseEntity {
         this.weight = weight;
     }
 
-    @Column(name = "height")
+    @Column(name = "height", nullable = false)
     public Integer getHeight() {
         return height;
     }
@@ -42,7 +42,7 @@ public class FitnessProfile extends BaseEntity {
         this.height = height;
     }
 
-    @Column(name = "age")
+    @Column(name = "age", nullable = false)
     public Integer getAge() {
         return age;
     }
@@ -52,7 +52,7 @@ public class FitnessProfile extends BaseEntity {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "sports_experience")
+    @Column(name = "sports_experience", nullable = false)
     public SportsExperience getSportsExperience() {
         return sportsExperience;
     }
@@ -62,7 +62,7 @@ public class FitnessProfile extends BaseEntity {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "activity_level")
+    @Column(name = "activity_level", nullable = false)
     public ActivityLevel getActivityLevel() {
         return activityLevel;
     }
@@ -72,7 +72,7 @@ public class FitnessProfile extends BaseEntity {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "weight_goal")
+    @Column(name = "weight_goal", nullable = false)
     public WeightGoal getWeightGoal() {
         return weightGoal;
     }
@@ -82,7 +82,7 @@ public class FitnessProfile extends BaseEntity {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "weight_change_rate")
+    @Column(name = "weight_change_rate", nullable = false)
     public WeightChangeRate getWeightChangeRate() {
         return weightChangeRate;
     }

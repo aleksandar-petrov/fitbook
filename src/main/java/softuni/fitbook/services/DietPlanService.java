@@ -1,6 +1,7 @@
 package softuni.fitbook.services;
 
 
+import softuni.fitbook.services.models.CommentInfoServiceModel;
 import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.services.models.dietPlan.DietPlanCreateServiceModel;
 import softuni.fitbook.services.models.dietPlan.DietPlanServiceModel;
@@ -30,8 +31,10 @@ public interface DietPlanService {
 
     DietPlanServiceModel likeDietPlan(String dietPlanId, String username);
 
-    CommentServiceModel commentDietPlan(String dietPlanId, CommentRequestModel model, String username);
+    CommentServiceModel commentDietPlan(String dietPlanId, CommentServiceModel model, String username);
 
     void deleteDietPlanComment(String commentId, String username);
+
+    CommentInfoServiceModel getCommentInfoByDietPlanId(String dietPlanId, String username);
 
 }

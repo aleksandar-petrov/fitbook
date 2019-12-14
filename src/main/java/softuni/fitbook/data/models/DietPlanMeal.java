@@ -12,7 +12,7 @@ public class DietPlanMeal extends BaseEntity {
     private Meal meal;
     private DietPlan dietPlan;
 
-    @Column(name = "order_index")
+    @Column(name = "order_index", nullable = false)
     public Integer getOrderIndex() {
         return orderIndex;
     }

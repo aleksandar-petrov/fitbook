@@ -1,5 +1,6 @@
 package softuni.fitbook.services.models.workoutPlan;
 
+import softuni.fitbook.common.constants.ValidationConstants;
 import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.services.models.workout.WorkoutServiceModel;
 
@@ -9,13 +10,13 @@ import java.util.List;
 
 public class WorkoutPlanWorkoutServiceModel {
 
-    @NotBlank
+    @NotBlank(message = ValidationConstants.ID_REQUIRED)
     private String id;
 
-    @NotNull
+    @NotNull(message = ValidationConstants.ORDER_INDEX_REQUIRED)
     private Integer orderIndex;
 
-    @NotNull
+    @NotNull(message = ValidationConstants.WORKOUT_REQUIRED)
     private WorkoutServiceModel workout;
     private Integer likesCount;
     private Boolean isLiked;

@@ -1,20 +1,27 @@
 package softuni.fitbook.services.models.dietPlan;
 
+import softuni.fitbook.common.constants.ValidationConstants;
 import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.services.models.CreatorServiceModel;
 
-import javax.validation.constraints.NotBlank;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class DietPlanServiceModel {
 
-    @NotBlank
+    @NotEmpty(message = ValidationConstants.ID_REQUIRED)
     private String id;
-    @NotBlank
+
+    @NotEmpty(message = ValidationConstants.NAME_REQUIRED)
     private String name;
 
-    @NotBlank
+    @NotNull(message = ValidationConstants.STATUS_REQUIRED)
     private Boolean isPublic;
+
+    @Valid
     private List<DietPlanMealServiceModel> meals;
     private CreatorServiceModel creator;
     private Boolean isCopied;

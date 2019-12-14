@@ -13,7 +13,7 @@ public class WorkoutPlanWorkout extends BaseEntity {
     private Workout workout;
     private WorkoutPlan workoutPlan;
 
-    @Column(name = "order_index")
+    @Column(name = "order_index", nullable = false)
     public Integer getOrderIndex() {
         return orderIndex;
     }

@@ -18,7 +18,7 @@ public class MealFood extends BaseEntity {
     public MealFood() {
     }
 
-    @Column(name = "serving")
+    @Column(name = "serving", nullable = false)
     public Integer getServing() {
         return serving;
     }
@@ -27,7 +27,7 @@ public class MealFood extends BaseEntity {
         this.serving = serving;
     }
 
-    @Column(name = "protein_per_serving")
+    @Column(name = "protein_per_serving", nullable = false)
     public Integer getProteinPerServing() {
         return proteinPerServing;
     }
@@ -36,7 +36,7 @@ public class MealFood extends BaseEntity {
         this.proteinPerServing = proteinPerServing;
     }
 
-    @Column(name = "carbohydrates_per_serving")
+    @Column(name = "carbohydrates_per_serving", nullable = false)
     public Integer getCarbohydratesPerServing() {
         return carbohydratesPerServing;
     }
@@ -45,7 +45,7 @@ public class MealFood extends BaseEntity {
         this.carbohydratesPerServing = carbohydratesPerServing;
     }
 
-    @Column(name = "fats_per_serving")
+    @Column(name = "fats_per_serving", nullable = false)
     public Integer getFatsPerServing() {
         return fatsPerServing;
     }

@@ -1,8 +1,10 @@
 package softuni.fitbook.services.models.workoutPlan;
 
+import softuni.fitbook.common.constants.ValidationConstants;
 import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.services.models.CreatorServiceModel;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -12,12 +14,13 @@ public class WorkoutPlanServiceModel {
 
   private String id;
 
-  @NotBlank
+  @NotBlank(message = ValidationConstants.NAME_REQUIRED)
   private String name;
 
-  @NotNull
+  @NotNull(message = ValidationConstants.STATUS_REQUIRED)
   private Boolean isPublic;
 
+  @Valid
   private List<WorkoutPlanWorkoutServiceModel> workouts;
   private CreatorServiceModel creator;
   private Boolean isCopied;

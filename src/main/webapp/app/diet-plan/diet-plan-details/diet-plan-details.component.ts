@@ -10,6 +10,7 @@ import {UserService} from "../../user/user.service";
 import {CommentService} from "../../comment/comment.service";
 import {UserAuthModel} from "../../auth/user-auth.model";
 import {UserModel} from "../../user/user.model";
+import {Title} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-diet-plan-details',
@@ -38,10 +39,13 @@ export class DietPlanDetailsComponent implements OnInit {
                 private commentService: CommentService,
                 private route: ActivatedRoute,
                 private modalService: NgbModal,
-                private router: Router) {
+                private router: Router,
+                private titleService: Title) {
     }
 
     ngOnInit() {
+
+        this.titleService.setTitle( 'FitBook' + '- Diet Plan Details' );
 
         this.dietPlan = new DietPlan();
 

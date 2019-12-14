@@ -4,18 +4,20 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import softuni.fitbook.common.constants.FileUploaderConstants;
 import softuni.fitbook.data.models.Exercise;
 import softuni.fitbook.data.models.Workout;
 import softuni.fitbook.data.models.enumerations.Muscle;
 import softuni.fitbook.data.repositories.WorkoutRepository;
+import softuni.fitbook.services.ValidationService;
 import softuni.fitbook.services.models.exercise.ExerciseCreateServiceModel;
 import softuni.fitbook.services.models.exercise.ExerciseServiceModel;
 import softuni.fitbook.data.repositories.ExerciseRepository;
 import softuni.fitbook.services.ExerciseService;
 import softuni.fitbook.services.EnumParserService;
 import softuni.fitbook.services.FileUploaderService;
+import softuni.fitbook.web.errors.exceptions.NotFoundException;
 
-import javax.validation.Valid;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,20 +30,22 @@ public class ExerciseServiceImpl implements ExerciseService {
     private final WorkoutRepository workoutRepository;
     private final ModelMapper modelMapper;
     private final FileUploaderService fileUploaderService;
+    private final ValidationService validationService;
 
     @Autowired
-    public ExerciseServiceImpl(ExerciseRepository exerciseRepository, WorkoutRepository workoutRepository, ModelMapper modelMapper, FileUploaderService fileUploaderService) {
+    public ExerciseServiceImpl(ExerciseRepository exerciseRepository, WorkoutRepository workoutRepository, ModelMapper modelMapper, FileUploaderService fileUploaderService, ValidationService validationService) {
         this.exerciseRepository = exerciseRepository;
         this.workoutRepository = workoutRepository;
         this.modelMapper = modelMapper;
         this.fileUploaderService = fileUploaderService;
+        this.validationService = validationService;
     }
 
     public ExerciseServiceModel getExerciseById(String id) {
 
         List<Workout> allWorkouts = workoutRepository.findAll();
 
-        Exercise exercise = this.exerciseRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No such exercise found with given ID."));
+        Exercise exercise = this.exerciseRepository.findById(id).orElseThrow(() -> new NotFoundException("No such exercise found with given ID."));
 
         ExerciseServiceModel model = getExerciseServiceModelFromExercise(exercise);
         model.setWorkoutsCounter(getExerciseUsage(allWorkouts, id));
@@ -78,7 +82,9 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public ExerciseServiceModel createExercise(@Valid ExerciseCreateServiceModel model, MultipartFile pictureFile) {
+    public ExerciseServiceModel createExercise(ExerciseCreateServiceModel model, MultipartFile pictureFile) {
+
+        validationService.validate(model);
 
         Exercise exercise = modelMapper.map(model, Exercise.class);
 
@@ -90,7 +96,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         exercise = exerciseRepository.saveAndFlush(exercise);
 
         exercise.setPictureURL(
-                fileUploaderService.getUploadedFileUrl("exercise", exercise.getId(), pictureFile));
+                fileUploaderService.getUploadedFileUrl(FileUploaderConstants.EXERCISES_FOLDER_NAME, exercise.getId(), pictureFile));
 
         exerciseRepository.save(exercise);
 

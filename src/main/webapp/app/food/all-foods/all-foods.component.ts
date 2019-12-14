@@ -6,6 +6,7 @@ import {FoodService} from "../food.service";
 import {MealService} from "../../meal/meal.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Router} from "@angular/router";
+import {Title} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-all-foods',
@@ -33,10 +34,13 @@ export class AllFoodsComponent implements OnInit {
     constructor(private foodService: FoodService,
                 private mealService: MealService,
                 private modalService: NgbModal,
-                private router: Router) {
+                private router: Router,
+                private titleService: Title) {
     }
 
     ngOnInit() {
+
+        this.titleService.setTitle( 'FitBook' + '- All Foods' );
 
         this.mealFoodBindingModel = new MealFoodBindingModel();
 

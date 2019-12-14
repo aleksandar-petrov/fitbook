@@ -19,7 +19,7 @@ public class EraseLogsFromDatabaseScheduleTask {
     }
 
     @Async
-    @Scheduled(cron = "0 0 12 * * FRI") // EVERY FRIDAY AT NOON
+    @Scheduled(cron = "0 0 0 * * FRI") // EVERY FRIDAY AT MIDNIGHT
     void eraseLogsFromDatabase() {
         logService.eraseAllLogs();
     }

@@ -1,25 +1,30 @@
 package softuni.fitbook.services.models.workout;
 
+import softuni.fitbook.common.constants.ValidationConstants;
 import softuni.fitbook.services.models.exercise.ExerciseServiceModel;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 public class WorkoutExerciseServiceModel {
 
-  @NotBlank
+  @NotBlank(message = ValidationConstants.ID_REQUIRED)
   private String id;
 
-  @NotNull
+  @NotNull(message = ValidationConstants.ORDER_INDEX_REQUIRED)
   private Integer orderIndex;
 
-  @NotNull
+  @NotNull(message = ValidationConstants.REPS_REQUIRED)
+  @Positive(message = ValidationConstants.REPS_POSITIVE_NUMBER)
   private Integer reps;
 
-  @NotNull
+  @NotNull(message = ValidationConstants.SETS_REQUIRED)
+  @Positive(message = ValidationConstants.SETS_POSITIVE_NUMBER)
   private Integer sets;
 
-  @NotNull
+  @NotNull(message = ValidationConstants.EXERCISE_REQUIRED)
   private ExerciseServiceModel exercise;
 
   public WorkoutExerciseServiceModel() {

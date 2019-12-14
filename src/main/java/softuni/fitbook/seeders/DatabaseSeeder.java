@@ -1,15 +1,14 @@
 package softuni.fitbook.seeders;
 
 
-import com.cloudinary.Cloudinary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import softuni.fitbook.config.Constants;
+import softuni.fitbook.common.constants.AuthorityConstants;
 import softuni.fitbook.data.models.UserRole;
-import softuni.fitbook.data.repositories.ExerciseRepository;
 import softuni.fitbook.data.repositories.RoleRepository;
+import softuni.fitbook.services.EmailService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,14 +17,18 @@ import java.util.List;
 public class DatabaseSeeder {
 
     private final RoleRepository roleRepository;
+    private final EmailService emailService;
 
     @Autowired
-    public DatabaseSeeder(RoleRepository roleRepository, ExerciseRepository exerciseRepository, Cloudinary cloudinary) {
+    public DatabaseSeeder(RoleRepository roleRepository, EmailService emailService) {
         this.roleRepository = roleRepository;
+        this.emailService = emailService;
     }
 
     @EventListener
     public void seed(ContextRefreshedEvent event) {
+
+
         seedRolesTable();
     }
 
@@ -35,13 +38,13 @@ public class DatabaseSeeder {
 
         if (allRoles.size() == 0) {
             UserRole rootAdmin = new UserRole();
-            rootAdmin.setAuthority(Constants.AUTHORITY_ROOT_ADMIN);
+            rootAdmin.setAuthority(AuthorityConstants.AUTHORITY_ROOT_ADMIN);
             UserRole admin = new UserRole();
-            admin.setAuthority(Constants.AUTHORITY_ADMIN);
+            admin.setAuthority(AuthorityConstants.AUTHORITY_ADMIN);
             UserRole moderator = new UserRole();
-            moderator.setAuthority(Constants.AUTHORITY_MODERATOR);
+            moderator.setAuthority(AuthorityConstants.AUTHORITY_MODERATOR);
             UserRole user = new UserRole();
-            user.setAuthority(Constants.AUTHORITY_USER);
+            user.setAuthority(AuthorityConstants.AUTHORITY_USER);
 
             this.roleRepository.saveAll(Arrays.asList(rootAdmin, admin, moderator, user));
         }

@@ -1,6 +1,7 @@
 package softuni.fitbook.services;
 
 import softuni.fitbook.data.models.Workout;
+import softuni.fitbook.services.models.CommentInfoServiceModel;
 import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.services.models.workout.WorkoutCreateServiceModel;
 import softuni.fitbook.services.models.workout.WorkoutExerciseCreateServiceModel;
@@ -35,7 +36,9 @@ public interface WorkoutService {
 
     WorkoutServiceModel likeWorkout(String workoutId, String username);
 
-    CommentServiceModel commentWorkout(String workoutId, CommentRequestModel model, String username);
+    CommentServiceModel commentWorkout(String workoutId, CommentServiceModel model, String username);
 
     void deleteWorkoutComment(String commentId, String username);
+
+    CommentInfoServiceModel getCommentInfoByWorkoutId(String workoutId, String username);
 }

@@ -21,7 +21,7 @@ public class Workout extends BaseEntity {
   public Workout() {
   }
 
-  @Column(name = "name")
+  @Column(name = "name", nullable = false)
   public String getName() {
     return name;
   }
@@ -30,7 +30,7 @@ public class Workout extends BaseEntity {
     this.name = name;
   }
 
-  @Column(name = "is_public")
+  @Column(name = "is_public", nullable = false)
   public Boolean getIsPublic() {
     return isPublic;
   }
@@ -60,7 +60,7 @@ public class Workout extends BaseEntity {
   }
 
 
-  @Column(name = "is_copied")
+  @Column(name = "is_copied", nullable = false)
   public Boolean getIsCopied() {
     return isCopied;
   }

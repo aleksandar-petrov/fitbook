@@ -60,6 +60,7 @@ import {DietPlanCardComponent} from './diet-plan/diet-plan-card/diet-plan-card.c
 import {NoSelectedDietPlanComponent} from './diet-plan/my-diet-plans/no-selected-diet-plan/no-selected-diet-plan.component';
 import {SelectedDietPlanComponent} from './diet-plan/my-diet-plans/selected-diet-plan/selected-diet-plan.component';
 import {CommentDatePipe} from "./comment/comment-date.pipe";
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
     declarations: [
@@ -112,7 +113,8 @@ import {CommentDatePipe} from "./comment/comment-date.pipe";
         DietPlanCardComponent,
         NoSelectedDietPlanComponent,
         SelectedDietPlanComponent,
-        CommentDatePipe
+        CommentDatePipe,
+        NotFoundComponent
     ],
     imports: [
         BrowserModule,

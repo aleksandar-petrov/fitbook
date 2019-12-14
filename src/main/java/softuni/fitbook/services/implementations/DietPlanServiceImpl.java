@@ -4,24 +4,25 @@ package softuni.fitbook.services.implementations;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import softuni.fitbook.config.Constants;
+import softuni.fitbook.common.constants.AuthorityConstants;
+import softuni.fitbook.common.constants.ErrorConstants;
+import softuni.fitbook.common.constants.TypeConstants;
 import softuni.fitbook.data.models.*;
-import softuni.fitbook.services.models.CommentServiceModel;
-import softuni.fitbook.services.models.CreatorServiceModel;
-
-import softuni.fitbook.services.models.dietPlan.DietPlanCreateServiceModel;
-import softuni.fitbook.services.models.dietPlan.DietPlanMealServiceModel;
-import softuni.fitbook.services.models.dietPlan.DietPlanServiceModel;
 import softuni.fitbook.data.repositories.*;
 import softuni.fitbook.services.DietPlanService;
 import softuni.fitbook.services.FileExporterService;
 import softuni.fitbook.services.MealService;
-import softuni.fitbook.web.controllers.models.request.CommentRequestModel;
+import softuni.fitbook.services.ValidationService;
+import softuni.fitbook.services.models.CommentInfoServiceModel;
+import softuni.fitbook.services.models.CommentServiceModel;
+import softuni.fitbook.services.models.CreatorServiceModel;
+import softuni.fitbook.services.models.dietPlan.DietPlanCreateServiceModel;
+import softuni.fitbook.services.models.dietPlan.DietPlanMealServiceModel;
+import softuni.fitbook.services.models.dietPlan.DietPlanServiceModel;
 import softuni.fitbook.web.errors.exceptions.NoPrivilegesException;
 import softuni.fitbook.web.errors.exceptions.NotFoundException;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -44,9 +45,10 @@ public class DietPlanServiceImpl implements DietPlanService {
     private final DietPlanLikeRepository dietPlanLikeRepository;
     private final DietPlanCommentRepository dietPlanCommentRepository;
     private final RoleRepository roleRepository;
+    private final ValidationService validationService;
 
     @Autowired
-    public DietPlanServiceImpl(DietPlanRepository dietPlanRepository, MealRepository mealRepository, UserProfileRepository userProfileRepository, DietPlanMealRepository dietPlanMealRepository, MealService mealService, UserRepository userRepository, ModelMapper modelMapper, FileExporterService fileExporterService, DietPlanLikeRepository dietPlanLikeRepository, DietPlanCommentRepository dietPlanCommentRepository, RoleRepository roleRepository) {
+    public DietPlanServiceImpl(DietPlanRepository dietPlanRepository, MealRepository mealRepository, UserProfileRepository userProfileRepository, DietPlanMealRepository dietPlanMealRepository, MealService mealService, UserRepository userRepository, ModelMapper modelMapper, FileExporterService fileExporterService, DietPlanLikeRepository dietPlanLikeRepository, DietPlanCommentRepository dietPlanCommentRepository, RoleRepository roleRepository, ValidationService validationService) {
         this.dietPlanRepository = dietPlanRepository;
         this.mealRepository = mealRepository;
         this.userProfileRepository = userProfileRepository;
@@ -58,15 +60,18 @@ public class DietPlanServiceImpl implements DietPlanService {
         this.dietPlanLikeRepository = dietPlanLikeRepository;
         this.dietPlanCommentRepository = dietPlanCommentRepository;
         this.roleRepository = roleRepository;
+        this.validationService = validationService;
     }
 
 
     @Override
-    public DietPlanServiceModel createDietPlan(@Valid DietPlanCreateServiceModel model, String username) {
+    public DietPlanServiceModel createDietPlan(DietPlanCreateServiceModel model, String username) {
+
+        validationService.validate(model);
 
         User user = this.userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME));
 
 
         DietPlan dietPlan = modelMapper.map(model, DietPlan.class);
@@ -97,7 +102,7 @@ public class DietPlanServiceImpl implements DietPlanService {
 
         User user = this.userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME));
 
 
         Meal meal = user.getUserProfile()
@@ -105,14 +110,14 @@ public class DietPlanServiceImpl implements DietPlanService {
                 .stream()
                 .filter(w -> w.getId().equals(mealId))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("No such meal with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_MEAL_WITH_GIVEN_ID));
 
         DietPlan dietPlan = user.getUserProfile()
                 .getDietPlans()
                 .stream()
                 .filter(wp -> wp.getId().equals(dietPlanId))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("No such diet plan with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_DIET_PLAN_WITH_GIVEN_ID));
 
         DietPlanMeal dietPlanMeal = new DietPlanMeal();
         dietPlanMeal.setOrderIndex(dietPlan.getMeals().size() + 1);
@@ -142,7 +147,7 @@ public class DietPlanServiceImpl implements DietPlanService {
     @Override
     public List<DietPlanServiceModel> getAllDietPlansByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."))
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME))
                 .getUserProfile()
                 .getDietPlans()
                 .stream()
@@ -156,20 +161,34 @@ public class DietPlanServiceImpl implements DietPlanService {
 
         User user = this.userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME));
 
         DietPlan dietPlan = user.getUserProfile()
                 .getDietPlans()
                 .stream()
                 .filter(wp -> wp.getId().equals(dietPlanId))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("No such diet plan with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_DIET_PLAN_WITH_GIVEN_ID));
 
         dietPlan.getMeals().forEach(m -> {
             m.setDietPlan(null);
             m.setMeal(null);
             dietPlanMealRepository.delete(m);
         });
+
+        dietPlan.getLikes()
+                .forEach(like -> {
+                    like.setUserProfile(null);
+                    like.setDietPlan(null);
+                    dietPlanLikeRepository.delete(like);
+                });
+
+        dietPlan.getComments()
+                .forEach(comment -> {
+                    comment.setUserProfile(null);
+                    comment.setDietPlan(null);
+                    dietPlanCommentRepository.delete(comment);
+                });
 
 
         user.getUserProfile().getDietPlans().remove(dietPlan);
@@ -181,16 +200,19 @@ public class DietPlanServiceImpl implements DietPlanService {
     }
 
     @Override
-    public DietPlanServiceModel editMyDietPlanById(String dietPlanId, @Valid DietPlanServiceModel model, String username) {
+    public DietPlanServiceModel editMyDietPlanById(String dietPlanId, DietPlanServiceModel model, String username) {
+
+        validationService.validate(model);
+
         DietPlan oldDietPlan = userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."))
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME))
                 .getUserProfile()
                 .getDietPlans()
                 .stream()
                 .filter(wp -> wp.getId().equals(dietPlanId))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("No such diet plan with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_DIET_PLAN_WITH_GIVEN_ID));
 
         DietPlan editedDietPlan = modelMapper.map(model, DietPlan.class);
 
@@ -240,7 +262,7 @@ public class DietPlanServiceImpl implements DietPlanService {
     public List<DietPlanServiceModel> getAllPublicDietPlans(String username) {
 
         List<DietPlanLike> dietPlanLikes = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."))
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME))
                 .getUserProfile()
                 .getDietPlanLikes();
 
@@ -267,10 +289,10 @@ public class DietPlanServiceImpl implements DietPlanService {
     public DietPlanServiceModel copyDietPlanToLoggedUserDietPlans(String dietPlanId, String username) {
         User user = this.userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME));
 
         DietPlan dietPlan = dietPlanRepository.findById(dietPlanId)
-                .orElseThrow(() -> new NotFoundException("No such diet plan with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_DIET_PLAN_WITH_GIVEN_ID));
 
         DietPlan copy = new DietPlan();
 
@@ -315,14 +337,14 @@ public class DietPlanServiceImpl implements DietPlanService {
     public DietPlanServiceModel getDietPlanById(String id, String username) {
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME));
 
         List<DietPlanLike> dietPlanLikes = user.getUserProfile().getDietPlanLikes();
 
 
         DietPlan dietPlan = dietPlanRepository
                 .findById(id)
-                .orElseThrow(() -> new NotFoundException("No such diet plan with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_DIET_PLAN_WITH_GIVEN_ID));
 
 
         DietPlanServiceModel dietPlanServiceModel = mapDietPlanToDietPlanServiceModel(dietPlan);
@@ -336,7 +358,7 @@ public class DietPlanServiceImpl implements DietPlanService {
                     CommentServiceModel comment = modelMapper.map(c, CommentServiceModel.class);
 
                     User commentUser = userRepository.findByUserProfileId(c.getUserProfile().getId())
-                            .orElseThrow(() -> new NotFoundException("No such user profile with given user profile ID."));
+                            .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USER_PROFILE_ID));
 
                     comment.setUsername(commentUser.getUsername());
                     comment.setProfilePictureURL(commentUser.getUserProfile().getProfilePictureURL());
@@ -355,7 +377,7 @@ public class DietPlanServiceImpl implements DietPlanService {
 
         DietPlan dietPlan = dietPlanRepository
                 .findById(dietPlanId)
-                .orElseThrow(() -> new NotFoundException("No such diet plan with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_DIET_PLAN_WITH_GIVEN_ID));
 
         return fileExporterService
                 .exportDietPlanToExcel(
@@ -368,12 +390,12 @@ public class DietPlanServiceImpl implements DietPlanService {
 
         UserProfile userProfile = userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."))
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME))
                 .getUserProfile();
 
         DietPlan dietPlan = dietPlanRepository
                 .findById(dietPlanId)
-                .orElseThrow(() -> new NotFoundException("No such diet plan with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_DIET_PLAN_WITH_GIVEN_ID));
 
         Optional<DietPlanLike> likeOptional = dietPlan.getLikes()
                 .stream()
@@ -413,13 +435,16 @@ public class DietPlanServiceImpl implements DietPlanService {
     }
 
     @Override
-    public CommentServiceModel commentDietPlan(String dietPlanId, CommentRequestModel model, String username) {
+    public CommentServiceModel commentDietPlan(String dietPlanId, CommentServiceModel model, String username) {
+
+        validationService.validate(model);
+
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME));
 
         DietPlan dietPlan = dietPlanRepository
                 .findById(dietPlanId)
-                .orElseThrow(() -> new NotFoundException("No such diet plan with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_DIET_PLAN_WITH_GIVEN_ID));
 
 
         DietPlanComment dietPlanComment = modelMapper.map(model, DietPlanComment.class);
@@ -441,21 +466,21 @@ public class DietPlanServiceImpl implements DietPlanService {
     public void deleteDietPlanComment(String commentId, String username) {
 
         DietPlanComment comment = dietPlanCommentRepository.findById(commentId)
-                .orElseThrow(() -> new NotFoundException("No such comment with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_COMMENT_WITH_GIVEN_ID));
 
-        UserRole moderatorRole = roleRepository.getByAuthority(Constants.AUTHORITY_MODERATOR);
+        UserRole moderatorRole = roleRepository.getByAuthority(AuthorityConstants.AUTHORITY_MODERATOR);
 
         DietPlan dietPlan = comment.getDietPlan();
 
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME));
 
         if (!user.getAuthorities().contains(moderatorRole) &&
                 !dietPlan.getUserProfile().getId().equals(user.getUserProfile().getId()) &&
                 !comment.getUserProfile().getId().equals(user.getUserProfile().getId())) {
 
-            throw new NoPrivilegesException("You do not have privileges to delete this comment.");
+            throw new NoPrivilegesException(ErrorConstants.NO_PRESENT_PRIVILEGES_DELETE_COMMENT);
         }
 
         comment.setUserProfile(null);
@@ -466,13 +491,33 @@ public class DietPlanServiceImpl implements DietPlanService {
 
     }
 
+    @Override
+    public CommentInfoServiceModel getCommentInfoByDietPlanId(String dietPlanId, String username) {
+        DietPlan dietPlan = dietPlanRepository
+                .findById(dietPlanId)
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_DIET_PLAN_WITH_GIVEN_ID));
+
+        User dietPlanOwnerUser = userRepository
+                .findByUserProfileId(dietPlan.getUserProfile().getId())
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USER_PROFILE_ID));
+
+        CommentInfoServiceModel model = new CommentInfoServiceModel();
+        model.setCommentatorUsername(username);
+        model.setOwnerFirstName(dietPlan.getUserProfile().getFirstName());
+        model.setOwnerUsername(dietPlanOwnerUser.getUsername());
+        model.setOwnerEmail(dietPlanOwnerUser.getEmail());
+        model.setEntityType(TypeConstants.DIET_PLAN);
+        model.setEntityName(dietPlan.getName());
+
+        return model;
+    }
 
     private DietPlanServiceModel mapDietPlanToDietPlanServiceModel(DietPlan dietPlan) {
 
         DietPlanServiceModel model = modelMapper.map(dietPlan, DietPlanServiceModel.class);
 
         User user = userRepository.findByUserProfileId(dietPlan.getUserProfile().getId())
-                .orElseThrow(() -> new IllegalArgumentException("No user with given user profile ID."));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USER_PROFILE_ID));
 
         CreatorServiceModel creator = modelMapper.map(user, CreatorServiceModel.class);
 

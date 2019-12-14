@@ -25,4 +25,6 @@ public interface UserService extends UserDetailsService {
   UserServiceModel getByUsername(String username);
 
   boolean editFitnessProfileByUserId(String userId, FitnessProfileServiceModel model);
+
+  boolean userWithGivenUsernameExists(String username);
 }

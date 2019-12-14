@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.web.controllers.models.request.CommentRequestModel;
 import softuni.fitbook.web.controllers.models.request.workout.WorkoutCreateRequestModel;
 import softuni.fitbook.web.controllers.models.request.workout.WorkoutEditRequestModel;
@@ -116,7 +117,7 @@ public class WorkoutController {
     @PostMapping("/comment/{workoutId}")
     public CommentResponseModel commentWorkout(@PathVariable String workoutId, @RequestBody CommentRequestModel model, Principal principal) {
 
-        return modelMapper.map(workoutService.commentWorkout(workoutId, model, principal.getName()), CommentResponseModel.class);
+        return modelMapper.map(workoutService.commentWorkout(workoutId, modelMapper.map(model, CommentServiceModel.class), principal.getName()), CommentResponseModel.class);
 
     }
 

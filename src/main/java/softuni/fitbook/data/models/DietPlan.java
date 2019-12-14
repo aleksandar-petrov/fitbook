@@ -21,7 +21,7 @@ public class DietPlan extends BaseEntity {
     private List<DietPlanLike> likes;
     private List<DietPlanComment> comments;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }
@@ -30,7 +30,7 @@ public class DietPlan extends BaseEntity {
         this.name = name;
     }
 
-    @Column(name = "is_public")
+    @Column(name = "is_public", nullable = false)
     public Boolean getIsPublic() {
         return isPublic;
     }
@@ -59,7 +59,7 @@ public class DietPlan extends BaseEntity {
     }
 
 
-    @Column(name = "is_copied")
+    @Column(name = "is_copied", nullable = false)
     public Boolean getIsCopied() {
         return isCopied;
     }
@@ -68,7 +68,7 @@ public class DietPlan extends BaseEntity {
         isCopied = copied;
     }
 
-    @Column(name = "total_protein")
+    @Column(name = "total_protein", nullable = false)
     public Integer getTotalProtein() {
         return totalProtein;
     }
@@ -77,7 +77,7 @@ public class DietPlan extends BaseEntity {
         this.totalProtein = totalProtein;
     }
 
-    @Column(name = "total_carbohydrates")
+    @Column(name = "total_carbohydrates", nullable = false)
     public Integer getTotalCarbohydrates() {
         return totalCarbohydrates;
     }
@@ -86,7 +86,7 @@ public class DietPlan extends BaseEntity {
         this.totalCarbohydrates = totalCarbohydrates;
     }
 
-    @Column(name = "total_fats")
+    @Column(name = "total_fats", nullable = false)
     public Integer getTotalFats() {
         return totalFats;
     }
@@ -95,7 +95,7 @@ public class DietPlan extends BaseEntity {
         this.totalFats = totalFats;
     }
 
-    @Column(name = "total_calories")
+    @Column(name = "total_calories", nullable = false)
     public Integer getTotalCalories() {
         return totalCalories;
     }

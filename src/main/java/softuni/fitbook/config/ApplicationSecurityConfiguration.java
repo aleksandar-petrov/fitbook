@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import softuni.fitbook.common.constants.AuthorityConstants;
 import softuni.fitbook.services.UserService;
 import softuni.fitbook.web.filters.JwtAuthenticationFilter;
 import softuni.fitbook.web.filters.JwtAuthorizationFilter;
@@ -37,7 +38,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/api/users/register", "/api/users/signin").permitAll()
+                .antMatchers("/api/users/register", "/api/users/signin", "/api/users/exists/*").permitAll()
                 .antMatchers("/",
                 "/favicon.ico",
                 "/**/*.png",
@@ -48,8 +49,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 "/**/*.css",
                 "/**/*.js")
                 .permitAll()
-                .antMatchers("/api/exercises/create").hasAuthority(Constants.AUTHORITY_MODERATOR)
-                .antMatchers("/api/users/all", "/api/users/promote", "/api/users/demote").hasAuthority(Constants.AUTHORITY_ADMIN)
+                .antMatchers("/api/exercises/create").hasAuthority(AuthorityConstants.AUTHORITY_MODERATOR)
+                .antMatchers("/api/users/all", "/api/users/promote", "/api/users/demote").hasAuthority(AuthorityConstants.AUTHORITY_ADMIN)
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))

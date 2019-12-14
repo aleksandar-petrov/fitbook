@@ -123,6 +123,11 @@ export class SelectedDietPlanComponent implements OnInit {
         this.dietPlanService.getLoggedInUserDietPlans().subscribe((dietPlans: DietPlan[]) => {
             if (dietPlans) {
                 this.selectedDietPlan = dietPlans.find(w => w.id === this.dietPlanId);
+
+                if (!this.selectedDietPlan) {
+                    this.router.navigate(['/404']);
+                }
+
                 this.makeChartDataForMacroNutrients();
                 this.loading = false;
             }

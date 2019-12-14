@@ -16,7 +16,7 @@ public class WorkoutExercise extends BaseEntity {
   public WorkoutExercise() {
   }
 
-  @Column(name = "order_index")
+  @Column(name = "order_index", nullable = false)
   public Integer getOrderIndex() {
     return orderIndex;
   }
@@ -25,7 +25,7 @@ public class WorkoutExercise extends BaseEntity {
     this.orderIndex = orderIndex;
   }
 
-  @Column(name = "reps")
+  @Column(name = "reps", nullable = false)
   public Integer getReps() {
     return reps;
   }
@@ -34,7 +34,7 @@ public class WorkoutExercise extends BaseEntity {
     this.reps = reps;
   }
 
-  @Column(name = "sets")
+  @Column(name = "sets", nullable = false)
   public Integer getSets() {
     return sets;
   }

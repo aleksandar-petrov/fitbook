@@ -19,7 +19,7 @@ public class Food extends BaseEntity {
     private Integer caloriesPerHundred;
 
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }
@@ -28,7 +28,7 @@ public class Food extends BaseEntity {
         this.name = name;
     }
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     public String getDescription() {
         return description;
     }
@@ -46,7 +46,7 @@ public class Food extends BaseEntity {
         this.pictureURL = pictureURL;
     }
 
-    @Column(name = "protein_per_hundred")
+    @Column(name = "protein_per_hundred", nullable = false)
     public Integer getProteinPerHundred() {
         return proteinPerHundred;
     }
@@ -55,7 +55,7 @@ public class Food extends BaseEntity {
         this.proteinPerHundred = proteinPerHundred;
     }
 
-    @Column(name = "carbohydrates_per_hundred")
+    @Column(name = "carbohydrates_per_hundred", nullable = false)
     public Integer getCarbohydratesPerHundred() {
         return carbohydratesPerHundred;
     }
@@ -64,7 +64,7 @@ public class Food extends BaseEntity {
         this.carbohydratesPerHundred = carbohydratesPerHundred;
     }
 
-    @Column(name = "fats_per_hundred")
+    @Column(name = "fats_per_hundred", nullable = false)
     public Integer getFatsPerHundred() {
         return fatsPerHundred;
     }
@@ -73,7 +73,7 @@ public class Food extends BaseEntity {
         this.fatsPerHundred = fatsPerHundred;
     }
 
-    @Column(name = "calories_per_hundred")
+    @Column(name = "calories_per_hundred", nullable = false)
     public Integer getCaloriesPerHundred() {
         return caloriesPerHundred;
     }

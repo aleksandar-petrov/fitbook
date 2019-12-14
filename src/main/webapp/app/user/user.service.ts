@@ -37,6 +37,10 @@ export class UserService implements OnInit {
     return this.http.get<UserModel>(`${AppSettings.API_ENDPOINT}/api/users/username/` + username);
   }
 
+  checkIfUserExistsByUsername(username: string) {
+    return this.http.get(`${AppSettings.API_ENDPOINT}/api/users/exists/` + username);
+  }
+
   setFitnessProfileToLoggedInUser(fitnessProfileBindingModel: FitnessProfileBindingModel) {
 
     const headers = new HttpHeaders({

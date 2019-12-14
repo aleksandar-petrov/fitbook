@@ -1,16 +1,18 @@
 package softuni.fitbook.services.models.meal;
 
+import softuni.fitbook.common.constants.ValidationConstants;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class MealFoodCreateServiceModel {
 
-    @NotNull
-    @Min(1)
+    @NotNull(message = ValidationConstants.SERVING_REQUIRED)
+    @Min(value = 1, message = ValidationConstants.SERVING_POSITIVE_NUMBER)
     private Integer serving;
 
-    @NotBlank
+    @NotBlank(message = ValidationConstants.FOOD_ID_REQUIRED)
     private String foodId;
 
     public MealFoodCreateServiceModel() {

@@ -28,7 +28,7 @@ export class CreateExerciseComponent implements OnInit {
   ngOnInit() {
     this.exerciseBindingModel = new ExerciseBindingModel();
     this.assistingMuscleGroupsSelected = new SelectedMuscleGroupsModel();
-    this.titleService.setTitle( this.titleService.getTitle() + '- Create Exercise' );
+    this.titleService.setTitle( 'FitBook' + '- Create Exercise' );
   }
 
   onMuscleClick(muscleType: string): void {

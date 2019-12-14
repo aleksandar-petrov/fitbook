@@ -20,7 +20,7 @@ public class Exercise extends BaseEntity {
     public Exercise() {
     }
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }
@@ -29,7 +29,7 @@ public class Exercise extends BaseEntity {
         this.name = name;
     }
 
-    @Column(name = "instructions", length = 10000)
+    @Column(name = "instructions", nullable = false, length = 10000)
     public String getInstructions() {
         return instructions;
     }
@@ -47,7 +47,7 @@ public class Exercise extends BaseEntity {
         this.pictureURL = pictureURL;
     }
 
-    @Column(name = "youtube_url")
+    @Column(name = "youtube_url", nullable = false)
     public String getYoutubeURL() {
         return youtubeURL;
     }
@@ -57,7 +57,7 @@ public class Exercise extends BaseEntity {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "major_muscle_group")
+    @Column(name = "major_muscle_group", nullable = false)
     public Muscle getMajorMuscleGroup() {
         return majorMuscleGroup;
     }

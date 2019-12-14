@@ -10,6 +10,7 @@ import {UserAuthModel} from "../../auth/user-auth.model";
 import {UserModel} from "../../user/user.model";
 import {AuthService} from "../../auth/auth.service";
 import {UserService} from "../../user/user.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-meal-details',
@@ -34,10 +35,13 @@ export class MealDetailsComponent implements OnInit {
                 private commentService: CommentService,
                 private route: ActivatedRoute,
                 private modalService: NgbModal,
-                private router: Router) {
+                private router: Router,
+                private titleService: Title) {
     }
 
     ngOnInit() {
+
+        this.titleService.setTitle( 'FitBook' + '- Meal Details' );
 
         this.meal = new Meal();
 

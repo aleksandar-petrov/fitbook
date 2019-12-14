@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../user/user.service';
 import {FitnessProfileBindingModel} from './fitness-profile-binding.model';
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-create-fitness-profile',
@@ -16,10 +17,12 @@ export class CreateFitnessProfileComponent implements OnInit {
   fitnessProfileBindingModel: FitnessProfileBindingModel;
 
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private titleService: Title) {
   }
 
   ngOnInit() {
+
+    this.titleService.setTitle( 'FitBook' + '- Create Fitness Profile' );
 
     this.fitnessProfileBindingModel = new FitnessProfileBindingModel();
 

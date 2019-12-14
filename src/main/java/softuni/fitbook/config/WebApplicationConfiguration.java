@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import softuni.fitbook.web.interceptors.CommentInterceptor;
 import softuni.fitbook.web.interceptors.LoggingInterceptor;
 
 @Configuration
@@ -18,10 +19,12 @@ import softuni.fitbook.web.interceptors.LoggingInterceptor;
 public class WebApplicationConfiguration implements WebMvcConfigurer {
 
     private final LoggingInterceptor loggingInterceptor;
+    private final CommentInterceptor commentInterceptor;
 
     @Autowired
-    public WebApplicationConfiguration(LoggingInterceptor loggingInterceptor) {
+    public WebApplicationConfiguration(LoggingInterceptor loggingInterceptor, CommentInterceptor commentInterceptor) {
         this.loggingInterceptor = loggingInterceptor;
+        this.commentInterceptor = commentInterceptor;
     }
 
     @Override
@@ -34,6 +37,12 @@ public class WebApplicationConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loggingInterceptor);
+        registry.addInterceptor(commentInterceptor)
+                .addPathPatterns("/api/workouts/comment/*",
+                        "/api/workout-plans/comment/*",
+                        "/api/meals/comment/*",
+                        "/api/diet-plans/comment/*");
+
     }
 
     @Bean

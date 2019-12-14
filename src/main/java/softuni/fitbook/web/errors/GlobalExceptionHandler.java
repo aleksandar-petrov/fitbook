@@ -5,8 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import softuni.fitbook.web.errors.exceptions.BaseCustomException;
+import softuni.fitbook.web.errors.exceptions.base.BaseCustomException;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,27 +17,26 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<CustomError> handleException(Exception exception) {
+    public ResponseEntity<ErrorResponseModel> handleException(Exception exception) {
 
-        CustomError customError;
+        ErrorResponseModel errorResponseModel;
 
-        if (exception instanceof BaseCustomException) {
-            customError = new CustomError(((BaseCustomException) exception).getStatusCode(), List.of(exception.getMessage()));
-        } else if (exception instanceof MethodArgumentNotValidException) {
+        if (BaseCustomException.class.isAssignableFrom(exception.getClass())) {
+            errorResponseModel = new ErrorResponseModel(((BaseCustomException) exception).getStatusCode(), List.of(exception.getMessage()));
+        } else if (exception instanceof ConstraintViolationException) {
 
-            List<String> errors = ((MethodArgumentNotValidException) exception).getBindingResult()
-                    .getFieldErrors()
+            List<String> errors = ((ConstraintViolationException) exception).getConstraintViolations()
                     .stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .map(ConstraintViolation::getMessage)
                     .collect(Collectors.toList());
 
-            customError = new CustomError(400, errors);
+            errorResponseModel = new ErrorResponseModel(400, errors);
 
         } else {
-            customError = new CustomError(500, List.of(exception.getMessage()));
+            errorResponseModel = new ErrorResponseModel(500, List.of(exception.getMessage()));
         }
 
-        return ResponseEntity.status(customError.getStatus()).body(customError);
+        return ResponseEntity.status(errorResponseModel.getStatus()).body(errorResponseModel);
     }
 
 }

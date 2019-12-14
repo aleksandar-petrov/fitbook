@@ -1,4 +1,4 @@
-package softuni.fitbook.web.errors.exceptions;
+package softuni.fitbook.web.errors.exceptions.base;
 
 public class BaseCustomException extends RuntimeException {
 
@@ -6,6 +6,7 @@ public class BaseCustomException extends RuntimeException {
 
     public BaseCustomException(String message, Integer statusCode) {
         super(message);
+        this.statusCode = statusCode;
     }
 
     public Integer getStatusCode() {

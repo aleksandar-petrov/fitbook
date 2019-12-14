@@ -3,6 +3,7 @@ import {SigninBindingModel} from './signin-binding.model';
 import {HttpErrorResponse} from '@angular/common/http';
 import {AuthService} from '../../auth/auth.service';
 import {Router} from '@angular/router';
+import {Title} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-signin',
@@ -17,10 +18,12 @@ export class SigninComponent implements OnInit {
     rememberMe = false;
     errorOccurred = false;
 
-    constructor(private authService: AuthService, private router: Router) {
+    constructor(private authService: AuthService, private router: Router, private titleService: Title) {
     }
 
     ngOnInit() {
+
+        this.titleService.setTitle( 'FitBook' + '- Sign In' );
 
         this.signInBindingModel = new SigninBindingModel();
     }

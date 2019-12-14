@@ -3,6 +3,7 @@ import {FitnessProfileBindingModel} from "../create-fitness-profile/fitness-prof
 import {UserService} from "../../user/user.service";
 import {FitnessProfileModel} from "../../user/fitness-profile.model";
 import {Router} from "@angular/router";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-edit-fitness-profile',
@@ -18,10 +19,13 @@ export class EditFitnessProfileComponent implements OnInit {
   currentFitnessProfile: FitnessProfileModel;
   private formChanged = false;
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private userService: UserService, private router: Router, private titleService: Title) {
+
   }
 
   ngOnInit() {
+
+    this.titleService.setTitle( 'FitBook' + '- Edit Fitness Profile' );
 
     this.fitnessProfileBindingModel = new FitnessProfileBindingModel();
 

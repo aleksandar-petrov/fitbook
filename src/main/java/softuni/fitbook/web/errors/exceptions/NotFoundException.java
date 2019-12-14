@@ -1,7 +1,6 @@
 package softuni.fitbook.web.errors.exceptions;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import softuni.fitbook.web.errors.exceptions.base.BaseCustomException;
 
 public class NotFoundException extends BaseCustomException {
 

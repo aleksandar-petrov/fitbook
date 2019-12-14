@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../user/user.service';
 import {UserModel} from '../../user/user.model';
 import {FitnessProfileModel} from '../../user/fitness-profile.model';
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-my-profile',
@@ -18,10 +19,12 @@ export class MyProfileComponent implements OnInit {
   macroNutrientsData: any[];
   activeEntries: any[];
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private titleService: Title) {
   }
 
   ngOnInit() {
+
+    this.titleService.setTitle( 'FitBook' + '- Home' );
 
     this.loading = true;
 

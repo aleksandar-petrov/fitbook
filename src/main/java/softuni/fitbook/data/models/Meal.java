@@ -24,7 +24,7 @@ public class Meal extends BaseEntity {
     public Meal() {
     }
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }
@@ -33,7 +33,7 @@ public class Meal extends BaseEntity {
         this.name = name;
     }
 
-    @Column(name = "is_public")
+    @Column(name = "is_public", nullable = false)
     public Boolean getIsPublic() {
         return isPublic;
     }
@@ -62,7 +62,7 @@ public class Meal extends BaseEntity {
         this.userProfile = userProfile;
     }
 
-    @Column(name = "is_copied")
+    @Column(name = "is_copied", nullable = false)
     public Boolean getIsCopied() {
         return isCopied;
     }
@@ -71,7 +71,7 @@ public class Meal extends BaseEntity {
         this.isCopied = isCopied;
     }
 
-    @Column(name = "total_protein")
+    @Column(name = "total_protein", nullable = false)
     public Integer getTotalProtein() {
         return totalProtein;
     }
@@ -80,7 +80,7 @@ public class Meal extends BaseEntity {
         this.totalProtein = totalProtein;
     }
 
-    @Column(name = "total_carbohydrates")
+    @Column(name = "total_carbohydrates", nullable = false)
     public Integer getTotalCarbohydrates() {
         return totalCarbohydrates;
     }
@@ -89,7 +89,7 @@ public class Meal extends BaseEntity {
         this.totalCarbohydrates = totalCarbohydrates;
     }
 
-    @Column(name = "total_fats")
+    @Column(name = "total_fats", nullable = false)
     public Integer getTotalFats() {
         return totalFats;
     }
@@ -98,7 +98,7 @@ public class Meal extends BaseEntity {
         this.totalFats = totalFats;
     }
 
-    @Column(name = "total_calories")
+    @Column(name = "total_calories", nullable = false)
     public Integer getTotalCalories() {
         return totalCalories;
     }

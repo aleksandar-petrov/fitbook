@@ -38,6 +38,7 @@ import {LoggedGuard} from "./home/logged.guard";
 import {ModeratorGuard} from "./auth/moderator.guard";
 import {AdminGuard} from "./auth/admin.guard";
 import {FitnessProfileGuard} from "./home/fitness-profile.guard";
+import {NotFoundComponent} from "./not-found/not-found.component";
 
 
 const appRoutes: Routes = [
@@ -82,7 +83,9 @@ const appRoutes: Routes = [
     {path: 'foods/all', component: AllFoodsComponent, canActivate: [AuthGuard, FitnessProfileGuard, FitnessProfileGuard]},
     {path: 'foods/details/:id', component: FoodDetailsComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
     {path: 'profile/:username', component: UserProfileComponent, canActivate: [AuthGuard, FitnessProfileGuard]},
-    {path: 'admin-panel', component: AdminPanelComponent, canActivate: [AdminGuard, FitnessProfileGuard]}
+    {path: 'admin-panel', component: AdminPanelComponent, canActivate: [AdminGuard, FitnessProfileGuard]},
+    {path: '404', component: NotFoundComponent},
+    {path: '**', redirectTo: '/404'}
 ];
 
 @NgModule({

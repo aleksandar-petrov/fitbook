@@ -138,6 +138,7 @@
     </ng-template>
 
 
+    <form #editForm="ngForm">
     <h2 *ngIf="!editMode" class="pt-3 font-weight-light">{{selectedDietPlan.name}}</h2>
     <div class="py-3 mx-auto col-5" *ngIf="editMode"><input type="text" value="{{editDietPlanBindingModel.name}}"
                                                             class="form-control form-control-lg text-center"
@@ -157,6 +158,8 @@
             <option [ngValue]="false">Private</option>
         </select>
     </div>
+
+    </form>
     <button *ngIf="!editMode" type="button" routerLink="/diet-plans/details/{{dietPlanId}}"
             class="btn btn-dark mb-2"><i class="fas fa-share-alt"></i></button>
 
@@ -313,7 +316,7 @@
             </tr>
         </table>
 
-        <div class="nutrition-goal">
+        <div class="nutrition-goal" *ngIf="editDietPlanBindingModel.meals && editDietPlanBindingModel.meals.length">
             <table class="table table-hover table-borderless mb-4">
                 <tbody>
                 <tr>
@@ -384,7 +387,7 @@
 
 
     <div class="meal-actions-edit" *ngIf="editMode">
-        <button type="link" class="btn btn-success my-3 mx-2" (click)="onSaveHandler()">
+        <button type="link" [disabled]="editForm.invalid" class="btn btn-success my-3 mx-2" (click)="onSaveHandler()">
             Save
         </button>
         <button type="link" class="btn btn-danger my-3 mx-2" routerLink="./">Cancel</button>

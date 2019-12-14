@@ -6,6 +6,7 @@ import {Food} from "../food.model";
 import {MealFoodBindingModel} from "../../meal/meal-food-binding-model";
 import {Meal} from "../../meal/meal.model";
 import {MealService} from "../../meal/meal.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-food-details',
@@ -29,10 +30,13 @@ export class FoodDetailsComponent implements OnInit {
               private route: ActivatedRoute,
               private modalService: NgbModal,
               private mealService: MealService,
-              private router: Router) {
+              private router: Router,
+              private titleService: Title) {
   }
 
   ngOnInit() {
+
+    this.titleService.setTitle( 'FitBook' + '- Food Details' );
 
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {

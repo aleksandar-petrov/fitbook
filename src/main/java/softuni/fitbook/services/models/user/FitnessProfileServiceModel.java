@@ -1,12 +1,35 @@
 package softuni.fitbook.services.models.user;
 
+import softuni.fitbook.common.constants.ValidationConstants;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class FitnessProfileServiceModel {
+
+    @NotNull(message = ValidationConstants.WEIGHT_REQUIRED)
+    @Min(value = 1, message = ValidationConstants.WEIGHT_POSITIVE_NUMBER)
     private Integer weight;
+
+    @NotNull(message = ValidationConstants.HEIGHT_REQUIRED)
+    @Min(value = 1, message = ValidationConstants.HEIGHT_POSITIVE_NUMBER)
     private Integer height;
+
+    @NotNull(message = ValidationConstants.AGE_REQUIRED)
+    @Min(value = 1, message = ValidationConstants.AGE_POSITIVE_NUMBER)
     private Integer age;
+
+    @NotBlank(message = ValidationConstants.SPORT_EXPERIENCE_REQUIRED)
     private String sportsExperience;
+
+    @NotBlank(message = ValidationConstants.ACTIVITY_LEVEL_REQUIRED)
     private String activityLevel;
+
+    @NotBlank(message = ValidationConstants.WEIGHT_GOAL_REQUIRED)
     private String weightGoal;
+
+    @NotBlank(message = ValidationConstants.WEIGHT_CHANGE_RATE_REQUIRED)
     private String weightChangeRate;
     private NutritionGoalServiceModel nutritionGoal;
 

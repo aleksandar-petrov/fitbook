@@ -1,6 +1,7 @@
 package softuni.fitbook.services;
 
 import softuni.fitbook.data.models.Meal;
+import softuni.fitbook.services.models.CommentInfoServiceModel;
 import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.services.models.meal.MealCreateServiceModel;
 import softuni.fitbook.services.models.meal.MealFoodCreateServiceModel;
@@ -35,7 +36,9 @@ public interface MealService {
 
     MealServiceModel likeMeal(String mealId, String username);
 
-    CommentServiceModel commentMeal(String mealId, CommentRequestModel model, String username);
+    CommentServiceModel commentMeal(String mealId, CommentServiceModel model, String username);
 
     void deleteMealComment(String commentId, String username);
+
+    CommentInfoServiceModel getCommentInfoByMealId(String mealId, String username);
 }

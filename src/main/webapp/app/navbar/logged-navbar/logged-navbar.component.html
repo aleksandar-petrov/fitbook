@@ -49,7 +49,7 @@
         <a class="nav-link" routerLink="/foods/create">Create Food</a>
       </li>
       <li class="nav-item d-lg-none">
-        <a class="nav-link" href="#">Edit Profile</a>
+        <a class="nav-link" routerLink="/fitness-profile/edit">Edit Fitness Profile</a>
       </li>
       <li class="nav-item d-lg-none">
         <a class="nav-link" style="cursor: pointer" (click)="onLogout()">Log Out</a>
@@ -72,8 +72,7 @@
               width="60" height="60" class="rounded-circle">
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Dashboard</a>
-            <a class="dropdown-item" href="#">Edit Profile</a>
+            <a class="dropdown-item" routerLink="/fitness-profile/edit">Edit Fitness Profile</a>
             <a class="dropdown-item" (click)="onLogout()">Log Out</a>
           </div>
         </li>

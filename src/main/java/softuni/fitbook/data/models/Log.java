@@ -19,7 +19,7 @@ public class Log extends BaseEntity {
     public Log() {
     }
 
-    @Column(name = "request_uri")
+    @Column(name = "request_uri", nullable = false)
     public String getRequestURI() {
         return requestURI;
     }
@@ -28,7 +28,7 @@ public class Log extends BaseEntity {
         this.requestURI = requestURI;
     }
 
-    @Column(name = "method")
+    @Column(name = "method", nullable = false)
     public String getMethod() {
         return method;
     }
@@ -37,7 +37,7 @@ public class Log extends BaseEntity {
         this.method = method;
     }
 
-    @Column(name = "date_time")
+    @Column(name = "date_time", nullable = false)
     public LocalDateTime getDateTime() {
         return dateTime;
     }
@@ -46,7 +46,7 @@ public class Log extends BaseEntity {
         this.dateTime = dateTime;
     }
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     public String getUsername() {
         return username;
     }

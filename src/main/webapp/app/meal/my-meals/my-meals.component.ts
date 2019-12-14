@@ -6,6 +6,7 @@ import {filter} from "rxjs/operators";
 import {Meal} from "../meal.model";
 import {MealBindingModel} from "../meal-binding-model";
 import {MealService} from "../meal.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-my-meals',
@@ -19,10 +20,17 @@ export class MyMealsComponent implements OnInit {
     mealBindingModel: MealBindingModel;
     loggedUserId: string;
 
-    constructor(private modalService: NgbModal, private mealService: MealService, private authService: AuthService, private router: Router, private route: ActivatedRoute) {
+    constructor(private modalService: NgbModal,
+                private mealService: MealService,
+                private authService: AuthService,
+                private router: Router,
+                private route: ActivatedRoute,
+                private titleService: Title) {
     }
 
     ngOnInit() {
+
+        this.titleService.setTitle( 'FitBook' + '- My Meals' );
 
         this.router.events.pipe(
             filter((event: RouterEvent) => event instanceof NavigationEnd)

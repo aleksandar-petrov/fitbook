@@ -7,20 +7,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
-import softuni.fitbook.config.Constants;
+import softuni.fitbook.common.constants.AuthorityConstants;
+import softuni.fitbook.common.constants.EmailTemplateConstants;
+import softuni.fitbook.common.constants.ErrorConstants;
+import softuni.fitbook.common.constants.FileUploaderConstants;
 import softuni.fitbook.data.models.*;
 import softuni.fitbook.data.models.enumerations.*;
+import softuni.fitbook.services.*;
 import softuni.fitbook.services.models.user.AllUsersUserServiceModel;
 import softuni.fitbook.services.models.user.FitnessProfileServiceModel;
 import softuni.fitbook.services.models.user.UserServiceModel;
 import softuni.fitbook.data.repositories.*;
-import softuni.fitbook.services.UserService;
-import softuni.fitbook.services.EnumParserService;
-import softuni.fitbook.services.FileUploaderService;
 import softuni.fitbook.web.errors.exceptions.NotFoundException;
 
-import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserProfileRepository userProfileRepository;
 
-    private final NutritionGoalRepository nutritionGoalRepository;
+    private final EmailService emailService;
 
     private final FitnessProfileRepository fitnessProfileRepository;
 
@@ -44,49 +45,52 @@ public class UserServiceImpl implements UserService {
 
     private final FileUploaderService fileUploaderService;
 
+    private final ValidationService validationService;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserProfileRepository userProfileRepository, NutritionGoalRepository nutritionGoalRepository, FitnessProfileRepository fitnessProfileRepository, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPasswordEncoder, FileUploaderService fileUploaderService) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserProfileRepository userProfileRepository, EmailService emailService, FitnessProfileRepository fitnessProfileRepository, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPasswordEncoder, FileUploaderService fileUploaderService, ValidationService validationService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userProfileRepository = userProfileRepository;
-        this.nutritionGoalRepository = nutritionGoalRepository;
+        this.emailService = emailService;
         this.fitnessProfileRepository = fitnessProfileRepository;
         this.modelMapper = modelMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.fileUploaderService = fileUploaderService;
+        this.validationService = validationService;
     }
 
     private Set<UserRole> getAllRolesForAuthority(String authority) {
 
-        UserRole user = roleRepository.getByAuthority(Constants.AUTHORITY_USER);
-        UserRole moderator = roleRepository.getByAuthority(Constants.AUTHORITY_MODERATOR);
-        UserRole admin = roleRepository.getByAuthority(Constants.AUTHORITY_ADMIN);
-        UserRole rootAdmin = roleRepository.getByAuthority(Constants.AUTHORITY_ROOT_ADMIN);
+        UserRole user = roleRepository.getByAuthority(AuthorityConstants.AUTHORITY_USER);
+        UserRole moderator = roleRepository.getByAuthority(AuthorityConstants.AUTHORITY_MODERATOR);
+        UserRole admin = roleRepository.getByAuthority(AuthorityConstants.AUTHORITY_ADMIN);
+        UserRole rootAdmin = roleRepository.getByAuthority(AuthorityConstants.AUTHORITY_ROOT_ADMIN);
 
         switch (authority) {
-            case Constants.AUTHORITY_USER:
+            case AuthorityConstants.AUTHORITY_USER:
                 return new HashSet<>(Set.of(user));
-            case Constants.AUTHORITY_MODERATOR:
+            case AuthorityConstants.AUTHORITY_MODERATOR:
                 return new HashSet<>(Set.of(user, moderator));
-            case Constants.AUTHORITY_ADMIN:
+            case AuthorityConstants.AUTHORITY_ADMIN:
                 return new HashSet<>(Set.of(user, moderator, admin));
-            case Constants.AUTHORITY_ROOT_ADMIN:
+            case AuthorityConstants.AUTHORITY_ROOT_ADMIN:
                 return new HashSet<>(Set.of(user, moderator, admin, rootAdmin));
             default:
-                throw new IllegalArgumentException("No such role with given authority.");
+                throw new IllegalArgumentException(ErrorConstants.NO_SUCH_ROLE_WITH_GIVEN_AUTHORITY);
         }
     }
 
     private String getUserAuthority(String userId) {
 
-        UserRole user = roleRepository.getByAuthority(Constants.AUTHORITY_USER);
-        UserRole moderator = roleRepository.getByAuthority(Constants.AUTHORITY_MODERATOR);
-        UserRole admin = roleRepository.getByAuthority(Constants.AUTHORITY_ADMIN);
-        UserRole rootAdmin = roleRepository.getByAuthority(Constants.AUTHORITY_ROOT_ADMIN);
+        UserRole user = roleRepository.getByAuthority(AuthorityConstants.AUTHORITY_USER);
+        UserRole moderator = roleRepository.getByAuthority(AuthorityConstants.AUTHORITY_MODERATOR);
+        UserRole admin = roleRepository.getByAuthority(AuthorityConstants.AUTHORITY_ADMIN);
+        UserRole rootAdmin = roleRepository.getByAuthority(AuthorityConstants.AUTHORITY_ROOT_ADMIN);
 
         Set<UserRole> authorities = userRepository
                 .findById(userId)
-                .orElseThrow(() -> new NotFoundException("No such user with given ID."))
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_ID))
                 .getAuthorities();
 
         if (authorities.contains(rootAdmin)) {
@@ -98,12 +102,15 @@ public class UserServiceImpl implements UserService {
         } else if (authorities.contains(user)) {
             return user.getAuthority();
         } else {
-            throw new IllegalArgumentException("No such role");
+            throw new IllegalArgumentException(ErrorConstants.NO_SUCH_ROLE);
         }
     }
 
     @Override
-    public boolean createUser(@Valid UserServiceModel userServiceModel, MultipartFile file) {
+    public boolean createUser(UserServiceModel userServiceModel, MultipartFile file) {
+
+        validationService.validate(userServiceModel);
+
         User userEntity = modelMapper.map(userServiceModel, User.class);
         UserProfile userProfileEntity = modelMapper.map(userServiceModel, UserProfile.class);
 
@@ -115,19 +122,20 @@ public class UserServiceImpl implements UserService {
 
         if (userRepository.findAll().isEmpty()) {
 
-            userEntity.setAuthorities(getAllRolesForAuthority(Constants.AUTHORITY_ROOT_ADMIN));
+            userEntity.setAuthorities(getAllRolesForAuthority(AuthorityConstants.AUTHORITY_ROOT_ADMIN));
         } else {
-            userEntity.setAuthorities(getAllRolesForAuthority(Constants.AUTHORITY_USER));
+            userEntity.setAuthorities(getAllRolesForAuthority(AuthorityConstants.AUTHORITY_USER));
         }
         try {
             userEntity = this.userRepository.saveAndFlush(userEntity);
-            String uploadedFileUrl = this.fileUploaderService.getUploadedFileUrl("users", userEntity.getId(), file);
+            String uploadedFileUrl = this.fileUploaderService.getUploadedFileUrl(FileUploaderConstants.USERS_FOLDER_NAME, userEntity.getId(), file);
             userEntity.getUserProfile().setProfilePictureURL(uploadedFileUrl);
             this.userRepository.saveAndFlush(userEntity);
         } catch (Exception ignored) {
-
             return false;
         }
+
+        emailService.sendMessage(userEntity.getEmail(), EmailTemplateConstants.WELCOME_SUBJECT, String.format(EmailTemplateConstants.WELCOME_TEMPLATE, userEntity.getUserProfile().getFirstName()));
 
         return true;
     }
@@ -153,20 +161,20 @@ public class UserServiceImpl implements UserService {
     public AllUsersUserServiceModel promoteUser(String id) {
         User user = userRepository
                 .findById(id)
-                .orElseThrow(() -> new NotFoundException("No such user with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_ID));
 
 
         String userAuthority = getUserAuthority(user.getId());
 
         switch (userAuthority) {
-            case Constants.AUTHORITY_USER:
-                user.setAuthorities(getAllRolesForAuthority(Constants.AUTHORITY_MODERATOR));
+            case AuthorityConstants.AUTHORITY_USER:
+                user.setAuthorities(getAllRolesForAuthority(AuthorityConstants.AUTHORITY_MODERATOR));
                 break;
-            case Constants.AUTHORITY_MODERATOR:
-                user.setAuthorities(getAllRolesForAuthority(Constants.AUTHORITY_ADMIN));
+            case AuthorityConstants.AUTHORITY_MODERATOR:
+                user.setAuthorities(getAllRolesForAuthority(AuthorityConstants.AUTHORITY_ADMIN));
                 break;
             default:
-                throw new IllegalArgumentException("There is no role higher than ADMIN");
+                throw new IllegalArgumentException(ErrorConstants.NO_HIGHER_PROMOTABLE_ROLE);
         }
 
         user = userRepository.save(user);
@@ -179,29 +187,29 @@ public class UserServiceImpl implements UserService {
     public AllUsersUserServiceModel demoteUser(String id, String adminUserName) {
         User user = userRepository
                 .findById(id)
-                .orElseThrow(() -> new NotFoundException("No such user with given ID."));
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_ID));
 
         String adminAuthority = getUserAuthority(userRepository
                 .findByUsername(adminUserName)
-                .orElseThrow(() -> new NotFoundException("No such user with given username."))
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME))
                 .getId());
 
         String userAuthority = getUserAuthority(user.getId());
 
         switch (userAuthority) {
-            case Constants.AUTHORITY_ROOT_ADMIN:
-                throw new IllegalArgumentException("ROOT ADMIN cannot be demoted.");
-            case Constants.AUTHORITY_ADMIN:
-                if (adminAuthority.equals(Constants.AUTHORITY_ADMIN)) {
-                    throw new IllegalArgumentException("ADMIN cannot be demoted by other ADMIN.");
+            case AuthorityConstants.AUTHORITY_ROOT_ADMIN:
+                throw new IllegalArgumentException(ErrorConstants.ROOT_ADMIN_CANNOT_BE_DEMOTED);
+            case AuthorityConstants.AUTHORITY_ADMIN:
+                if (adminAuthority.equals(AuthorityConstants.AUTHORITY_ADMIN)) {
+                    throw new IllegalArgumentException(ErrorConstants.ADMIN_DEMOTE_CONFLICT);
                 }
-                user.setAuthorities(getAllRolesForAuthority(Constants.AUTHORITY_MODERATOR));
+                user.setAuthorities(getAllRolesForAuthority(AuthorityConstants.AUTHORITY_MODERATOR));
                 break;
-            case Constants.AUTHORITY_MODERATOR:
-                user.setAuthorities(getAllRolesForAuthority(Constants.AUTHORITY_USER));
+            case AuthorityConstants.AUTHORITY_MODERATOR:
+                user.setAuthorities(getAllRolesForAuthority(AuthorityConstants.AUTHORITY_USER));
                 break;
             default:
-                throw new IllegalArgumentException("There is no role lower than USER");
+                throw new IllegalArgumentException(ErrorConstants.USER_DEMOTE);
         }
 
         user = userRepository.save(user);
@@ -211,25 +219,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository
+        return userRepository
                 .findByUsername(username)
-                .orElse(null);
-
-        if (user == null) throw new NotFoundException("No such user.");
-
-        return user;
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME));
     }
 
     @Override
     public UserServiceModel getById(String id) {
 
-        User user = userRepository.findById(id).orElseThrow();
+        User user = userRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_ID));
 
         return getUserServiceModelFromUser(user);
     }
 
     @Override
     public boolean setFitnessProfileToUser(String userId, FitnessProfileServiceModel model) {
+
+        validationService.validate(model);
 
         try {
 
@@ -292,7 +300,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserServiceModel getByUsername(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("No such user with given username."));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_USER_WITH_GIVEN_USERNAME));
         return getUserServiceModelFromUser(user);
     }
 
@@ -315,6 +323,13 @@ public class UserServiceImpl implements UserService {
         }
 
         return fitnessProfile;
+
+    }
+
+    @Override
+    public boolean userWithGivenUsernameExists(String username) {
+
+        return userRepository.findByUsername(username).isPresent();
 
     }
 

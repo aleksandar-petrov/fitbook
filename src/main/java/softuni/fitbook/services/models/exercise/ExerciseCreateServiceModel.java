@@ -1,22 +1,24 @@
 package softuni.fitbook.services.models.exercise;
 
+import softuni.fitbook.common.constants.ValidationConstants;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Set;
 
 public class ExerciseCreateServiceModel {
 
-    @NotBlank
+    @NotBlank(message = ValidationConstants.NAME_REQUIRED)
     private String name;
 
-    @NotBlank
+    @NotBlank(message = ValidationConstants.INSTRUCTIONS_REQUIRED)
     private String instructions;
 
-    @NotBlank
-    @Pattern(regexp = "http(?:s?)://(?:www\\.)?youtu(?:be\\.com/watch\\?v=|\\.be/)([\\w\\-_]*)(&(amp;)?[\\w?\u200C\u200B=]*)?")
+    @NotBlank(message = ValidationConstants.YOUTUBE_LINK_REQUIRED)
+    @Pattern(regexp = ValidationConstants.YOUTUBE_LINK_PATTERN, message = ValidationConstants.YOUTUBE_LINK_VALID)
     private String youtubeURL;
 
-    @NotBlank
+    @NotBlank(message = ValidationConstants.MAJOR_MUSCLE_GROUP_REQUIRED)
     private String majorMuscleGroup;
     private Set<String> assistingMuscleGroups;
 

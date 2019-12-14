@@ -3,6 +3,7 @@ import {AdminService} from "./admin.service";
 import {AllUserModel} from "./all-user.model";
 import {AuthService} from "../auth/auth.service";
 import {UserAuthModel} from "../auth/user-auth.model";
+import {Title} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-admin-panel',
@@ -19,7 +20,9 @@ export class AdminPanelComponent implements OnInit {
     page: number = 1;
     pageSize: number = 6;
 
-    constructor(private adminService: AdminService, private authService: AuthService) {
+    constructor(private adminService: AdminService, private authService: AuthService, private titleService: Title) {
+
+        this.titleService.setTitle( 'FitBook' + '- Admin Panel' );
     }
 
     ngOnInit() {

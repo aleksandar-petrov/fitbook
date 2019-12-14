@@ -6,6 +6,7 @@ import {ActivatedRoute, NavigationEnd, Params, Router, RouterEvent} from "@angul
 import {WorkoutPlanService} from "../workout-plan.service";
 import {WorkoutPlan} from "../workout-plan.model";
 import {filter} from "rxjs/operators";
+import {Title} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-my-workout-plans',
@@ -23,10 +24,12 @@ export class MyWorkoutPlansComponent implements OnInit {
                 private authService: AuthService,
                 private router: Router,
                 private route: ActivatedRoute,
-                private workoutPlanService: WorkoutPlanService) {
+                private workoutPlanService: WorkoutPlanService, private titleService: Title) {
     }
 
     ngOnInit() {
+
+        this.titleService.setTitle( 'FitBook' + '- My Workout Plans' );
 
         this.router.events.pipe(
             filter((event: RouterEvent) => event instanceof NavigationEnd)

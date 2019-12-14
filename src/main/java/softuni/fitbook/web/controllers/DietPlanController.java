@@ -3,6 +3,7 @@ package softuni.fitbook.web.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 import softuni.fitbook.services.DietPlanService;
+import softuni.fitbook.services.models.CommentServiceModel;
 import softuni.fitbook.services.models.dietPlan.DietPlanCreateServiceModel;
 import softuni.fitbook.services.models.dietPlan.DietPlanServiceModel;
 import softuni.fitbook.web.controllers.models.request.CommentRequestModel;
@@ -110,7 +111,7 @@ public class DietPlanController {
     @PostMapping("/comment/{dietPlanId}")
     public CommentResponseModel commentDietPlan(@PathVariable String dietPlanId, @RequestBody CommentRequestModel model, Principal principal) {
 
-        return modelMapper.map(dietPlanService.commentDietPlan(dietPlanId, model, principal.getName()), CommentResponseModel.class);
+        return modelMapper.map(dietPlanService.commentDietPlan(dietPlanId, modelMapper.map(model, CommentServiceModel.class), principal.getName()), CommentResponseModel.class);
 
     }
 

@@ -123,7 +123,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"selected-diet-plan\">\n\n    <div *ngIf=\"loading\" class=\"loader-container\">\n        <img src=\"assets/static/images/global-loader.gif\" alt=\"Loader\">\n    </div>\n\n    <ng-template #addMealToDietPlanModal let-modal>\n        <div class=\"modal-header\">\n            <h4 class=\"modal-title\" id=\"modal-basic-title2\">Add Meal To Diet Plan</h4>\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss('Cross click')\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n        </div>\n        <div class=\"modal-body\">\n            <form *ngIf=\"selectedMealForModal\" #addMealToDietPlanForm=\"ngForm\">\n\n                <div class=\"form-group col-6\">\n                    <label for=\"inputStatus\">Meal</label>\n                    <select id=\"inputMealId\" name=\"mealId\" class=\"form-control\" #inputMealId\n                            (change)=\"setSelectedMealForModal()\"\n                            [(ngModel)]=\"selectedMealIdForModal\">\n                        <option [ngValue]=\"meal.id\"\n                                *ngFor=\"let meal of loggedUserMeals\">{{meal.name}}</option>\n                    </select>\n                </div>\n\n                <hr/>\n\n                <h5 class=\"text-center\">{{selectedMealForModal.name}}</h5>\n\n                <table class=\"table table-striped table-hover mx-auto\">\n                    <thead>\n                    <tr *ngIf=\"selectedMealForModal.foods && !selectedMealForModal.foods.length\">\n                        <td colspan=\"5\" class=\"py-auto\"><h5 class=\"text-center\">No added foods in this meal.</h5></td>\n                    </tr>\n                    <tr *ngIf=\"selectedMealForModal.foods && selectedMealForModal.foods.length\">\n                        <th scope=\"col\" style=\"width: 25%\">Food name</th>\n                        <th scope=\"col\" style=\"width: 15%\">Serving</th>\n                        <th scope=\"col\" style=\"width: 15%\">P</th>\n                        <th scope=\"col\" style=\"width: 15%\">C</th>\n                        <th scope=\"col\" style=\"width: 15%\">F</th>\n                        <th scope=\"col\" style=\"width: 15%\">Calories</th>\n\n                    </tr>\n                    </thead>\n                    <tbody *ngIf=\"selectedMealForModal.foods && selectedMealForModal.foods.length\">\n\n                    <tr *ngFor=\"let food of selectedMealForModal.foods\">\n                        <td class=\"align-middle\">{{food.food.name}}</td>\n                        <td class=\"align-middle\">{{food.serving}} g.</td>\n                        <td class=\"align-middle\">{{food.proteinPerServing}} g.</td>\n                        <td class=\"align-middle\">{{food.carbohydratesPerServing}} g.</td>\n                        <td class=\"align-middle\">{{food.fatsPerServing}} g.</td>\n                        <td class=\"align-middle\">{{food.caloriesPerServing}}</td>\n                    </tr>\n\n                    <tr>\n                        <td colspan=\"2\" class=\"align-middle text-center\">Total:</td>\n                        <td class=\"align-middle\">{{selectedMealForModal.totalProtein}} g.</td>\n                        <td class=\"align-middle\">{{selectedMealForModal.totalCarbohydrates}} g.</td>\n                        <td class=\"align-middle\">{{selectedMealForModal.totalFats}} g.</td>\n                        <td class=\"align-middle\">{{selectedMealForModal.totalCalories}}</td>\n                    </tr>\n                    </tbody>\n                </table>\n            </form>\n\n            <div *ngIf=\"!selectedMealForModal\"><h5 class=\"text-center\">You don't have any\n                meals.</h5>\n                <button type=\"button\" class=\"btn btn-success d-block mt-3 mx-auto\"\n                        routerLink=\"/my-meals\" (click)=\"modal.dismiss()\">Go to My Meals\n                </button>\n            </div>\n\n        </div>\n        <div class=\"modal-footer\">\n            <button type=\"button\" [disabled]=\"!selectedMealForModal\" class=\"btn btn-outline-dark\"\n                    (click)=\"modal.close()\">Add to Diet Plan\n            </button>\n        </div>\n    </ng-template>\n\n    <ng-template #showDietPlanNutritionModal let-modal>\n        <div class=\"modal-header\">\n            <h4 class=\"modal-title\" id=\"modal-basic-title\">Diet Plan Nutrition Info</h4>\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss('Cross click')\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n        </div>\n        <div class=\"modal-body row\">\n\n            <div class=\"col-lg-3 align-middle my-auto pl-5\">\n                <h1 class=\"text-center font-weight-bold\">{{selectedDietPlan.name}}</h1>\n\n\n                <h3 class=\"text-center font-weight-light\">Calories: {{selectedDietPlan.totalCalories}}</h3>\n                <div class=\"macros text-center mx-auto\">\n                    <h3 class=\"font-weight-light \">\n                        Protein: {{selectedDietPlan.totalProtein}}g.</h3>\n                    <h3 class=\"font-weight-light \">\n                        Carbohydrates: {{selectedDietPlan.totalCarbohydrates}}g.</h3>\n                    <h3 class=\"font-weight-light \">Fats: {{selectedDietPlan.totalFats}}\n                        g.</h3>\n                    <span class=\"display-5 opacity-5\"><i\n                            class=\"fas fa-utensils fa-lg\"></i></span>\n                </div>\n            </div>\n            <div class=\"chart-container row align-middle col-lg-9\">\n\n                <ngx-charts-bar-horizontal-2d *ngIf=\"macroNutrientsData\"\n                                              class=\"mx-auto\"\n                                              [view]=\"[600, 400]\"\n                                              [animations]=\"true\"\n                                              [xAxis]=\"true\"\n                                              [yAxis]=\"true\"\n                                              [results]=\"macroNutrientsData\"\n                                              [trimXAxisTicks]=\"false\"\n                                              legendTitle=\"Nutrition\"\n                                              [legend]=\"true\"\n                                              [showXAxisLabel]=\"true\"\n                                              [showGridLines]=\"true\"\n                                              [showYAxisLabel]=\"true\"\n                                              [gradient]=\"true\"\n                                              [noBarWhenZero]=\"true\"\n                                              [roundDomains]=\"true\"\n                                              [tooltipDisabled]=\"false\"\n                                              [trimYAxisTicks]=\"false\"\n                                              [showDataLabel]=\"true\">\n\n                </ngx-charts-bar-horizontal-2d>\n\n\n            </div>\n        </div>\n        <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"modal.dismiss()\">Close</button>\n        </div>\n    </ng-template>\n\n\n    <h2 *ngIf=\"!editMode\" class=\"pt-3 font-weight-light\">{{selectedDietPlan.name}}</h2>\n    <div class=\"py-3 mx-auto col-5\" *ngIf=\"editMode\"><input type=\"text\" value=\"{{editDietPlanBindingModel.name}}\"\n                                                            class=\"form-control form-control-lg text-center\"\n                                                            id=\"inputName\"\n                                                            name=\"inputName\" #inputName=\"ngModel\"\n                                                            required\n                                                            [ngClass]=\"{'is-valid': inputName.valid && inputName.touched,\n                         'is-invalid': inputName.invalid && inputName.touched}\"\n                                                            [(ngModel)]=\"editDietPlanBindingModel.name\"></div>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"!editMode && !selectedDietPlan.isCopied\">\n        ({{selectedDietPlan.isPublic ? 'Public' : 'Private'}})</h4>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"selectedDietPlan.isCopied\">(Copy)</h4>\n    <div *ngIf=\"editMode && !selectedDietPlan.isCopied\" class=\"pb-3 col-3 mx-auto\">\n        <select id=\"inputStatus\" name=\"status\" class=\"form-control\" #inputMealStatus\n                [(ngModel)]=\"editDietPlanBindingModel.isPublic\">\n            <option [ngValue]=\"true\">Public</option>\n            <option [ngValue]=\"false\">Private</option>\n        </select>\n    </div>\n    <button *ngIf=\"!editMode\" type=\"button\" routerLink=\"/diet-plans/details/{{dietPlanId}}\"\n            class=\"btn btn-dark mb-2\"><i class=\"fas fa-share-alt\"></i></button>\n\n\n    <h5 *ngIf=\"!selectedDietPlan.meals || !selectedDietPlan.meals.length\">No added meals in this diet\n        plan.</h5>\n\n\n    <div class=\"meals-container col-12 mx-auto\" *ngIf=\"!editMode\">\n        <table class=\"table table-striped table-hover mb-4\" *ngFor=\"let meal of selectedDietPlan.meals\">\n            <h4 class=\"order-index-meal font-weight-bold font-italic\">{{meal.orderIndex}}</h4>\n            <thead>\n            <tr>\n                <th colspan=\"7\" class=\"py-auto\"><h5><a\n                        routerLink=\"/my-meals/{{meal.meal.id}}\">{{meal.meal.name}}</a></h5></th>\n            </tr>\n            <tr *ngIf=\"meal.meal.foods && !meal.meal.foods.length\">\n                <td colspan=\"7\" class=\"py-auto\"><h5>No added foods in this meal.</h5></td>\n            </tr>\n            <tr *ngIf=\"meal.meal.foods && meal.meal.foods.length\">\n                <th scope=\"col\" style=\"width: 25%\">Food name</th>\n                <th scope=\"col\" style=\"width: 15%\">Serving</th>\n                <th scope=\"col\" style=\"width: 10%\">P</th>\n                <th scope=\"col\" style=\"width: 10%\">C</th>\n                <th scope=\"col\" style=\"width: 10%\">F</th>\n                <th scope=\"col\" style=\"width: 10%\">Calories</th>\n                <th scope=\"col\" style=\"width: 20%;\"></th>\n            </tr>\n            </thead>\n            <tbody *ngIf=\"!editMode && meal.meal.foods && meal.meal.foods.length\">\n            <tr *ngFor=\"let food of meal.meal.foods\">\n                <td class=\"align-middle\">{{food.food.name}}</td>\n                <td class=\"align-middle\">{{food.serving}} g.</td>\n                <td class=\"align-middle\">{{food.proteinPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.carbohydratesPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.fatsPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.caloriesPerServing}}</td>\n                <td>\n                    <button type=\"button\" routerLink=\"/foods/details/{{food.food.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                </td>\n            </tr>\n\n            <tr>\n                <td colspan=\"2\" class=\"align-middle text-center\">Total:</td>\n                <td class=\"align-middle\">{{meal.meal.totalProtein}} g.</td>\n                <td class=\"align-middle\">{{meal.meal.totalCarbohydrates}} g.</td>\n                <td class=\"align-middle\">{{meal.meal.totalFats}} g.</td>\n                <td class=\"align-middle\">{{meal.meal.totalCalories}}</td>\n                <td class=\"align-middle\"></td>\n            </tr>\n\n            </tbody>\n        </table>\n\n        <div class=\"nutrition-goal\" *ngIf=\"selectedDietPlan.meals && selectedDietPlan.meals.length\">\n            <table class=\"table table-hover table-borderless mb-4\">\n                <tbody>\n                <tr>\n                    <td class=\"align-middle\" style=\"width: 37%\"><h5 class=\"m-0\">Diet Plan: </h5></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{selectedDietPlan.totalProtein}} g.</p></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{selectedDietPlan.totalCarbohydrates}} g.</p></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{selectedDietPlan.totalFats}} g.</p></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{selectedDietPlan.totalCalories}}</p></td>\n                    <td class=\"align-middle\" style=\"width: 19%\"></td>\n                </tr>\n                <tr>\n                    <td class=\"align-middle\" style=\"width: 37%\"><h5 class=\"m-0\">Nutrition Goal: </h5></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{userNutritionGoal.gramsOfProtein}} g.</p></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{userNutritionGoal.gramsOfCarbohydrates}} g.</p>\n                    </td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{userNutritionGoal.gramsOfFats}} g.</p></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{userNutritionGoal.calories}}</p></td>\n                    <td class=\"align-middle\" style=\"width: 19%\"></td>\n                </tr>\n                <tr>\n                    <td class=\"align-middle\" style=\"width: 37%\"><h5 class=\"m-0\">Remaining: </h5></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\" [ngClass]=\"{'text-danger': userNutritionGoal.gramsOfProtein - selectedDietPlan.totalProtein < 0,\n                        'text-success': userNutritionGoal.gramsOfProtein - selectedDietPlan.totalProtein >= 0}\">\n                        {{userNutritionGoal.gramsOfProtein - selectedDietPlan.totalProtein}} g.</p></td>\n                    <td class=\"align-middle\" style=\"width: 11%\">\n                        <p class=\"font-weight-bold m-0\" [ngClass]=\"{'text-danger': userNutritionGoal.gramsOfCarbohydrates - selectedDietPlan.totalCarbohydrates < 0,\n                        'text-success': userNutritionGoal.gramsOfCarbohydrates - selectedDietPlan.totalCarbohydrates >= 0}\">\n                            {{userNutritionGoal.gramsOfCarbohydrates - selectedDietPlan.totalCarbohydrates}} g.</p>\n                    </td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\" [ngClass]=\"{'text-danger': userNutritionGoal.gramsOfFats - selectedDietPlan.totalFats < 0,\n                        'text-success': userNutritionGoal.gramsOfFats - selectedDietPlan.totalFats >= 0}\">\n                        {{userNutritionGoal.gramsOfFats - selectedDietPlan.totalFats}} g.</p>\n                    </td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\" [ngClass]=\"{'text-danger': userNutritionGoal.calories - selectedDietPlan.totalCalories < 0,\n                        'text-success': userNutritionGoal.calories - selectedDietPlan.totalCalories >= 0}\">\n                        {{userNutritionGoal.calories - selectedDietPlan.totalCalories}}</p>\n                    </td>\n                    <td class=\"align-middle\" style=\"width: 19%\"></td>\n                </tr>\n\n                </tbody>\n            </table>\n        </div>\n\n\n    </div>\n    <div class=\"meals-container col-12 mx-auto\" cdkDropList (cdkDropListDropped)=\"onDrop($event)\" *ngIf=\"editMode\">\n        <table cdkDrag class=\"table table-striped table-hover mb-4\"\n               *ngFor=\"let meal of editDietPlanBindingModel.meals\">\n            <h4 class=\"order-index-meal font-weight-bold font-italic\">{{meal.orderIndex}}</h4>\n            <thead>\n            <tr>\n                <th colspan=\"7\" class=\"py-auto\"><h5 class=\"d-inline-block\">{{meal.meal.name}}</h5>\n                    <button type=\"button\" (click)=\"onMealDeleteHandler(meal.id, meal.orderIndex)\"\n                            class=\"btn btn-danger delete-btn ml-3\"><i class=\"far fa-trash-alt\"></i></button>\n                </th>\n\n            </tr>\n            <tr *ngIf=\"meal.meal.foods && !meal.meal.foods.length\">\n                <td colspan=\"7\" class=\"py-auto\"><h5>No added foods in this meal.</h5></td>\n            </tr>\n            <tr *ngIf=\"meal.meal.foods && meal.meal.foods.length\">\n                <th scope=\"col\" style=\"width: 25%\">Food name</th>\n                <th scope=\"col\" style=\"width: 15%\">Serving</th>\n                <th scope=\"col\" style=\"width: 10%\">P</th>\n                <th scope=\"col\" style=\"width: 10%\">C</th>\n                <th scope=\"col\" style=\"width: 10%\">F</th>\n                <th scope=\"col\" style=\"width: 10%\">Calories</th>\n                <th scope=\"col\" style=\"width: 20%;\"></th>\n            </tr>\n            </thead>\n            <tbody *ngIf=\"meal.meal.foods && meal.meal.foods.length\">\n\n            <tr *ngFor=\"let food of meal.meal.foods\">\n                <td class=\"align-middle\">{{food.food.name}}</td>\n                <td class=\"align-middle\">{{food.serving}} g.</td>\n                <td class=\"align-middle\">{{food.proteinPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.carbohydratesPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.fatsPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.caloriesPerServing}}</td>\n                <td>\n                    <button type=\"button\" routerLink=\"/foods/details/{{food.food.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                </td>\n            </tr>\n\n            <tr>\n                <td colspan=\"2\" class=\"align-middle text-center\">Total:</td>\n                <td class=\"align-middle\">{{meal.meal.totalProtein}} g.</td>\n                <td class=\"align-middle\">{{meal.meal.totalCarbohydrates}} g.</td>\n                <td class=\"align-middle\">{{meal.meal.totalFats}} g.</td>\n                <td class=\"align-middle\">{{meal.meal.totalCalories}}</td>\n                <td class=\"align-middle\"></td>\n            </tr>\n\n            </tbody>\n            <tr *cdkDragPreview class=\"text-center\">\n            </tr>\n        </table>\n\n        <div class=\"nutrition-goal\">\n            <table class=\"table table-hover table-borderless mb-4\">\n                <tbody>\n                <tr>\n                    <td colspan=\"2\" class=\"align-middle\"><h5>Diet Plan: </h5></td>\n                    <td class=\"align-middle\"><h5>{{editDietPlanBindingModel.totalProtein}} g.</h5></td>\n                    <td class=\"align-middle\"><h5>{{editDietPlanBindingModel.totalCarbohydrates}} g.</h5></td>\n                    <td class=\"align-middle\"><h5>{{editDietPlanBindingModel.totalFats}} g.</h5></td>\n                    <td class=\"align-middle\"><h5>{{editDietPlanBindingModel.totalCalories}}</h5></td>\n                </tr>\n                <tr>\n                    <td colspan=\"2\" class=\"align-middle\"><h5>Nutrition Goal: </h5></td>\n                    <td class=\"align-middle\"><h5>{{userNutritionGoal.gramsOfProtein}} g.</h5></td>\n                    <td class=\"align-middle\"><h5>{{userNutritionGoal.gramsOfCarbohydrates}} g.</h5></td>\n                    <td class=\"align-middle\"><h5>{{userNutritionGoal.gramsOfFats}} g.</h5></td>\n                    <td class=\"align-middle\"><h5>{{userNutritionGoal.calories}}</h5></td>\n                </tr>\n                <tr>\n                    <td colspan=\"2\" class=\"align-middle\"><h5>Remaining: </h5></td>\n                    <td class=\"align-middle\"><h5 [ngClass]=\"{'text-danger': userNutritionGoal.gramsOfProtein - editDietPlanBindingModel.totalProtein < 0,\n                        'text-success': userNutritionGoal.gramsOfProtein - editDietPlanBindingModel.totalProtein >= 0}\">\n                        {{userNutritionGoal.gramsOfProtein - editDietPlanBindingModel.totalProtein}} g.</h5></td>\n                    <td class=\"align-middle\">\n                        <h5 [ngClass]=\"{'text-danger': userNutritionGoal.gramsOfCarbohydrates - editDietPlanBindingModel.totalCarbohydrates < 0,\n                        'text-success': userNutritionGoal.gramsOfCarbohydrates - editDietPlanBindingModel.totalCarbohydrates >= 0}\">\n                            {{userNutritionGoal.gramsOfCarbohydrates - editDietPlanBindingModel.totalCarbohydrates}}\n                            g.</h5>\n                    </td>\n                    <td class=\"align-middle\"><h5 [ngClass]=\"{'text-danger': userNutritionGoal.gramsOfFats - editDietPlanBindingModel.totalFats < 0,\n                        'text-success': userNutritionGoal.gramsOfFats - editDietPlanBindingModel.totalFats >= 0}\">\n                        {{userNutritionGoal.gramsOfFats - editDietPlanBindingModel.totalFats}} g.</h5>\n                    </td>\n                    <td class=\"align-middle\"><h5 [ngClass]=\"{'text-danger': userNutritionGoal.calories - editDietPlanBindingModel.totalCalories < 0,\n                        'text-success': userNutritionGoal.calories - editDietPlanBindingModel.totalCalories >= 0}\">\n                        {{userNutritionGoal.calories - editDietPlanBindingModel.totalCalories}}</h5>\n                    </td>\n                </tr>\n\n                </tbody>\n            </table>\n        </div>\n\n    </div>\n\n\n    <div class=\"meal-actions\" *ngIf=\"!editMode\">\n\n        <button *ngIf=\"selectedDietPlan.meals && selectedDietPlan.meals.length\" type=\"button\"\n                class=\"btn btn-info my-3 mx-2\" (click)=\"exportToExcelHandler()\">Export to Excel\n        </button>\n\n        <button *ngIf=\"selectedDietPlan.meals && selectedDietPlan.meals.length\" type=\"button\"\n                class=\"btn btn-secondary my-3 mx-2\" (click)=\"open(showDietPlanNutritionModal)\">Show Nutrition Info\n        </button>\n\n\n        <button type=\"link\" class=\"btn btn-primary my-3 mx-2\"\n                (click)=\"openAddMealModal(addMealToDietPlanModal)\">Add Meal\n        </button>\n\n        <button type=\"button\"\n                class=\"btn btn-success my-3 mx-2\" routerLink=\"./\" [queryParams]=\"{'edit': 1}\">Edit\n        </button>\n\n        <button type=\"button\" (click)=\"onDietPlanDeleteHandler()\" class=\"btn btn-danger my-3 mx-2\">\n            Delete\n        </button>\n    </div>\n\n\n    <div class=\"meal-actions-edit\" *ngIf=\"editMode\">\n        <button type=\"link\" class=\"btn btn-success my-3 mx-2\" (click)=\"onSaveHandler()\">\n            Save\n        </button>\n        <button type=\"link\" class=\"btn btn-danger my-3 mx-2\" routerLink=\"./\">Cancel</button>\n    </div>\n\n\n</div>\n\n\n\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"selected-diet-plan\">\n\n    <div *ngIf=\"loading\" class=\"loader-container\">\n        <img src=\"assets/static/images/global-loader.gif\" alt=\"Loader\">\n    </div>\n\n    <ng-template #addMealToDietPlanModal let-modal>\n        <div class=\"modal-header\">\n            <h4 class=\"modal-title\" id=\"modal-basic-title2\">Add Meal To Diet Plan</h4>\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss('Cross click')\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n        </div>\n        <div class=\"modal-body\">\n            <form *ngIf=\"selectedMealForModal\" #addMealToDietPlanForm=\"ngForm\">\n\n                <div class=\"form-group col-6\">\n                    <label for=\"inputStatus\">Meal</label>\n                    <select id=\"inputMealId\" name=\"mealId\" class=\"form-control\" #inputMealId\n                            (change)=\"setSelectedMealForModal()\"\n                            [(ngModel)]=\"selectedMealIdForModal\">\n                        <option [ngValue]=\"meal.id\"\n                                *ngFor=\"let meal of loggedUserMeals\">{{meal.name}}</option>\n                    </select>\n                </div>\n\n                <hr/>\n\n                <h5 class=\"text-center\">{{selectedMealForModal.name}}</h5>\n\n                <table class=\"table table-striped table-hover mx-auto\">\n                    <thead>\n                    <tr *ngIf=\"selectedMealForModal.foods && !selectedMealForModal.foods.length\">\n                        <td colspan=\"5\" class=\"py-auto\"><h5 class=\"text-center\">No added foods in this meal.</h5></td>\n                    </tr>\n                    <tr *ngIf=\"selectedMealForModal.foods && selectedMealForModal.foods.length\">\n                        <th scope=\"col\" style=\"width: 25%\">Food name</th>\n                        <th scope=\"col\" style=\"width: 15%\">Serving</th>\n                        <th scope=\"col\" style=\"width: 15%\">P</th>\n                        <th scope=\"col\" style=\"width: 15%\">C</th>\n                        <th scope=\"col\" style=\"width: 15%\">F</th>\n                        <th scope=\"col\" style=\"width: 15%\">Calories</th>\n\n                    </tr>\n                    </thead>\n                    <tbody *ngIf=\"selectedMealForModal.foods && selectedMealForModal.foods.length\">\n\n                    <tr *ngFor=\"let food of selectedMealForModal.foods\">\n                        <td class=\"align-middle\">{{food.food.name}}</td>\n                        <td class=\"align-middle\">{{food.serving}} g.</td>\n                        <td class=\"align-middle\">{{food.proteinPerServing}} g.</td>\n                        <td class=\"align-middle\">{{food.carbohydratesPerServing}} g.</td>\n                        <td class=\"align-middle\">{{food.fatsPerServing}} g.</td>\n                        <td class=\"align-middle\">{{food.caloriesPerServing}}</td>\n                    </tr>\n\n                    <tr>\n                        <td colspan=\"2\" class=\"align-middle text-center\">Total:</td>\n                        <td class=\"align-middle\">{{selectedMealForModal.totalProtein}} g.</td>\n                        <td class=\"align-middle\">{{selectedMealForModal.totalCarbohydrates}} g.</td>\n                        <td class=\"align-middle\">{{selectedMealForModal.totalFats}} g.</td>\n                        <td class=\"align-middle\">{{selectedMealForModal.totalCalories}}</td>\n                    </tr>\n                    </tbody>\n                </table>\n            </form>\n\n            <div *ngIf=\"!selectedMealForModal\"><h5 class=\"text-center\">You don't have any\n                meals.</h5>\n                <button type=\"button\" class=\"btn btn-success d-block mt-3 mx-auto\"\n                        routerLink=\"/my-meals\" (click)=\"modal.dismiss()\">Go to My Meals\n                </button>\n            </div>\n\n        </div>\n        <div class=\"modal-footer\">\n            <button type=\"button\" [disabled]=\"!selectedMealForModal\" class=\"btn btn-outline-dark\"\n                    (click)=\"modal.close()\">Add to Diet Plan\n            </button>\n        </div>\n    </ng-template>\n\n    <ng-template #showDietPlanNutritionModal let-modal>\n        <div class=\"modal-header\">\n            <h4 class=\"modal-title\" id=\"modal-basic-title\">Diet Plan Nutrition Info</h4>\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss('Cross click')\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n        </div>\n        <div class=\"modal-body row\">\n\n            <div class=\"col-lg-3 align-middle my-auto pl-5\">\n                <h1 class=\"text-center font-weight-bold\">{{selectedDietPlan.name}}</h1>\n\n\n                <h3 class=\"text-center font-weight-light\">Calories: {{selectedDietPlan.totalCalories}}</h3>\n                <div class=\"macros text-center mx-auto\">\n                    <h3 class=\"font-weight-light \">\n                        Protein: {{selectedDietPlan.totalProtein}}g.</h3>\n                    <h3 class=\"font-weight-light \">\n                        Carbohydrates: {{selectedDietPlan.totalCarbohydrates}}g.</h3>\n                    <h3 class=\"font-weight-light \">Fats: {{selectedDietPlan.totalFats}}\n                        g.</h3>\n                    <span class=\"display-5 opacity-5\"><i\n                            class=\"fas fa-utensils fa-lg\"></i></span>\n                </div>\n            </div>\n            <div class=\"chart-container row align-middle col-lg-9\">\n\n                <ngx-charts-bar-horizontal-2d *ngIf=\"macroNutrientsData\"\n                                              class=\"mx-auto\"\n                                              [view]=\"[600, 400]\"\n                                              [animations]=\"true\"\n                                              [xAxis]=\"true\"\n                                              [yAxis]=\"true\"\n                                              [results]=\"macroNutrientsData\"\n                                              [trimXAxisTicks]=\"false\"\n                                              legendTitle=\"Nutrition\"\n                                              [legend]=\"true\"\n                                              [showXAxisLabel]=\"true\"\n                                              [showGridLines]=\"true\"\n                                              [showYAxisLabel]=\"true\"\n                                              [gradient]=\"true\"\n                                              [noBarWhenZero]=\"true\"\n                                              [roundDomains]=\"true\"\n                                              [tooltipDisabled]=\"false\"\n                                              [trimYAxisTicks]=\"false\"\n                                              [showDataLabel]=\"true\">\n\n                </ngx-charts-bar-horizontal-2d>\n\n\n            </div>\n        </div>\n        <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"modal.dismiss()\">Close</button>\n        </div>\n    </ng-template>\n\n\n    <form #editForm=\"ngForm\">\n    <h2 *ngIf=\"!editMode\" class=\"pt-3 font-weight-light\">{{selectedDietPlan.name}}</h2>\n    <div class=\"py-3 mx-auto col-5\" *ngIf=\"editMode\"><input type=\"text\" value=\"{{editDietPlanBindingModel.name}}\"\n                                                            class=\"form-control form-control-lg text-center\"\n                                                            id=\"inputName\"\n                                                            name=\"inputName\" #inputName=\"ngModel\"\n                                                            required\n                                                            [ngClass]=\"{'is-valid': inputName.valid && inputName.touched,\n                         'is-invalid': inputName.invalid && inputName.touched}\"\n                                                            [(ngModel)]=\"editDietPlanBindingModel.name\"></div>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"!editMode && !selectedDietPlan.isCopied\">\n        ({{selectedDietPlan.isPublic ? 'Public' : 'Private'}})</h4>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"selectedDietPlan.isCopied\">(Copy)</h4>\n    <div *ngIf=\"editMode && !selectedDietPlan.isCopied\" class=\"pb-3 col-3 mx-auto\">\n        <select id=\"inputStatus\" name=\"status\" class=\"form-control\" #inputMealStatus\n                [(ngModel)]=\"editDietPlanBindingModel.isPublic\">\n            <option [ngValue]=\"true\">Public</option>\n            <option [ngValue]=\"false\">Private</option>\n        </select>\n    </div>\n\n    </form>\n    <button *ngIf=\"!editMode\" type=\"button\" routerLink=\"/diet-plans/details/{{dietPlanId}}\"\n            class=\"btn btn-dark mb-2\"><i class=\"fas fa-share-alt\"></i></button>\n\n\n    <h5 *ngIf=\"!selectedDietPlan.meals || !selectedDietPlan.meals.length\">No added meals in this diet\n        plan.</h5>\n\n\n    <div class=\"meals-container col-12 mx-auto\" *ngIf=\"!editMode\">\n        <table class=\"table table-striped table-hover mb-4\" *ngFor=\"let meal of selectedDietPlan.meals\">\n            <h4 class=\"order-index-meal font-weight-bold font-italic\">{{meal.orderIndex}}</h4>\n            <thead>\n            <tr>\n                <th colspan=\"7\" class=\"py-auto\"><h5><a\n                        routerLink=\"/my-meals/{{meal.meal.id}}\">{{meal.meal.name}}</a></h5></th>\n            </tr>\n            <tr *ngIf=\"meal.meal.foods && !meal.meal.foods.length\">\n                <td colspan=\"7\" class=\"py-auto\"><h5>No added foods in this meal.</h5></td>\n            </tr>\n            <tr *ngIf=\"meal.meal.foods && meal.meal.foods.length\">\n                <th scope=\"col\" style=\"width: 25%\">Food name</th>\n                <th scope=\"col\" style=\"width: 15%\">Serving</th>\n                <th scope=\"col\" style=\"width: 10%\">P</th>\n                <th scope=\"col\" style=\"width: 10%\">C</th>\n                <th scope=\"col\" style=\"width: 10%\">F</th>\n                <th scope=\"col\" style=\"width: 10%\">Calories</th>\n                <th scope=\"col\" style=\"width: 20%;\"></th>\n            </tr>\n            </thead>\n            <tbody *ngIf=\"!editMode && meal.meal.foods && meal.meal.foods.length\">\n            <tr *ngFor=\"let food of meal.meal.foods\">\n                <td class=\"align-middle\">{{food.food.name}}</td>\n                <td class=\"align-middle\">{{food.serving}} g.</td>\n                <td class=\"align-middle\">{{food.proteinPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.carbohydratesPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.fatsPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.caloriesPerServing}}</td>\n                <td>\n                    <button type=\"button\" routerLink=\"/foods/details/{{food.food.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                </td>\n            </tr>\n\n            <tr>\n                <td colspan=\"2\" class=\"align-middle text-center\">Total:</td>\n                <td class=\"align-middle\">{{meal.meal.totalProtein}} g.</td>\n                <td class=\"align-middle\">{{meal.meal.totalCarbohydrates}} g.</td>\n                <td class=\"align-middle\">{{meal.meal.totalFats}} g.</td>\n                <td class=\"align-middle\">{{meal.meal.totalCalories}}</td>\n                <td class=\"align-middle\"></td>\n            </tr>\n\n            </tbody>\n        </table>\n\n        <div class=\"nutrition-goal\" *ngIf=\"selectedDietPlan.meals && selectedDietPlan.meals.length\">\n            <table class=\"table table-hover table-borderless mb-4\">\n                <tbody>\n                <tr>\n                    <td class=\"align-middle\" style=\"width: 37%\"><h5 class=\"m-0\">Diet Plan: </h5></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{selectedDietPlan.totalProtein}} g.</p></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{selectedDietPlan.totalCarbohydrates}} g.</p></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{selectedDietPlan.totalFats}} g.</p></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{selectedDietPlan.totalCalories}}</p></td>\n                    <td class=\"align-middle\" style=\"width: 19%\"></td>\n                </tr>\n                <tr>\n                    <td class=\"align-middle\" style=\"width: 37%\"><h5 class=\"m-0\">Nutrition Goal: </h5></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{userNutritionGoal.gramsOfProtein}} g.</p></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{userNutritionGoal.gramsOfCarbohydrates}} g.</p>\n                    </td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{userNutritionGoal.gramsOfFats}} g.</p></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\">{{userNutritionGoal.calories}}</p></td>\n                    <td class=\"align-middle\" style=\"width: 19%\"></td>\n                </tr>\n                <tr>\n                    <td class=\"align-middle\" style=\"width: 37%\"><h5 class=\"m-0\">Remaining: </h5></td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\" [ngClass]=\"{'text-danger': userNutritionGoal.gramsOfProtein - selectedDietPlan.totalProtein < 0,\n                        'text-success': userNutritionGoal.gramsOfProtein - selectedDietPlan.totalProtein >= 0}\">\n                        {{userNutritionGoal.gramsOfProtein - selectedDietPlan.totalProtein}} g.</p></td>\n                    <td class=\"align-middle\" style=\"width: 11%\">\n                        <p class=\"font-weight-bold m-0\" [ngClass]=\"{'text-danger': userNutritionGoal.gramsOfCarbohydrates - selectedDietPlan.totalCarbohydrates < 0,\n                        'text-success': userNutritionGoal.gramsOfCarbohydrates - selectedDietPlan.totalCarbohydrates >= 0}\">\n                            {{userNutritionGoal.gramsOfCarbohydrates - selectedDietPlan.totalCarbohydrates}} g.</p>\n                    </td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\" [ngClass]=\"{'text-danger': userNutritionGoal.gramsOfFats - selectedDietPlan.totalFats < 0,\n                        'text-success': userNutritionGoal.gramsOfFats - selectedDietPlan.totalFats >= 0}\">\n                        {{userNutritionGoal.gramsOfFats - selectedDietPlan.totalFats}} g.</p>\n                    </td>\n                    <td class=\"align-middle\" style=\"width: 11%\"><p class=\"font-weight-bold m-0\" [ngClass]=\"{'text-danger': userNutritionGoal.calories - selectedDietPlan.totalCalories < 0,\n                        'text-success': userNutritionGoal.calories - selectedDietPlan.totalCalories >= 0}\">\n                        {{userNutritionGoal.calories - selectedDietPlan.totalCalories}}</p>\n                    </td>\n                    <td class=\"align-middle\" style=\"width: 19%\"></td>\n                </tr>\n\n                </tbody>\n            </table>\n        </div>\n\n\n    </div>\n    <div class=\"meals-container col-12 mx-auto\" cdkDropList (cdkDropListDropped)=\"onDrop($event)\" *ngIf=\"editMode\">\n        <table cdkDrag class=\"table table-striped table-hover mb-4\"\n               *ngFor=\"let meal of editDietPlanBindingModel.meals\">\n            <h4 class=\"order-index-meal font-weight-bold font-italic\">{{meal.orderIndex}}</h4>\n            <thead>\n            <tr>\n                <th colspan=\"7\" class=\"py-auto\"><h5 class=\"d-inline-block\">{{meal.meal.name}}</h5>\n                    <button type=\"button\" (click)=\"onMealDeleteHandler(meal.id, meal.orderIndex)\"\n                            class=\"btn btn-danger delete-btn ml-3\"><i class=\"far fa-trash-alt\"></i></button>\n                </th>\n\n            </tr>\n            <tr *ngIf=\"meal.meal.foods && !meal.meal.foods.length\">\n                <td colspan=\"7\" class=\"py-auto\"><h5>No added foods in this meal.</h5></td>\n            </tr>\n            <tr *ngIf=\"meal.meal.foods && meal.meal.foods.length\">\n                <th scope=\"col\" style=\"width: 25%\">Food name</th>\n                <th scope=\"col\" style=\"width: 15%\">Serving</th>\n                <th scope=\"col\" style=\"width: 10%\">P</th>\n                <th scope=\"col\" style=\"width: 10%\">C</th>\n                <th scope=\"col\" style=\"width: 10%\">F</th>\n                <th scope=\"col\" style=\"width: 10%\">Calories</th>\n                <th scope=\"col\" style=\"width: 20%;\"></th>\n            </tr>\n            </thead>\n            <tbody *ngIf=\"meal.meal.foods && meal.meal.foods.length\">\n\n            <tr *ngFor=\"let food of meal.meal.foods\">\n                <td class=\"align-middle\">{{food.food.name}}</td>\n                <td class=\"align-middle\">{{food.serving}} g.</td>\n                <td class=\"align-middle\">{{food.proteinPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.carbohydratesPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.fatsPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.caloriesPerServing}}</td>\n                <td>\n                    <button type=\"button\" routerLink=\"/foods/details/{{food.food.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                </td>\n            </tr>\n\n            <tr>\n                <td colspan=\"2\" class=\"align-middle text-center\">Total:</td>\n                <td class=\"align-middle\">{{meal.meal.totalProtein}} g.</td>\n                <td class=\"align-middle\">{{meal.meal.totalCarbohydrates}} g.</td>\n                <td class=\"align-middle\">{{meal.meal.totalFats}} g.</td>\n                <td class=\"align-middle\">{{meal.meal.totalCalories}}</td>\n                <td class=\"align-middle\"></td>\n            </tr>\n\n            </tbody>\n            <tr *cdkDragPreview class=\"text-center\">\n            </tr>\n        </table>\n\n        <div class=\"nutrition-goal\" *ngIf=\"editDietPlanBindingModel.meals && editDietPlanBindingModel.meals.length\">\n            <table class=\"table table-hover table-borderless mb-4\">\n                <tbody>\n                <tr>\n                    <td colspan=\"2\" class=\"align-middle\"><h5>Diet Plan: </h5></td>\n                    <td class=\"align-middle\"><h5>{{editDietPlanBindingModel.totalProtein}} g.</h5></td>\n                    <td class=\"align-middle\"><h5>{{editDietPlanBindingModel.totalCarbohydrates}} g.</h5></td>\n                    <td class=\"align-middle\"><h5>{{editDietPlanBindingModel.totalFats}} g.</h5></td>\n                    <td class=\"align-middle\"><h5>{{editDietPlanBindingModel.totalCalories}}</h5></td>\n                </tr>\n                <tr>\n                    <td colspan=\"2\" class=\"align-middle\"><h5>Nutrition Goal: </h5></td>\n                    <td class=\"align-middle\"><h5>{{userNutritionGoal.gramsOfProtein}} g.</h5></td>\n                    <td class=\"align-middle\"><h5>{{userNutritionGoal.gramsOfCarbohydrates}} g.</h5></td>\n                    <td class=\"align-middle\"><h5>{{userNutritionGoal.gramsOfFats}} g.</h5></td>\n                    <td class=\"align-middle\"><h5>{{userNutritionGoal.calories}}</h5></td>\n                </tr>\n                <tr>\n                    <td colspan=\"2\" class=\"align-middle\"><h5>Remaining: </h5></td>\n                    <td class=\"align-middle\"><h5 [ngClass]=\"{'text-danger': userNutritionGoal.gramsOfProtein - editDietPlanBindingModel.totalProtein < 0,\n                        'text-success': userNutritionGoal.gramsOfProtein - editDietPlanBindingModel.totalProtein >= 0}\">\n                        {{userNutritionGoal.gramsOfProtein - editDietPlanBindingModel.totalProtein}} g.</h5></td>\n                    <td class=\"align-middle\">\n                        <h5 [ngClass]=\"{'text-danger': userNutritionGoal.gramsOfCarbohydrates - editDietPlanBindingModel.totalCarbohydrates < 0,\n                        'text-success': userNutritionGoal.gramsOfCarbohydrates - editDietPlanBindingModel.totalCarbohydrates >= 0}\">\n                            {{userNutritionGoal.gramsOfCarbohydrates - editDietPlanBindingModel.totalCarbohydrates}}\n                            g.</h5>\n                    </td>\n                    <td class=\"align-middle\"><h5 [ngClass]=\"{'text-danger': userNutritionGoal.gramsOfFats - editDietPlanBindingModel.totalFats < 0,\n                        'text-success': userNutritionGoal.gramsOfFats - editDietPlanBindingModel.totalFats >= 0}\">\n                        {{userNutritionGoal.gramsOfFats - editDietPlanBindingModel.totalFats}} g.</h5>\n                    </td>\n                    <td class=\"align-middle\"><h5 [ngClass]=\"{'text-danger': userNutritionGoal.calories - editDietPlanBindingModel.totalCalories < 0,\n                        'text-success': userNutritionGoal.calories - editDietPlanBindingModel.totalCalories >= 0}\">\n                        {{userNutritionGoal.calories - editDietPlanBindingModel.totalCalories}}</h5>\n                    </td>\n                </tr>\n\n                </tbody>\n            </table>\n        </div>\n\n    </div>\n\n\n    <div class=\"meal-actions\" *ngIf=\"!editMode\">\n\n        <button *ngIf=\"selectedDietPlan.meals && selectedDietPlan.meals.length\" type=\"button\"\n                class=\"btn btn-info my-3 mx-2\" (click)=\"exportToExcelHandler()\">Export to Excel\n        </button>\n\n        <button *ngIf=\"selectedDietPlan.meals && selectedDietPlan.meals.length\" type=\"button\"\n                class=\"btn btn-secondary my-3 mx-2\" (click)=\"open(showDietPlanNutritionModal)\">Show Nutrition Info\n        </button>\n\n\n        <button type=\"link\" class=\"btn btn-primary my-3 mx-2\"\n                (click)=\"openAddMealModal(addMealToDietPlanModal)\">Add Meal\n        </button>\n\n        <button type=\"button\"\n                class=\"btn btn-success my-3 mx-2\" routerLink=\"./\" [queryParams]=\"{'edit': 1}\">Edit\n        </button>\n\n        <button type=\"button\" (click)=\"onDietPlanDeleteHandler()\" class=\"btn btn-danger my-3 mx-2\">\n            Delete\n        </button>\n    </div>\n\n\n    <div class=\"meal-actions-edit\" *ngIf=\"editMode\">\n        <button type=\"link\" [disabled]=\"editForm.invalid\" class=\"btn btn-success my-3 mx-2\" (click)=\"onSaveHandler()\">\n            Save\n        </button>\n        <button type=\"link\" class=\"btn btn-danger my-3 mx-2\" routerLink=\"./\">Cancel</button>\n    </div>\n\n\n</div>\n\n\n\n");
 
 /***/ }),
 
@@ -396,7 +396,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"selected-meal\">\n\n    <ng-template #mealNutritionInfoModal let-modal>\n        <div class=\"modal-header\">\n            <h4 class=\"modal-title\" id=\"modal-basic-title\">Meal Nutrition Info</h4>\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss('Cross click')\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n        </div>\n        <div class=\"modal-body row\">\n\n            <div class=\"col-lg-3 align-middle my-auto mx-auto pl-5\">\n                <h1 class=\"text-center font-weight-bold\">{{selectedMeal.name}}</h1>\n\n\n                <h3 class=\"text-center font-weight-light\">Calories: {{selectedMeal.totalCalories}}</h3>\n                <div class=\"macros text-center mx-auto\">\n                    <h3 class=\"font-weight-light \">\n                        Protein: {{this.selectedMeal.totalProtein}}g.</h3>\n                    <h3 class=\"font-weight-light \">\n                        Carbohydrates: {{this.selectedMeal.totalCarbohydrates}}g.</h3>\n                    <h3 class=\"font-weight-light \">Fats: {{this.selectedMeal.totalFats}}\n                        g.</h3>\n                    <span class=\"display-5 opacity-5\"><i\n                            class=\"fas fa-utensils fa-lg\"></i></span>\n                </div>\n            </div>\n            <div class=\"chart-container row align-middle col-lg-9\">\n\n                <ngx-charts-bar-horizontal-2d *ngIf=\"macroNutrientsData\"\n                                              class=\"mx-auto\"\n                                              [view]=\"[600, 400]\"\n                                              [animations]=\"true\"\n                                              [xAxis]=\"true\"\n                                              [yAxis]=\"true\"\n                                              [results]=\"macroNutrientsData\"\n                                              [trimXAxisTicks]=\"false\"\n                                              legendTitle=\"Nutrition\"\n                                              [legend]=\"true\"\n                                              [showXAxisLabel]=\"true\"\n                                              [showGridLines]=\"true\"\n                                              [showYAxisLabel]=\"true\"\n                                              [gradient]=\"true\"\n                                              [noBarWhenZero]=\"true\"\n                                              [roundDomains]=\"true\"\n                                              [tooltipDisabled]=\"false\"\n                                              [trimYAxisTicks]=\"false\"\n                                              [showDataLabel]=\"true\">\n\n                </ngx-charts-bar-horizontal-2d>\n\n\n            </div>\n        </div>\n        <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"modal.dismiss()\">Close</button>\n        </div>\n    </ng-template>\n\n\n    <h2 class=\"pt-3 font-weight-light\" *ngIf=\"!editMode\">{{selectedMeal.name}}</h2>\n    <div class=\"py-3 mx-auto col-5\" *ngIf=\"editMode\"><input type=\"text\" value=\"{{editMealBindingModel.name}}\"\n                                                            class=\"form-control form-control-lg text-center\"\n                                                            id=\"inputName\"\n                                                            name=\"inputName\" #inputName=\"ngModel\"\n                                                            required\n                                                            [ngClass]=\"{'is-valid': inputName.valid && inputName.touched,\n                         'is-invalid': inputName.invalid && inputName.touched}\" [(ngModel)]=\"editMealBindingModel.name\">\n    </div>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"!editMode && !selectedMeal.isCopied\">\n        ({{selectedMeal.isPublic ? 'Public' : 'Private'}})</h4>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"selectedMeal.isCopied\">(Copy)</h4>\n    <div *ngIf=\"editMode && !selectedMeal.isCopied\" class=\"pb-3 col-3 mx-auto\">\n        <select id=\"inputStatus\" name=\"status\" class=\"form-control\" #inputWorkoutStatus\n                [(ngModel)]=\"editMealBindingModel.isPublic\">\n            <option [ngValue]=\"true\">Public</option>\n            <option [ngValue]=\"false\">Private</option>\n        </select>\n    </div>\n    <button *ngIf=\"!editMode\" type=\"button\" routerLink=\"/meals/details/{{mealId}}\"\n            class=\"btn btn-dark mb-2\"><i class=\"fas fa-share-alt\"></i></button>\n\n    <form #editForm=\"ngForm\">\n        <table class=\"table table-striped table-hover\">\n            <thead>\n            <tr *ngIf=\"selectedMeal.foods && !selectedMeal.foods.length\">\n                <td colspan=\"5\" class=\"py-auto\"><h5>No added foods in this meal.</h5></td>\n            </tr>\n            <tr *ngIf=\"selectedMeal.foods && selectedMeal.foods.length\">\n                <th scope=\"col\" style=\"width: 25%\">Food name</th>\n                <th scope=\"col\" style=\"width: 15%\">Serving</th>\n                <th scope=\"col\" style=\"width: 10%\">P</th>\n                <th scope=\"col\" style=\"width: 10%\">C</th>\n                <th scope=\"col\" style=\"width: 10%\">F</th>\n                <th scope=\"col\" style=\"width: 10%\">Calories</th>\n                <th scope=\"col\" style=\"width: 20%;\"></th>\n\n            </tr>\n            </thead>\n            <tbody *ngIf=\"!editMode && selectedMeal.foods && selectedMeal.foods.length\">\n\n            <tr *ngFor=\"let food of selectedMeal.foods\">\n                <td class=\"align-middle\">{{food.food.name}}</td>\n                <td class=\"align-middle\">{{food.serving}} g.</td>\n                <td class=\"align-middle\">{{food.proteinPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.carbohydratesPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.fatsPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.caloriesPerServing}}</td>\n                <td>\n                    <button type=\"button\" routerLink=\"/foods/details/{{food.food.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                </td>\n            </tr>\n\n            <tr>\n                <td colspan=\"2\" class=\"align-middle text-center\">Total:</td>\n                <td class=\"align-middle\">{{selectedMeal.totalProtein}} g.</td>\n                <td class=\"align-middle\">{{selectedMeal.totalCarbohydrates}} g.</td>\n                <td class=\"align-middle\">{{selectedMeal.totalFats}} g.</td>\n                <td class=\"align-middle\">{{selectedMeal.totalCalories}}</td>\n                <td class=\"align-middle\"></td>\n            </tr>\n            </tbody>\n            <tbody *ngIf=\"editMode\">\n\n            <tr *ngFor=\"let food of editMealBindingModel.foods\" [id]=\"food.id\">\n                <td class=\"align-middle\">{{food.food.name}}</td>\n                <td class=\"align-middle\">\n                    <input type=\"number\" value=\"{{food.serving}}\" class=\"form-control\" id=\"inputServing\"\n                           name=\"inputServing-{{food.id}}\"\n                           #inputServing=\"ngModel\" [(ngModel)]=\"food.serving\"\n                           required\n                           pattern=\"^[1-9][0-9]*\"\n                           min=\"1\"\n                           (change)=\"onEditMealFoodHandler(food)\"\n                           [ngClass]=\"{'is-invalid': inputServing.invalid && inputServing.touched}\"></td>\n\n                <td class=\"align-middle\">{{food.proteinPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.carbohydratesPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.fatsPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.caloriesPerServing}}</td>\n                <td>\n                    <button type=\"button\" routerLink=\"/foods/details/{{food.food.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                    <button type=\"button\" (click)=\"onMealFoodDeleteHandler(selectedMeal.id, food.id)\"\n                            class=\"btn btn-danger\"><i class=\"far fa-trash-alt\"></i></button>\n                </td>\n\n            </tr>\n\n            <tr>\n                <td colspan=\"2\" class=\"align-middle text-center\">Total:</td>\n                <td class=\"align-middle\">{{editMealBindingModel.totalProtein}} g.</td>\n                <td class=\"align-middle\">{{editMealBindingModel.totalCarbohydrates}} g.</td>\n                <td class=\"align-middle\">{{editMealBindingModel.totalFats}} g.</td>\n                <td class=\"align-middle\">{{editMealBindingModel.totalCalories}}</td>\n                <td class=\"align-middle\"></td>\n            </tr>\n            </tbody>\n        </table>\n    </form>\n\n    <div class=\"workout-actions\" *ngIf=\"!editMode\">\n\n        <button *ngIf=\"selectedMeal.foods && selectedMeal.foods.length\" type=\"button\"\n                class=\"btn btn-secondary my-3 mx-2\" (click)=\"open(mealNutritionInfoModal)\">Show Nutrition Info\n        </button>\n\n        <button type=\"link\" class=\"btn btn-primary my-3 mx-2\" routerLink=\"/foods/all\">Add Food</button>\n\n        <button type=\"button\"\n                class=\"btn btn-success my-3 mx-2\" routerLink=\"./\" [queryParams]=\"{'edit': 1}\">Edit\n        </button>\n\n        <button type=\"button\" (click)=\"onMealDeleteHandler(selectedMeal.id)\" class=\"btn btn-danger my-3 mx-2\">\n            Delete\n        </button>\n    </div>\n\n\n    <div class=\"workout-actions-edit\" *ngIf=\"editMode\">\n        <button type=\"link\" [disabled]=\"editForm.invalid\" class=\"btn btn-success my-3 mx-2\" (click)=\"onSaveHandler()\">\n            Save\n        </button>\n        <button type=\"link\" class=\"btn btn-danger my-3 mx-2\" routerLink=\"./\">Cancel</button>\n    </div>\n\n\n</div>\n\n\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"selected-meal\">\n\n    <ng-template #mealNutritionInfoModal let-modal>\n        <div class=\"modal-header\">\n            <h4 class=\"modal-title\" id=\"modal-basic-title\">Meal Nutrition Info</h4>\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss('Cross click')\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n        </div>\n        <div class=\"modal-body row\">\n\n            <div class=\"col-lg-3 align-middle my-auto mx-auto pl-5\">\n                <h1 class=\"text-center font-weight-bold\">{{selectedMeal.name}}</h1>\n\n\n                <h3 class=\"text-center font-weight-light\">Calories: {{selectedMeal.totalCalories}}</h3>\n                <div class=\"macros text-center mx-auto\">\n                    <h3 class=\"font-weight-light \">\n                        Protein: {{this.selectedMeal.totalProtein}}g.</h3>\n                    <h3 class=\"font-weight-light \">\n                        Carbohydrates: {{this.selectedMeal.totalCarbohydrates}}g.</h3>\n                    <h3 class=\"font-weight-light \">Fats: {{this.selectedMeal.totalFats}}\n                        g.</h3>\n                    <span class=\"display-5 opacity-5\"><i\n                            class=\"fas fa-utensils fa-lg\"></i></span>\n                </div>\n            </div>\n            <div class=\"chart-container row align-middle col-lg-9\">\n\n                <ngx-charts-bar-horizontal-2d *ngIf=\"macroNutrientsData\"\n                                              class=\"mx-auto\"\n                                              [view]=\"[600, 400]\"\n                                              [animations]=\"true\"\n                                              [xAxis]=\"true\"\n                                              [yAxis]=\"true\"\n                                              [results]=\"macroNutrientsData\"\n                                              [trimXAxisTicks]=\"false\"\n                                              legendTitle=\"Nutrition\"\n                                              [legend]=\"true\"\n                                              [showXAxisLabel]=\"true\"\n                                              [showGridLines]=\"true\"\n                                              [showYAxisLabel]=\"true\"\n                                              [gradient]=\"true\"\n                                              [noBarWhenZero]=\"true\"\n                                              [roundDomains]=\"true\"\n                                              [tooltipDisabled]=\"false\"\n                                              [trimYAxisTicks]=\"false\"\n                                              [showDataLabel]=\"true\">\n\n                </ngx-charts-bar-horizontal-2d>\n\n\n            </div>\n        </div>\n        <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"modal.dismiss()\">Close</button>\n        </div>\n    </ng-template>\n\n\n    <h2 class=\"pt-3 font-weight-light\" *ngIf=\"!editMode\">{{selectedMeal.name}}</h2>\n    <form #editForm=\"ngForm\">\n    <div class=\"py-3 mx-auto col-5\" *ngIf=\"editMode\"><input type=\"text\" value=\"{{editMealBindingModel.name}}\"\n                                                            class=\"form-control form-control-lg text-center\"\n                                                            id=\"inputName\"\n                                                            name=\"inputName\" #inputName=\"ngModel\"\n                                                            required\n                                                            [ngClass]=\"{'is-valid': inputName.valid && inputName.touched,\n                         'is-invalid': inputName.invalid && inputName.touched}\" [(ngModel)]=\"editMealBindingModel.name\">\n    </div>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"!editMode && !selectedMeal.isCopied\">\n        ({{selectedMeal.isPublic ? 'Public' : 'Private'}})</h4>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"selectedMeal.isCopied\">(Copy)</h4>\n    <div *ngIf=\"editMode && !selectedMeal.isCopied\" class=\"pb-3 col-3 mx-auto\">\n        <select id=\"inputStatus\" name=\"status\" class=\"form-control\" #inputWorkoutStatus\n                [(ngModel)]=\"editMealBindingModel.isPublic\">\n            <option [ngValue]=\"true\">Public</option>\n            <option [ngValue]=\"false\">Private</option>\n        </select>\n    </div>\n    <button *ngIf=\"!editMode\" type=\"button\" routerLink=\"/meals/details/{{mealId}}\"\n            class=\"btn btn-dark mb-2\"><i class=\"fas fa-share-alt\"></i></button>\n\n\n        <table class=\"table table-striped table-hover\">\n            <thead>\n            <tr *ngIf=\"selectedMeal.foods && !selectedMeal.foods.length\">\n                <td colspan=\"5\" class=\"py-auto\"><h5>No added foods in this meal.</h5></td>\n            </tr>\n            <tr *ngIf=\"selectedMeal.foods && selectedMeal.foods.length\">\n                <th scope=\"col\" style=\"width: 25%\">Food name</th>\n                <th scope=\"col\" style=\"width: 15%\">Serving</th>\n                <th scope=\"col\" style=\"width: 10%\">P</th>\n                <th scope=\"col\" style=\"width: 10%\">C</th>\n                <th scope=\"col\" style=\"width: 10%\">F</th>\n                <th scope=\"col\" style=\"width: 10%\">Calories</th>\n                <th scope=\"col\" style=\"width: 20%;\"></th>\n\n            </tr>\n            </thead>\n            <tbody *ngIf=\"!editMode && selectedMeal.foods && selectedMeal.foods.length\">\n\n            <tr *ngFor=\"let food of selectedMeal.foods\">\n                <td class=\"align-middle\">{{food.food.name}}</td>\n                <td class=\"align-middle\">{{food.serving}} g.</td>\n                <td class=\"align-middle\">{{food.proteinPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.carbohydratesPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.fatsPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.caloriesPerServing}}</td>\n                <td>\n                    <button type=\"button\" routerLink=\"/foods/details/{{food.food.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                </td>\n            </tr>\n\n            <tr>\n                <td colspan=\"2\" class=\"align-middle text-center\">Total:</td>\n                <td class=\"align-middle\">{{selectedMeal.totalProtein}} g.</td>\n                <td class=\"align-middle\">{{selectedMeal.totalCarbohydrates}} g.</td>\n                <td class=\"align-middle\">{{selectedMeal.totalFats}} g.</td>\n                <td class=\"align-middle\">{{selectedMeal.totalCalories}}</td>\n                <td class=\"align-middle\"></td>\n            </tr>\n            </tbody>\n            <tbody *ngIf=\"editMode\">\n\n            <tr *ngFor=\"let food of editMealBindingModel.foods\" [id]=\"food.id\">\n                <td class=\"align-middle\">{{food.food.name}}</td>\n                <td class=\"align-middle\">\n                    <input type=\"number\" value=\"{{food.serving}}\" class=\"form-control\" id=\"inputServing\"\n                           name=\"inputServing-{{food.id}}\"\n                           #inputServing=\"ngModel\" [(ngModel)]=\"food.serving\"\n                           required\n                           pattern=\"^[1-9][0-9]*\"\n                           min=\"1\"\n                           (change)=\"onEditMealFoodHandler(food)\"\n                           [ngClass]=\"{'is-invalid': inputServing.invalid && inputServing.touched}\"></td>\n\n                <td class=\"align-middle\">{{food.proteinPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.carbohydratesPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.fatsPerServing}} g.</td>\n                <td class=\"align-middle\">{{food.caloriesPerServing}}</td>\n                <td>\n                    <button type=\"button\" routerLink=\"/foods/details/{{food.food.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                    <button type=\"button\" (click)=\"onMealFoodDeleteHandler(selectedMeal.id, food.id)\"\n                            class=\"btn btn-danger\"><i class=\"far fa-trash-alt\"></i></button>\n                </td>\n\n            </tr>\n\n            <tr>\n                <td colspan=\"2\" class=\"align-middle text-center\">Total:</td>\n                <td class=\"align-middle\">{{editMealBindingModel.totalProtein}} g.</td>\n                <td class=\"align-middle\">{{editMealBindingModel.totalCarbohydrates}} g.</td>\n                <td class=\"align-middle\">{{editMealBindingModel.totalFats}} g.</td>\n                <td class=\"align-middle\">{{editMealBindingModel.totalCalories}}</td>\n                <td class=\"align-middle\"></td>\n            </tr>\n            </tbody>\n        </table>\n    </form>\n\n    <div class=\"workout-actions\" *ngIf=\"!editMode\">\n\n        <button *ngIf=\"selectedMeal.foods && selectedMeal.foods.length\" type=\"button\"\n                class=\"btn btn-secondary my-3 mx-2\" (click)=\"open(mealNutritionInfoModal)\">Show Nutrition Info\n        </button>\n\n        <button type=\"link\" class=\"btn btn-primary my-3 mx-2\" routerLink=\"/foods/all\">Add Food</button>\n\n        <button type=\"button\"\n                class=\"btn btn-success my-3 mx-2\" routerLink=\"./\" [queryParams]=\"{'edit': 1}\">Edit\n        </button>\n\n        <button type=\"button\" (click)=\"onMealDeleteHandler(selectedMeal.id)\" class=\"btn btn-danger my-3 mx-2\">\n            Delete\n        </button>\n    </div>\n\n\n    <div class=\"workout-actions-edit\" *ngIf=\"editMode\">\n        <button type=\"link\" [disabled]=\"editForm.invalid\" class=\"btn btn-success my-3 mx-2\" (click)=\"onSaveHandler()\">\n            Save\n        </button>\n        <button type=\"link\" class=\"btn btn-danger my-3 mx-2\" routerLink=\"./\">Cancel</button>\n    </div>\n\n\n</div>\n\n\n");
 
 /***/ }),
 
@@ -422,7 +422,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<nav class=\"navbar navbar-expand-lg navbar-light bg-light fixed-top\">\n  <a class=\"navbar-brand\" routerLink=\"/home\">\n    <img src=\"assets/static/images/logo_icon.png\" height=\"50\" class=\"d-inline-block align-center\" alt=\"\">\n    FitBook\n  </a>\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarNavDropdown\"\n          aria-controls=\"navbarNavDropdown\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n  <div class=\"collapse navbar-collapse\" id=\"navbarNavDropdown\">\n    <ul class=\"navbar-nav\">\n      <li class=\"nav-item dropdown\" [ngClass]=\"{'active': isInDiets}\">\n        <a class=\"nav-link dropdown-toggle\" id=\"dietsDropdown\" data-toggle=\"dropdown\">\n          Diets\n        </a>\n        <div class=\"dropdown-menu\">\n          <a class=\"dropdown-item\" routerLink=\"/my-meals\" routerLinkActive=\"active\">My meals</a>\n          <a class=\"dropdown-item\" routerLink=\"/my-diet-plans\" routerLinkActive=\"active\">My diet plans</a>\n        </div>\n      </li>\n      <li class=\"nav-item dropdown\"  [ngClass]=\"{'active': isInWorkouts}\">\n        <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"workoutDropdown\" data-toggle=\"dropdown\">\n          Workouts\n        </a>\n        <div class=\"dropdown-menu\">\n          <a class=\"dropdown-item\" routerLink=\"/my-workouts\" routerLinkActive=\"active\">My workouts</a>\n          <a class=\"dropdown-item\" routerLink=\"/my-workout-plans\" routerLinkActive=\"active\">My workout plans</a>\n        </div>\n      </li>\n\n      <li class=\"nav-item dropdown\"  [ngClass]=\"{'active': isExploring}\">\n        <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"exploreDropdown\" data-toggle=\"dropdown\">\n          Explore\n        </a>\n        <div class=\"dropdown-menu\">\n          <h6 class=\"dropdown-header\">Diet related</h6>\n          <a class=\"dropdown-item\" routerLink=\"/foods/all\" routerLinkActive=\"active\">Foods</a>\n          <a class=\"dropdown-item\" routerLink=\"/meals/all\" routerLinkActive=\"active\">Meals</a>\n          <a class=\"dropdown-item\" routerLink=\"/diet-plans/all\" routerLinkActive=\"active\">Diet Plans</a>\n          <h6 class=\"dropdown-header\">Workout related</h6>\n          <a class=\"dropdown-item\" routerLink=\"/exercises/all\" routerLinkActive=\"active\"\n             [routerLinkActiveOptions]=\"{exact: true}\">Exercises</a>\n          <a class=\"dropdown-item\" routerLink=\"/workouts/all\" routerLinkActive=\"active\">Workouts</a>\n          <a class=\"dropdown-item\" routerLink=\"/workout-plans/all\" routerLinkActive=\"active\">Workout Plans</a>\n        </div>\n      </li>\n\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/foods/create\">Create Food</a>\n      </li>\n      <li class=\"nav-item d-lg-none\">\n        <a class=\"nav-link\" href=\"#\">Edit Profile</a>\n      </li>\n      <li class=\"nav-item d-lg-none\">\n        <a class=\"nav-link\" style=\"cursor: pointer\" (click)=\"onLogout()\">Log Out</a>\n      </li>\n    </ul>\n\n    <div class=\"collapse navbar-collapse \" id=\"navbar-list-4\">\n      <ul class=\"navbar-nav ml-auto\">\n        <li class=\"nav-item\" routerLinkActive=\"active\" *ngIf=\"userRole !== 'ROLE_USER'\">\n          <a class=\"nav-link\" routerLink=\"/exercises/create\">Create Exercise</a>\n        </li>\n        <li class=\"nav-item\" routerLinkActive=\"active\" *ngIf=\"userRole === 'ROLE_ADMIN' || userRole === 'ROLE_ROOT_ADMIN'\">\n          <a class=\"nav-link\" routerLink=\"/admin-panel\">Admin Panel</a>\n        </li>\n        <li class=\"nav-item dropdown dropleft\" dropdown>\n          <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdownMenuLink\" role=\"button\"\n             data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n            <img\n              src=\"{{profilePictureUrl}}\"\n              width=\"60\" height=\"60\" class=\"rounded-circle\">\n          </a>\n          <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">\n            <a class=\"dropdown-item\" href=\"#\">Dashboard</a>\n            <a class=\"dropdown-item\" href=\"#\">Edit Profile</a>\n            <a class=\"dropdown-item\" (click)=\"onLogout()\">Log Out</a>\n          </div>\n        </li>\n      </ul>\n    </div>\n  </div>\n</nav>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<nav class=\"navbar navbar-expand-lg navbar-light bg-light fixed-top\">\n  <a class=\"navbar-brand\" routerLink=\"/home\">\n    <img src=\"assets/static/images/logo_icon.png\" height=\"50\" class=\"d-inline-block align-center\" alt=\"\">\n    FitBook\n  </a>\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarNavDropdown\"\n          aria-controls=\"navbarNavDropdown\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n  <div class=\"collapse navbar-collapse\" id=\"navbarNavDropdown\">\n    <ul class=\"navbar-nav\">\n      <li class=\"nav-item dropdown\" [ngClass]=\"{'active': isInDiets}\">\n        <a class=\"nav-link dropdown-toggle\" id=\"dietsDropdown\" data-toggle=\"dropdown\">\n          Diets\n        </a>\n        <div class=\"dropdown-menu\">\n          <a class=\"dropdown-item\" routerLink=\"/my-meals\" routerLinkActive=\"active\">My meals</a>\n          <a class=\"dropdown-item\" routerLink=\"/my-diet-plans\" routerLinkActive=\"active\">My diet plans</a>\n        </div>\n      </li>\n      <li class=\"nav-item dropdown\"  [ngClass]=\"{'active': isInWorkouts}\">\n        <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"workoutDropdown\" data-toggle=\"dropdown\">\n          Workouts\n        </a>\n        <div class=\"dropdown-menu\">\n          <a class=\"dropdown-item\" routerLink=\"/my-workouts\" routerLinkActive=\"active\">My workouts</a>\n          <a class=\"dropdown-item\" routerLink=\"/my-workout-plans\" routerLinkActive=\"active\">My workout plans</a>\n        </div>\n      </li>\n\n      <li class=\"nav-item dropdown\"  [ngClass]=\"{'active': isExploring}\">\n        <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"exploreDropdown\" data-toggle=\"dropdown\">\n          Explore\n        </a>\n        <div class=\"dropdown-menu\">\n          <h6 class=\"dropdown-header\">Diet related</h6>\n          <a class=\"dropdown-item\" routerLink=\"/foods/all\" routerLinkActive=\"active\">Foods</a>\n          <a class=\"dropdown-item\" routerLink=\"/meals/all\" routerLinkActive=\"active\">Meals</a>\n          <a class=\"dropdown-item\" routerLink=\"/diet-plans/all\" routerLinkActive=\"active\">Diet Plans</a>\n          <h6 class=\"dropdown-header\">Workout related</h6>\n          <a class=\"dropdown-item\" routerLink=\"/exercises/all\" routerLinkActive=\"active\"\n             [routerLinkActiveOptions]=\"{exact: true}\">Exercises</a>\n          <a class=\"dropdown-item\" routerLink=\"/workouts/all\" routerLinkActive=\"active\">Workouts</a>\n          <a class=\"dropdown-item\" routerLink=\"/workout-plans/all\" routerLinkActive=\"active\">Workout Plans</a>\n        </div>\n      </li>\n\n      <li class=\"nav-item\" routerLinkActive=\"active\">\n        <a class=\"nav-link\" routerLink=\"/foods/create\">Create Food</a>\n      </li>\n      <li class=\"nav-item d-lg-none\">\n        <a class=\"nav-link\" routerLink=\"/fitness-profile/edit\">Edit Fitness Profile</a>\n      </li>\n      <li class=\"nav-item d-lg-none\">\n        <a class=\"nav-link\" style=\"cursor: pointer\" (click)=\"onLogout()\">Log Out</a>\n      </li>\n    </ul>\n\n    <div class=\"collapse navbar-collapse \" id=\"navbar-list-4\">\n      <ul class=\"navbar-nav ml-auto\">\n        <li class=\"nav-item\" routerLinkActive=\"active\" *ngIf=\"userRole !== 'ROLE_USER'\">\n          <a class=\"nav-link\" routerLink=\"/exercises/create\">Create Exercise</a>\n        </li>\n        <li class=\"nav-item\" routerLinkActive=\"active\" *ngIf=\"userRole === 'ROLE_ADMIN' || userRole === 'ROLE_ROOT_ADMIN'\">\n          <a class=\"nav-link\" routerLink=\"/admin-panel\">Admin Panel</a>\n        </li>\n        <li class=\"nav-item dropdown dropleft\" dropdown>\n          <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdownMenuLink\" role=\"button\"\n             data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n            <img\n              src=\"{{profilePictureUrl}}\"\n              width=\"60\" height=\"60\" class=\"rounded-circle\">\n          </a>\n          <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">\n            <a class=\"dropdown-item\" routerLink=\"/fitness-profile/edit\">Edit Fitness Profile</a>\n            <a class=\"dropdown-item\" (click)=\"onLogout()\">Log Out</a>\n          </div>\n        </li>\n      </ul>\n    </div>\n  </div>\n</nav>\n");
 
 /***/ }),
 
@@ -439,6 +439,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/raw-loader/dist/cjs.js!./src/main/webapp/app/not-found/not-found.component.html":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/main/webapp/app/not-found/not-found.component.html ***!
+  \******************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"container-fluid\">\n    <div class=\"jumbotron\">\n        <img src=\"assets/static/images/404.png\" class=\"d-inline-block align-center\" alt=\"\">\n\n    </div>\n</div>\n");
+
+/***/ }),
+
 /***/ "./node_modules/raw-loader/dist/cjs.js!./src/main/webapp/app/user/register/register.component.html":
 /*!*********************************************************************************************************!*\
   !*** ./node_modules/raw-loader/dist/cjs.js!./src/main/webapp/app/user/register/register.component.html ***!
@@ -448,7 +461,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"container-fluid\">\n\n  <div *ngIf=\"loading\" class=\"loader-container\">\n    <img src=\"assets/static/images/global-loader.gif\" alt=\"Loader\">\n  </div>\n\n  <div class=\"jumbotron\">\n    <div class=\"container\">\n      <div class=\"row\">\n        <div class=\"col-lg-10 col-xl-9 mx-auto\">\n          <div class=\"card card-signin flex-row my-5\">\n            <div class=\"card-img-left d-none d-md-flex\">\n            </div>\n            <div class=\"card-body\">\n              <h5 class=\"card-title text-center\">Register</h5>\n              <form class=\"form-signin\" #resisterForm=\"ngForm\">\n\n                <div class=\"form-label-group\">\n                  <label for=\"inputFirstName\">First name</label>\n                  <input type=\"text\" id=\"inputFirstName\" class=\"form-control\"\n                         placeholder=\"First name\" name=\"firstName\" #inputFirstName=\"ngModel\" required autofocus\n                         pattern=\"([A-Z][A-Za-z0-9\\. -]+)\"\n                         [ngClass]=\"{'is-valid': inputFirstName.valid && inputFirstName.touched,\n                         'is-invalid': inputFirstName.invalid && inputFirstName.touched}\"\n                         [(ngModel)]=\"registerBindingModel.firstName\">\n                  <div class=\"valid-feedback\"></div>\n                  <div class=\"invalid-feedback\">\n                    First name is required and should start with capital letter.\n                  </div>\n                </div>\n\n                <div class=\"form-label-group\">\n                  <label for=\"inputLastName\">Last name</label>\n                  <input type=\"text\" id=\"inputLastName\" class=\"form-control\"\n                         placeholder=\"Last name\" name=\"lastName\" #inputLastName=\"ngModel\"\n                         required\n                         pattern=\"([A-Z][A-Za-z0-9\\. -]+)\"\n                         [ngClass]=\"{'is-valid': inputLastName.valid && inputLastName.touched,\n                         'is-invalid': inputLastName.invalid && inputLastName.touched}\"\n                         [(ngModel)]=\"registerBindingModel.lastName\">\n                  <div class=\"valid-feedback\"></div>\n                  <div class=\"invalid-feedback\">\n                    Last name is required and should start with capital letter.\n                  </div>\n                </div>\n\n\n                <div class=\"form-label-group\">\n                  <label for=\"genderInput\">Gender</label>\n                  <select class=\"custom-select form-control\" id=\"genderInput\" name=\"gender\" #inputGender=\"ngModel\" required\n                          [ngClass]=\"{'is-valid': inputGender.valid && inputGender.touched,\n                         'is-invalid': inputGender.invalid && inputGender.touched}\"\n                          [(ngModel)]=\"registerBindingModel.gender\">\n                    <option selected value=\"\">Select gender</option>\n                    <option value=\"male\">Male</option>\n                    <option value=\"female\">Female</option>\n                  </select>\n                  <div class=\"valid-feedback\"></div>\n                  <div class=\"invalid-feedback\">\n                    Gender is required.\n                  </div>\n                </div>\n\n\n                <div class=\"form-label-group\">\n                  <label for=\"inputEmail\">Username</label>\n                  <input type=\"text\" id=\"inputUserame\" class=\"form-control\"\n                         placeholder=\"Username\" name=\"username\" #inputUsername=\"ngModel\" required\n                         [ngClass]=\"{'is-valid': inputUsername.valid && inputUsername.touched && !usernameTaken,\n                         'is-invalid': inputUsername.invalid && inputUsername.touched || usernameTaken}\"\n                         (focusout)=\"onUsernameFocusOut($event.target)\"\n                         [(ngModel)]=\"registerBindingModel.username\">\n                  <div class=\"valid-feedback\"></div>\n                  <div class=\"invalid-feedback\" *ngIf=\"usernameTaken\">\n                    Username is already taken.\n                  </div>\n                  <div class=\"invalid-feedback\" *ngIf=\"!usernameTaken\">\n                    Username is required.\n                  </div>\n                </div>\n\n                <div class=\"form-label-group\">\n                  <label for=\"inputEmail\">Email address</label>\n                  <input type=\"email\" id=\"inputEmail\" class=\"form-control\"\n                         placeholder=\"Email address\" name=\"email\" #inputEmail=\"ngModel\"\n                         required\n                         pattern=\"{{regexPattern}}\"\n                         [ngClass]=\"{'is-valid': inputEmail.valid && inputEmail.touched,\n                         'is-invalid': inputEmail.invalid && inputEmail.touched}\"\n                         [(ngModel)]=\"registerBindingModel.email\">\n                  <div class=\"valid-feedback\"></div>\n                  <div class=\"invalid-feedback\">\n                    Enter a valid email address.\n                  </div>\n                </div>\n\n                <div class=\"form-label-group\">\n                  <label for=\"customFile\" id=\"exercisePictureLabel\">Profile picture</label>\n                  <div class=\"custom-file\" id=\"customFileContainer\">\n                    <input type=\"file\" class=\"custom-file-input form-control\"\n                           id=\"customFile\" name=\"exercisePictureFile\"\n                           #inputProfilePicture=\"ngModel\"\n                           accept=\"image/*\"\n                           [(ngModel)]=\"file\"\n                           [ngClass]=\"{'is-valid': file && inputProfilePicture.touched,\n                         'is-invalid': !file && inputProfilePicture.touched}\"\n                           (change)=\"handleFileInput($event.target.files, chooseFileLabel)\">\n                    <label class=\"custom-file-label\" for=\"customFile\"\n                           id=\"çhooseFileLabel\" #chooseFileLabel>Choose\n                      file</label>\n                    <div class=\"valid-feedback\"></div>\n                    <div class=\"invalid-feedback\">\n                      Profile picture file should be an image.\n                    </div>\n                  </div>\n                </div>\n\n                <hr>\n\n                <div class=\"form-label-group\">\n                  <label for=\"inputPassword\">Password</label>\n                  <input type=\"password\" id=\"inputPassword\" class=\"form-control\"\n                         name=\"password\" placeholder=\"Password\" #inputPassword=\"ngModel\"\n                         [minLength]=\"6\"\n                         required\n                         [ngClass]=\"{'is-valid': inputPassword.valid && inputPassword.touched,\n                         'is-invalid': inputPassword.invalid && inputPassword.touched}\"\n                         [(ngModel)]=\"registerBindingModel.password\"\n                  (change)=\"onPasswordChange()\">\n                  <div class=\"valid-feedback\"></div>\n                  <div class=\"invalid-feedback\">\n                    Please enter a password with at least 6 symbols.\n                  </div>\n                </div>\n\n                <div class=\"form-label-group\">\n                  <label for=\"inputConfirmPassword\">Confirm password</label>\n                  <input type=\"password\" id=\"inputConfirmPassword\" class=\"form-control\"\n                         name=\"confirmPassword\" placeholder=\"Confirm password\" #inputConfirmPassword=\"ngModel\"\n                         required\n                         [ngClass]=\"{'is-valid': inputConfirmPassword.valid &&\n                         inputConfirmPassword.touched && passwordsMatch,\n                         'is-invalid': (inputConfirmPassword.invalid || !passwordsMatch) && inputConfirmPassword.touched}\"\n                         [(ngModel)]=\"registerBindingModel.confirmPassword\"\n                  (change)=\"onPasswordChange()\">\n                  <div class=\"valid-feedback\"></div>\n                  <div class=\"invalid-feedback\">\n                    Passwords must match.\n                  </div>\n                </div>\n\n                <button class=\"btn btn-lg btn-secondary btn-block text-uppercase\"\n                        type=\"submit\" [disabled]=\"resisterForm.invalid\" (click)=\"onSubmit()\">Register\n                </button>\n\n                <p>You already have a registration? Don't wait to get fit!</p>\n\n                <a routerLink=\"/signin\" role=\"button\">\n                  <button\n                    class=\"btn btn-lg btn-primary btn-block text-uppercase\"\n                    type=\"button\">Sign\n                    in\n                  </button>\n                </a>\n              </form>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"container-fluid\">\n\n  <div *ngIf=\"loading\" class=\"loader-container\">\n    <img src=\"assets/static/images/global-loader.gif\" alt=\"Loader\">\n  </div>\n\n  <div class=\"jumbotron\">\n    <div class=\"container\">\n      <div class=\"row\">\n        <div class=\"col-lg-10 col-xl-9 mx-auto\">\n          <div class=\"card card-signin flex-row my-5\">\n            <div class=\"card-img-left d-none d-md-flex\">\n            </div>\n            <div class=\"card-body\">\n              <h5 class=\"card-title text-center\">Register</h5>\n              <form class=\"form-signin\" #resisterForm=\"ngForm\">\n\n                <div class=\"form-label-group\">\n                  <label for=\"inputFirstName\">First name</label>\n                  <input type=\"text\" id=\"inputFirstName\" class=\"form-control\"\n                         placeholder=\"First name\" name=\"firstName\" #inputFirstName=\"ngModel\" required autofocus\n                         pattern=\"([A-Z][A-Za-z. -]+)\"\n                         [ngClass]=\"{'is-valid': inputFirstName.valid && inputFirstName.touched,\n                         'is-invalid': inputFirstName.invalid && inputFirstName.touched}\"\n                         [(ngModel)]=\"registerBindingModel.firstName\">\n                  <div class=\"valid-feedback\"></div>\n                  <div class=\"invalid-feedback\">\n                    First name is required and should start with capital letter.\n                  </div>\n                </div>\n\n                <div class=\"form-label-group\">\n                  <label for=\"inputLastName\">Last name</label>\n                  <input type=\"text\" id=\"inputLastName\" class=\"form-control\"\n                         placeholder=\"Last name\" name=\"lastName\" #inputLastName=\"ngModel\"\n                         required\n                         pattern=\"([A-Z][A-Za-z. -]+)\"\n                         [ngClass]=\"{'is-valid': inputLastName.valid && inputLastName.touched,\n                         'is-invalid': inputLastName.invalid && inputLastName.touched}\"\n                         [(ngModel)]=\"registerBindingModel.lastName\">\n                  <div class=\"valid-feedback\"></div>\n                  <div class=\"invalid-feedback\">\n                    Last name is required and should start with capital letter.\n                  </div>\n                </div>\n\n\n                <div class=\"form-label-group\">\n                  <label for=\"genderInput\">Gender</label>\n                  <select class=\"custom-select form-control\" id=\"genderInput\" name=\"gender\" #inputGender=\"ngModel\" required\n                          [ngClass]=\"{'is-valid': inputGender.valid && inputGender.touched,\n                         'is-invalid': inputGender.invalid && inputGender.touched}\"\n                          [(ngModel)]=\"registerBindingModel.gender\">\n                    <option selected value=\"\">Select gender</option>\n                    <option value=\"male\">Male</option>\n                    <option value=\"female\">Female</option>\n                  </select>\n                  <div class=\"valid-feedback\"></div>\n                  <div class=\"invalid-feedback\">\n                    Gender is required.\n                  </div>\n                </div>\n\n\n                <div class=\"form-label-group\">\n                  <label for=\"inputEmail\">Username</label>\n                  <input type=\"text\" id=\"inputUserame\" class=\"form-control\"\n                         placeholder=\"Username\" name=\"username\" #inputUsername=\"ngModel\" required\n                         [ngClass]=\"{'is-valid': inputUsername.valid && inputUsername.touched && !usernameTaken,\n                         'is-invalid': inputUsername.invalid && inputUsername.touched || usernameTaken}\"\n                         (focusout)=\"onUsernameFocusOut($event.target)\"\n                         [(ngModel)]=\"registerBindingModel.username\">\n                  <div class=\"valid-feedback\"></div>\n                  <div class=\"invalid-feedback\" *ngIf=\"usernameTaken\">\n                    Username is already taken.\n                  </div>\n                  <div class=\"invalid-feedback\" *ngIf=\"!usernameTaken\">\n                    Username is required.\n                  </div>\n                </div>\n\n                <div class=\"form-label-group\">\n                  <label for=\"inputEmail\">Email address</label>\n                  <input type=\"email\" id=\"inputEmail\" class=\"form-control\"\n                         placeholder=\"Email address\" name=\"email\" #inputEmail=\"ngModel\"\n                         required\n                         pattern=\"{{regexPattern}}\"\n                         [ngClass]=\"{'is-valid': inputEmail.valid && inputEmail.touched,\n                         'is-invalid': inputEmail.invalid && inputEmail.touched}\"\n                         [(ngModel)]=\"registerBindingModel.email\">\n                  <div class=\"valid-feedback\"></div>\n                  <div class=\"invalid-feedback\">\n                    Enter a valid email address.\n                  </div>\n                </div>\n\n                <div class=\"form-label-group\">\n                  <label for=\"customFile\" id=\"exercisePictureLabel\">Profile picture</label>\n                  <div class=\"custom-file\" id=\"customFileContainer\">\n                    <input type=\"file\" class=\"custom-file-input form-control\"\n                           id=\"customFile\" name=\"exercisePictureFile\"\n                           #inputProfilePicture=\"ngModel\"\n                           accept=\"image/*\"\n                           [(ngModel)]=\"file\"\n                           [ngClass]=\"{'is-valid': file && inputProfilePicture.touched,\n                         'is-invalid': !file && inputProfilePicture.touched}\"\n                           (change)=\"handleFileInput($event.target.files, chooseFileLabel)\">\n                    <label class=\"custom-file-label\" for=\"customFile\"\n                           id=\"çhooseFileLabel\" #chooseFileLabel>Choose\n                      file</label>\n                    <div class=\"valid-feedback\"></div>\n                    <div class=\"invalid-feedback\">\n                      Profile picture file should be an image.\n                    </div>\n                  </div>\n                </div>\n\n                <hr>\n\n                <div class=\"form-label-group\">\n                  <label for=\"inputPassword\">Password</label>\n                  <input type=\"password\" id=\"inputPassword\" class=\"form-control\"\n                         name=\"password\" placeholder=\"Password\" #inputPassword=\"ngModel\"\n                         pattern=\".{6,}\"\n                         required\n                         [ngClass]=\"{'is-valid': inputPassword.valid && inputPassword.touched,\n                         'is-invalid': inputPassword.invalid && inputPassword.touched}\"\n                         [(ngModel)]=\"registerBindingModel.password\"\n                  (change)=\"onPasswordChange()\">\n                  <div class=\"valid-feedback\"></div>\n                  <div class=\"invalid-feedback\">\n                    Please enter a password with at least 6 symbols.\n                  </div>\n                </div>\n\n                <div class=\"form-label-group\">\n                  <label for=\"inputConfirmPassword\">Confirm password</label>\n                  <input type=\"password\" id=\"inputConfirmPassword\" class=\"form-control\"\n                         name=\"confirmPassword\" placeholder=\"Confirm password\" #inputConfirmPassword=\"ngModel\"\n                         required\n                         [ngClass]=\"{'is-valid': inputConfirmPassword.valid && inputPassword.valid &&\n                         inputConfirmPassword.touched && passwordsMatch,\n                         'is-invalid': (inputConfirmPassword.invalid || !passwordsMatch || inputPassword.invalid) && inputConfirmPassword.touched}\"\n                         [(ngModel)]=\"registerBindingModel.confirmPassword\"\n                  (change)=\"onPasswordChange()\">\n                  <div class=\"valid-feedback\"></div>\n                  <div class=\"invalid-feedback\">\n                    Passwords must match.\n                  </div>\n                </div>\n\n                <button class=\"btn btn-lg btn-secondary btn-block text-uppercase\"\n                        type=\"submit\" [disabled]=\"resisterForm.invalid\" (click)=\"onSubmit()\">Register\n                </button>\n\n                <p>You already have a registration? Don't wait to get fit!</p>\n\n                <a routerLink=\"/signin\" role=\"button\">\n                  <button\n                    class=\"btn btn-lg btn-primary btn-block text-uppercase\"\n                    type=\"button\">Sign\n                    in\n                  </button>\n                </a>\n              </form>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n");
 
 /***/ }),
 
@@ -526,7 +539,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"selected-workout-plan\">\n\n    <ng-template #addWorkoutToWorkoutPlanModal let-modal>\n        <div class=\"modal-header\">\n            <h4 class=\"modal-title\" id=\"modal-basic-title2\">Add Workout To Workout Plan</h4>\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss('Cross click')\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n        </div>\n        <div class=\"modal-body\">\n            <form *ngIf=\"selectedWorkoutForModal\" #addWorkoutToWorkoutPlanForm=\"ngForm\">\n\n                <div class=\"form-group col-6\">\n                    <label for=\"inputStatus\">Workout</label>\n                    <select id=\"inputWorkoutId\" name=\"workoutId\" class=\"form-control\" #inputWorkoutId\n                            (change)=\"setSelectedWorkoutForModal()\"\n                            [(ngModel)]=\"selectedWorkoutIdForModal\">\n                        <option [ngValue]=\"workout.id\"\n                                *ngFor=\"let workout of loggedUserWorkouts\">{{workout.name}}</option>\n                    </select>\n                </div>\n\n                <hr/>\n\n                <h5 class=\"text-center\">{{selectedWorkoutForModal.name}}</h5>\n\n                <table class=\"table table-striped table-hover\">\n                    <thead>\n                    <tr *ngIf=\"selectedWorkoutForModal.exercises && !selectedWorkoutForModal.exercises.length\">\n                        <td colspan=\"5\" class=\"py-auto text-center\"><h5>No added exercises in this workout.</h5></td>\n                    </tr>\n                    <tr *ngIf=\"selectedWorkoutForModal.exercises && selectedWorkoutForModal.exercises.length\">\n                        <th scope=\"col\" style=\"width: 10%\">Order</th>\n                        <th scope=\"col\" style=\"width: 30%\">Exercise</th>\n                        <th scope=\"col\" style=\"width: 20%\">Reps</th>\n                        <th scope=\"col\" style=\"width: 20%\">Sets</th>\n                    </tr>\n                    </thead>\n                    <tbody>\n\n                    <tr *ngFor=\"let exercise of selectedWorkoutForModal.exercises\">\n                        <td class=\"align-middle\">{{exercise.orderIndex}}</td>\n                        <td class=\"align-middle\">{{exercise.exercise.name}}</td>\n                        <td class=\"align-middle\">{{exercise.reps}}</td>\n                        <td class=\"align-middle\">{{exercise.sets}}</td>\n                    </tr>\n                    </tbody>\n                </table>\n            </form>\n\n            <div *ngIf=\"!selectedWorkoutForModal\"><h5 class=\"text-center\">You don't have any\n                workouts.</h5>\n                <button type=\"button\" class=\"btn btn-success d-block mt-3 mx-auto\"\n                        routerLink=\"/my-workouts\" (click)=\"modal.dismiss()\">Go to My Workouts\n                </button>\n            </div>\n\n        </div>\n        <div class=\"modal-footer\">\n            <button type=\"button\" [disabled]=\"!selectedWorkoutForModal\" class=\"btn btn-outline-dark\"\n                    (click)=\"modal.close()\">Add to Workout Plan\n            </button>\n        </div>\n    </ng-template>\n\n    <ng-template #showWorkoutsSetsModal let-modal>\n        <div class=\"modal-header\">\n            <h4 class=\"modal-title\" id=\"modal-basic-title\">Sets per Muscle Group</h4>\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss('Cross click')\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n        </div>\n\n        <div class=\"modal-body\">\n            <div class=\"row align-middle\">\n                <ngx-charts-bar-horizontal\n                        [view]=\"[800, muscleGroupSets.length < 8 ? 200 : 400]\"\n                        [animations]=\"true\"\n                        [xAxis]=\"true\"\n                        [yAxis]=\"true\"\n                        [results]=\"muscleGroupSets\"\n                        legendTitle=\"Muscle Groups\"\n                        [legend]=\"true\"\n                        [showDataLabel]=\"false\"\n                        [showXAxisLabel]=\"false\"\n                        [showGridLines]=\"true\"\n                        [showYAxisLabel]=\"false\"\n                        [gradient]=\"true\"\n                        [noBarWhenZero]=\"true\"\n                        [roundDomains]=\"true\"\n                        [roundEdges]=\"true\"\n                        [tooltipDisabled]=\"false\"\n                        [trimYAxisTicks]=\"false\"\n                        [customColors]=\"customColors\"\n                >\n\n                </ngx-charts-bar-horizontal>\n            </div>\n        </div>\n        <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"modal.close()\">Close</button>\n        </div>\n    </ng-template>\n\n\n    <h2 *ngIf=\"!editMode\" class=\"pt-3 font-weight-light\">{{selectedWorkoutPlan.name}}</h2>\n    <div class=\"py-3 mx-auto col-5\" *ngIf=\"editMode\"><input type=\"text\" value=\"{{editWorkoutPlanBindingModel.name}}\"\n                                                            class=\"form-control form-control-lg text-center\"\n                                                            id=\"inputName\"\n                                                            name=\"inputName\" #inputName=\"ngModel\"\n                                                            required\n                                                            [ngClass]=\"{'is-valid': inputName.valid && inputName.touched,\n                         'is-invalid': inputName.invalid && inputName.touched}\"\n                                                            [(ngModel)]=\"editWorkoutPlanBindingModel.name\"></div>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"!editMode && !selectedWorkoutPlan.isCopied\">\n        ({{selectedWorkoutPlan.isPublic ? 'Public' : 'Private'}})</h4>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"selectedWorkoutPlan.isCopied\">(Copy)</h4>\n    <div *ngIf=\"editMode && !selectedWorkoutPlan.isCopied\" class=\"pb-3 col-3 mx-auto\">\n        <select id=\"inputStatus\" name=\"status\" class=\"form-control\" #inputWorkoutStatus\n                [(ngModel)]=\"editWorkoutPlanBindingModel.isPublic\">\n            <option [ngValue]=\"true\">Public</option>\n            <option [ngValue]=\"false\">Private</option>\n        </select>\n    </div>\n    <button *ngIf=\"!editMode\" type=\"button\" routerLink=\"/workout-plans/details/{{workoutPlanId}}\"\n            class=\"btn btn-dark mb-2\"><i class=\"fas fa-share-alt\"></i></button>\n\n\n    <h5 *ngIf=\"!selectedWorkoutPlan.workouts || !selectedWorkoutPlan.workouts.length\">No added workouts in this workout\n        plan.</h5>\n\n\n    <div class=\"workouts-container col-10 mx-auto\" *ngIf=\"!editMode\">\n        <table class=\"table table-striped table-hover mb-4\" *ngFor=\"let workout of selectedWorkoutPlan.workouts\">\n            <h4 class=\"order-index-workout font-weight-bold font-italic\">{{workout.orderIndex}}</h4>\n            <thead>\n            <tr>\n                <th colspan=\"5\" class=\"py-auto\"><h5><a\n                        routerLink=\"/my-workouts/{{workout.workout.id}}\">{{workout.workout.name}}</a></h5></th>\n            </tr>\n            <tr *ngIf=\"workout.workout.exercises && !workout.workout.exercises.length\">\n                <td colspan=\"5\" class=\"py-auto\"><h5>No added exercises in this workout.</h5></td>\n            </tr>\n            <tr *ngIf=\"workout.workout.exercises && workout.workout.exercises.length\">\n                <th scope=\"col\" style=\"width: 10%\">Order</th>\n                <th scope=\"col\" style=\"width: 30%\">Exercise name</th>\n                <th scope=\"col\" style=\"width: 20%\">Reps</th>\n                <th scope=\"col\" style=\"width: 20%\">Sets</th>\n                <th scope=\"col\" style=\"width: 20%;\"></th>\n\n            </tr>\n            </thead>\n            <tbody *ngIf=\"!editMode && workout.workout.exercises && workout.workout.exercises.length\">\n\n            <tr *ngFor=\"let exercise of workout.workout.exercises\">\n                <td class=\"align-middle\">{{exercise.orderIndex}}</td>\n                <td class=\"align-middle\">{{exercise.exercise.name}}</td>\n                <td class=\"align-middle\">{{exercise.reps}}</td>\n                <td class=\"align-middle\">{{exercise.sets}}</td>\n                <td>\n                    <button type=\"button\" routerLink=\"/exercises/details/{{exercise.exercise.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                </td>\n            </tr>\n            </tbody>\n        </table>\n    </div>\n    <div class=\"workouts-container col-10 mx-auto\" cdkDropList (cdkDropListDropped)=\"onDrop($event)\" *ngIf=\"editMode\">\n        <table cdkDrag class=\"table table-striped table-hover mb-4\"\n               *ngFor=\"let workout of editWorkoutPlanBindingModel.workouts\">\n            <h4 class=\"order-index-workout font-weight-bold font-italic\">{{workout.orderIndex}}</h4>\n            <thead>\n            <tr>\n                <th colspan=\"5\" class=\"py-auto\"><h5 class=\"d-inline-block\">{{workout.workout.name}}</h5>\n                    <button type=\"button\" (click)=\"onWorkoutDeleteHandler(workout.id, workout.orderIndex)\"\n                            class=\"btn btn-danger delete-btn ml-3\"><i class=\"far fa-trash-alt\"></i></button>\n                </th>\n\n            </tr>\n            <tr *ngIf=\"workout.workout.exercises && !workout.workout.exercises.length\">\n                <td colspan=\"5\" class=\"py-auto\"><h5>No added exercises in this workout.</h5></td>\n            </tr>\n            <tr *ngIf=\"workout.workout.exercises && workout.workout.exercises.length\">\n                <th scope=\"col\" style=\"width: 10%\">Order</th>\n                <th scope=\"col\" style=\"width: 30%\">Exercise name</th>\n                <th scope=\"col\" style=\"width: 20%\">Reps</th>\n                <th scope=\"col\" style=\"width: 20%\">Sets</th>\n                <th scope=\"col\" style=\"width: 20%;\"></th>\n\n            </tr>\n            </thead>\n            <tbody *ngIf=\"workout.workout.exercises && workout.workout.exercises.length\">\n\n            <tr *ngFor=\"let exercise of workout.workout.exercises\">\n                <td class=\"align-middle\">{{exercise.orderIndex}}</td>\n                <td class=\"align-middle\">{{exercise.exercise.name}}</td>\n                <td class=\"align-middle\">{{exercise.reps}}</td>\n                <td class=\"align-middle\">{{exercise.sets}}</td>\n                <td>\n                    <button type=\"button\" routerLink=\"/exercises/details/{{exercise.exercise.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                </td>\n            </tr>\n            </tbody>\n            <tr *cdkDragPreview class=\"text-center\">\n            </tr>\n        </table>\n\n    </div>\n\n\n    <div class=\"workout-actions\" *ngIf=\"!editMode\">\n\n        <button *ngIf=\"selectedWorkoutPlan.workouts && selectedWorkoutPlan.workouts.length\" type=\"button\"\n                class=\"btn btn-info my-3 mx-2\" (click)=\"exportToExcelHandler()\">Export to Excel\n        </button>\n\n        <button *ngIf=\"selectedWorkoutPlan.workouts && selectedWorkoutPlan.workouts.length\" type=\"button\"\n                class=\"btn btn-secondary my-3 mx-2\" (click)=\"open(showWorkoutsSetsModal)\">Sets per Muscle Group\n        </button>\n\n\n        <button type=\"link\" class=\"btn btn-primary my-3 mx-2\"\n                (click)=\"openAddWorkoutModal(addWorkoutToWorkoutPlanModal)\">Add Workout\n        </button>\n\n        <button type=\"button\"\n                class=\"btn btn-success my-3 mx-2\" routerLink=\"./\" [queryParams]=\"{'edit': 1}\">Edit\n        </button>\n\n        <button type=\"button\" (click)=\"onWorkoutPlanDeleteHandler()\" class=\"btn btn-danger my-3 mx-2\">\n            Delete\n        </button>\n    </div>\n\n\n    <div class=\"workout-actions-edit\" *ngIf=\"editMode\">\n        <button type=\"link\" class=\"btn btn-success my-3 mx-2\" (click)=\"onSaveHandler()\">\n            Save\n        </button>\n        <button type=\"link\" class=\"btn btn-danger my-3 mx-2\" routerLink=\"./\">Cancel</button>\n    </div>\n\n\n</div>\n\n\n\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"selected-workout-plan\">\n\n    <ng-template #addWorkoutToWorkoutPlanModal let-modal>\n        <div class=\"modal-header\">\n            <h4 class=\"modal-title\" id=\"modal-basic-title2\">Add Workout To Workout Plan</h4>\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss('Cross click')\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n        </div>\n        <div class=\"modal-body\">\n            <form *ngIf=\"selectedWorkoutForModal\" #addWorkoutToWorkoutPlanForm=\"ngForm\">\n\n                <div class=\"form-group col-6\">\n                    <label for=\"inputStatus\">Workout</label>\n                    <select id=\"inputWorkoutId\" name=\"workoutId\" class=\"form-control\" #inputWorkoutId\n                            (change)=\"setSelectedWorkoutForModal()\"\n                            [(ngModel)]=\"selectedWorkoutIdForModal\">\n                        <option [ngValue]=\"workout.id\"\n                                *ngFor=\"let workout of loggedUserWorkouts\">{{workout.name}}</option>\n                    </select>\n                </div>\n\n                <hr/>\n\n                <h5 class=\"text-center\">{{selectedWorkoutForModal.name}}</h5>\n\n                <table class=\"table table-striped table-hover\">\n                    <thead>\n                    <tr *ngIf=\"selectedWorkoutForModal.exercises && !selectedWorkoutForModal.exercises.length\">\n                        <td colspan=\"5\" class=\"py-auto text-center\"><h5>No added exercises in this workout.</h5></td>\n                    </tr>\n                    <tr *ngIf=\"selectedWorkoutForModal.exercises && selectedWorkoutForModal.exercises.length\">\n                        <th scope=\"col\" style=\"width: 10%\">Order</th>\n                        <th scope=\"col\" style=\"width: 30%\">Exercise</th>\n                        <th scope=\"col\" style=\"width: 20%\">Reps</th>\n                        <th scope=\"col\" style=\"width: 20%\">Sets</th>\n                    </tr>\n                    </thead>\n                    <tbody>\n\n                    <tr *ngFor=\"let exercise of selectedWorkoutForModal.exercises\">\n                        <td class=\"align-middle\">{{exercise.orderIndex}}</td>\n                        <td class=\"align-middle\">{{exercise.exercise.name}}</td>\n                        <td class=\"align-middle\">{{exercise.reps}}</td>\n                        <td class=\"align-middle\">{{exercise.sets}}</td>\n                    </tr>\n                    </tbody>\n                </table>\n            </form>\n\n            <div *ngIf=\"!selectedWorkoutForModal\"><h5 class=\"text-center\">You don't have any\n                workouts.</h5>\n                <button type=\"button\" class=\"btn btn-success d-block mt-3 mx-auto\"\n                        routerLink=\"/my-workouts\" (click)=\"modal.dismiss()\">Go to My Workouts\n                </button>\n            </div>\n\n        </div>\n        <div class=\"modal-footer\">\n            <button type=\"button\" [disabled]=\"!selectedWorkoutForModal\" class=\"btn btn-outline-dark\"\n                    (click)=\"modal.close()\">Add to Workout Plan\n            </button>\n        </div>\n    </ng-template>\n\n    <ng-template #showWorkoutsSetsModal let-modal>\n        <div class=\"modal-header\">\n            <h4 class=\"modal-title\" id=\"modal-basic-title\">Sets per Muscle Group</h4>\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss('Cross click')\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n        </div>\n\n        <div class=\"modal-body\">\n            <div class=\"row align-middle\">\n                <ngx-charts-bar-horizontal\n                        [view]=\"[800, muscleGroupSets.length < 8 ? 200 : 400]\"\n                        [animations]=\"true\"\n                        [xAxis]=\"true\"\n                        [yAxis]=\"true\"\n                        [results]=\"muscleGroupSets\"\n                        legendTitle=\"Muscle Groups\"\n                        [legend]=\"true\"\n                        [showDataLabel]=\"false\"\n                        [showXAxisLabel]=\"false\"\n                        [showGridLines]=\"true\"\n                        [showYAxisLabel]=\"false\"\n                        [gradient]=\"true\"\n                        [noBarWhenZero]=\"true\"\n                        [roundDomains]=\"true\"\n                        [roundEdges]=\"true\"\n                        [tooltipDisabled]=\"false\"\n                        [trimYAxisTicks]=\"false\"\n                        [customColors]=\"customColors\"\n                >\n\n                </ngx-charts-bar-horizontal>\n            </div>\n        </div>\n        <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"modal.close()\">Close</button>\n        </div>\n    </ng-template>\n\n    <form #editForm=\"ngForm\">\n    <h2 *ngIf=\"!editMode\" class=\"pt-3 font-weight-light\">{{selectedWorkoutPlan.name}}</h2>\n    <div class=\"py-3 mx-auto col-5\" *ngIf=\"editMode\"><input type=\"text\" value=\"{{editWorkoutPlanBindingModel.name}}\"\n                                                            class=\"form-control form-control-lg text-center\"\n                                                            id=\"inputName\"\n                                                            name=\"inputName\" #inputName=\"ngModel\"\n                                                            required\n                                                            [ngClass]=\"{'is-valid': inputName.valid && inputName.touched,\n                         'is-invalid': inputName.invalid && inputName.touched}\"\n                                                            [(ngModel)]=\"editWorkoutPlanBindingModel.name\"></div></form>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"!editMode && !selectedWorkoutPlan.isCopied\">\n        ({{selectedWorkoutPlan.isPublic ? 'Public' : 'Private'}})</h4>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"selectedWorkoutPlan.isCopied\">(Copy)</h4>\n    <div *ngIf=\"editMode && !selectedWorkoutPlan.isCopied\" class=\"pb-3 col-3 mx-auto\">\n        <select id=\"inputStatus\" name=\"status\" class=\"form-control\" #inputWorkoutStatus\n                [(ngModel)]=\"editWorkoutPlanBindingModel.isPublic\">\n            <option [ngValue]=\"true\">Public</option>\n            <option [ngValue]=\"false\">Private</option>\n        </select>\n    </div>\n    <button *ngIf=\"!editMode\" type=\"button\" routerLink=\"/workout-plans/details/{{workoutPlanId}}\"\n            class=\"btn btn-dark mb-2\"><i class=\"fas fa-share-alt\"></i></button>\n\n\n    <h5 *ngIf=\"!selectedWorkoutPlan.workouts || !selectedWorkoutPlan.workouts.length\">No added workouts in this workout\n        plan.</h5>\n\n\n    <div class=\"workouts-container col-10 mx-auto\" *ngIf=\"!editMode\">\n        <table class=\"table table-striped table-hover mb-4\" *ngFor=\"let workout of selectedWorkoutPlan.workouts\">\n            <h4 class=\"order-index-workout font-weight-bold font-italic\">{{workout.orderIndex}}</h4>\n            <thead>\n            <tr>\n                <th colspan=\"5\" class=\"py-auto\"><h5><a\n                        routerLink=\"/my-workouts/{{workout.workout.id}}\">{{workout.workout.name}}</a></h5></th>\n            </tr>\n            <tr *ngIf=\"workout.workout.exercises && !workout.workout.exercises.length\">\n                <td colspan=\"5\" class=\"py-auto\"><h5>No added exercises in this workout.</h5></td>\n            </tr>\n            <tr *ngIf=\"workout.workout.exercises && workout.workout.exercises.length\">\n                <th scope=\"col\" style=\"width: 10%\">Order</th>\n                <th scope=\"col\" style=\"width: 30%\">Exercise name</th>\n                <th scope=\"col\" style=\"width: 20%\">Reps</th>\n                <th scope=\"col\" style=\"width: 20%\">Sets</th>\n                <th scope=\"col\" style=\"width: 20%;\"></th>\n\n            </tr>\n            </thead>\n            <tbody *ngIf=\"!editMode && workout.workout.exercises && workout.workout.exercises.length\">\n\n            <tr *ngFor=\"let exercise of workout.workout.exercises\">\n                <td class=\"align-middle\">{{exercise.orderIndex}}</td>\n                <td class=\"align-middle\">{{exercise.exercise.name}}</td>\n                <td class=\"align-middle\">{{exercise.reps}}</td>\n                <td class=\"align-middle\">{{exercise.sets}}</td>\n                <td>\n                    <button type=\"button\" routerLink=\"/exercises/details/{{exercise.exercise.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                </td>\n            </tr>\n            </tbody>\n        </table>\n    </div>\n    <div class=\"workouts-container col-10 mx-auto\" cdkDropList (cdkDropListDropped)=\"onDrop($event)\" *ngIf=\"editMode\">\n        <table cdkDrag class=\"table table-striped table-hover mb-4\"\n               *ngFor=\"let workout of editWorkoutPlanBindingModel.workouts\">\n            <h4 class=\"order-index-workout font-weight-bold font-italic\">{{workout.orderIndex}}</h4>\n            <thead>\n            <tr>\n                <th colspan=\"5\" class=\"py-auto\"><h5 class=\"d-inline-block\">{{workout.workout.name}}</h5>\n                    <button type=\"button\" (click)=\"onWorkoutDeleteHandler(workout.id, workout.orderIndex)\"\n                            class=\"btn btn-danger delete-btn ml-3\"><i class=\"far fa-trash-alt\"></i></button>\n                </th>\n\n            </tr>\n            <tr *ngIf=\"workout.workout.exercises && !workout.workout.exercises.length\">\n                <td colspan=\"5\" class=\"py-auto\"><h5>No added exercises in this workout.</h5></td>\n            </tr>\n            <tr *ngIf=\"workout.workout.exercises && workout.workout.exercises.length\">\n                <th scope=\"col\" style=\"width: 10%\">Order</th>\n                <th scope=\"col\" style=\"width: 30%\">Exercise name</th>\n                <th scope=\"col\" style=\"width: 20%\">Reps</th>\n                <th scope=\"col\" style=\"width: 20%\">Sets</th>\n                <th scope=\"col\" style=\"width: 20%;\"></th>\n\n            </tr>\n            </thead>\n            <tbody *ngIf=\"workout.workout.exercises && workout.workout.exercises.length\">\n\n            <tr *ngFor=\"let exercise of workout.workout.exercises\">\n                <td class=\"align-middle\">{{exercise.orderIndex}}</td>\n                <td class=\"align-middle\">{{exercise.exercise.name}}</td>\n                <td class=\"align-middle\">{{exercise.reps}}</td>\n                <td class=\"align-middle\">{{exercise.sets}}</td>\n                <td>\n                    <button type=\"button\" routerLink=\"/exercises/details/{{exercise.exercise.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                </td>\n            </tr>\n            </tbody>\n            <tr *cdkDragPreview class=\"text-center\">\n            </tr>\n        </table>\n\n    </div>\n\n\n    <div class=\"workout-actions\" *ngIf=\"!editMode\">\n\n        <button *ngIf=\"selectedWorkoutPlan.workouts && selectedWorkoutPlan.workouts.length\" type=\"button\"\n                class=\"btn btn-info my-3 mx-2\" (click)=\"exportToExcelHandler()\">Export to Excel\n        </button>\n\n        <button *ngIf=\"selectedWorkoutPlan.workouts && selectedWorkoutPlan.workouts.length\" type=\"button\"\n                class=\"btn btn-secondary my-3 mx-2\" (click)=\"open(showWorkoutsSetsModal)\">Sets per Muscle Group\n        </button>\n\n\n        <button type=\"link\" class=\"btn btn-primary my-3 mx-2\"\n                (click)=\"openAddWorkoutModal(addWorkoutToWorkoutPlanModal)\">Add Workout\n        </button>\n\n        <button type=\"button\"\n                class=\"btn btn-success my-3 mx-2\" routerLink=\"./\" [queryParams]=\"{'edit': 1}\">Edit\n        </button>\n\n        <button type=\"button\" (click)=\"onWorkoutPlanDeleteHandler()\" class=\"btn btn-danger my-3 mx-2\">\n            Delete\n        </button>\n    </div>\n\n\n    <div class=\"workout-actions-edit\" *ngIf=\"editMode\">\n        <button type=\"link\" [disabled]=\"editForm.invalid\" class=\"btn btn-success my-3 mx-2\" (click)=\"onSaveHandler()\">\n            Save\n        </button>\n        <button type=\"link\" class=\"btn btn-danger my-3 mx-2\" routerLink=\"./\">Cancel</button>\n    </div>\n\n\n</div>\n\n\n\n");
 
 /***/ }),
 
@@ -604,7 +617,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"selected-workout\">\n\n    <ng-template #showWorkoutsSetsModal let-modal>\n        <div class=\"modal-header\">\n            <h4 class=\"modal-title\" id=\"modal-basic-title\">Sets per Muscle Group</h4>\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss('Cross click')\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n        </div>\n\n        <div class=\"modal-body\">\n            <div class=\"row align-middle\">\n                <ngx-charts-bar-horizontal\n                        [view]=\"[800, exercisesSets.length < 8 ? 200 : 400]\"\n                        [animations]=\"true\"\n                        [xAxis]=\"true\"\n                        [yAxis]=\"true\"\n                        [results]=\"exercisesSets\"\n                        legendTitle=\"Muscle Groups\"\n                        [legend]=\"true\"\n                        [showDataLabel]=\"false\"\n                        [showXAxisLabel]=\"false\"\n                        [showGridLines]=\"true\"\n                        [showYAxisLabel]=\"false\"\n                        [gradient]=\"true\"\n                        [noBarWhenZero]=\"true\"\n                        [roundDomains]=\"true\"\n                        [roundEdges]=\"true\"\n                        [tooltipDisabled]=\"false\"\n                        [trimYAxisTicks]=\"false\"\n                        [customColors]=\"customColors\"\n                >\n\n                </ngx-charts-bar-horizontal>\n            </div>\n        </div>\n        <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"modal.close()\">Close</button>\n        </div>\n    </ng-template>\n\n\n    <h2 class=\"pt-3 font-weight-light\"  *ngIf=\"!editMode\">{{selectedWorkout.name}}</h2>\n    <div class=\"py-3 mx-auto col-5\"  *ngIf=\"editMode\"><input type=\"text\" value=\"{{editWorkoutBindingModel.name}}\" class=\"form-control form-control-lg text-center\"\n                                                                id=\"inputName\"\n                                                                name=\"inputName\" #inputName=\"ngModel\"\n                                                                required\n                                                                [ngClass]=\"{'is-valid': inputName.valid && inputName.touched,\n                         'is-invalid': inputName.invalid && inputName.touched}\" [(ngModel)]=\"editWorkoutBindingModel.name\"></div>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"!editMode && !selectedWorkout.isCopied\">\n        ({{selectedWorkout.isPublic ? 'Public' : 'Private'}})</h4>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"selectedWorkout.isCopied\">(Copy)</h4>\n    <div *ngIf=\"editMode && !selectedWorkout.isCopied\" class=\"pb-3 col-3 mx-auto\">\n        <select id=\"inputStatus\" name=\"status\" class=\"form-control\" #inputWorkoutStatus\n                [(ngModel)]=\"editWorkoutBindingModel.isPublic\">\n            <option [ngValue]=\"true\">Public</option>\n            <option [ngValue]=\"false\">Private</option>\n        </select>\n    </div>\n    <button *ngIf=\"!editMode\" type=\"button\" routerLink=\"/workouts/details/{{workoutId}}\"\n            class=\"btn btn-dark mb-2\"><i class=\"fas fa-share-alt\"></i></button>\n\n    <form #editForm=\"ngForm\">\n        <table class=\"table table-striped table-hover\">\n            <thead>\n            <tr *ngIf=\"selectedWorkout.exercises && !selectedWorkout.exercises.length\">\n                <td colspan=\"5\" class=\"py-auto\"><h5>No added exercises in this workout.</h5></td>\n            </tr>\n            <tr *ngIf=\"selectedWorkout.exercises && selectedWorkout.exercises.length\">\n                <th scope=\"col\" style=\"width: 10%\">Order</th>\n                <th scope=\"col\" style=\"width: 30%\">Exercise name</th>\n                <th scope=\"col\" style=\"width: 20%\">Reps</th>\n                <th scope=\"col\" style=\"width: 20%\">Sets</th>\n                <th scope=\"col\" style=\"width: 20%;\"></th>\n\n            </tr>\n            </thead>\n            <tbody *ngIf=\"!editMode && selectedWorkout.exercises && selectedWorkout.exercises.length\">\n\n            <tr *ngFor=\"let exercise of selectedWorkout.exercises\">\n                <td class=\"align-middle\">{{exercise.orderIndex}}</td>\n                <td class=\"align-middle\">{{exercise.exercise.name}}</td>\n                <td class=\"align-middle\">{{exercise.reps}}</td>\n                <td class=\"align-middle\">{{exercise.sets}}</td>\n                <td>\n                    <button type=\"button\" routerLink=\"/exercises/details/{{exercise.exercise.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                </td>\n            </tr>\n            </tbody>\n            <tbody cdkDropList (cdkDropListDropped)=\"onDrop($event)\" *ngIf=\"editMode\">\n\n            <tr *ngFor=\"let exercise of editWorkoutBindingModel.exercises\" [id]=\"exercise.orderIndex\" cdkDrag>\n                <td class=\"align-middle\">{{exercise.orderIndex}}</td>\n                <td class=\"align-middle\">{{exercise.exercise.name}}</td>\n\n                <td class=\"align-middle\">\n                    <input type=\"number\" value=\"{{exercise.reps}}\" class=\"form-control\" id=\"inputReps\" name=\"inputReps-{{exercise.orderIndex}}\"\n                           #inputReps=\"ngModel\" [(ngModel)]=\"exercise.reps\"\n                           required\n                           pattern=\"^[1-9][0-9]*\"\n                           min=\"1\"\n                           [ngClass]=\"{'is-valid': inputReps.valid && inputReps.touched,\n                         'is-invalid': inputReps.invalid && inputReps.touched}\"></td>\n\n                <td class=\"align-middle\"><input type=\"number\" value=\"{{exercise.sets}}\" class=\"form-control\"\n                                                id=\"inputSets\"\n                                                name=\"inputSets-{{exercise.orderIndex}}\" #inputSets=\"ngModel\"\n                                                required\n                                                pattern=\"^[1-9][0-9]*\"\n                                                min=\"1\"\n                                                [ngClass]=\"{'is-valid': inputSets.valid && inputSets.touched,\n                         'is-invalid': inputSets.invalid && inputSets.touched}\" [(ngModel)]=\"exercise.sets\"></td>\n                <td>\n                    <button type=\"button\" routerLink=\"/exercises/details/{{exercise.exercise.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                    <button type=\"button\" (click)=\"onWorkoutExerciseDeleteHandler(selectedWorkout.id, exercise.id)\"\n                            class=\"btn btn-danger\"><i class=\"far fa-trash-alt\"></i></button>\n                </td>\n                <div *cdkDragPreview class=\"text-center\">\n                </div>\n\n            </tr>\n            </tbody>\n        </table>\n    </form>\n\n    <div class=\"workout-actions\" *ngIf=\"!editMode\">\n\n        <button *ngIf=\"selectedWorkout.exercises && selectedWorkout.exercises.length\" type=\"button\"\n                class=\"btn btn-secondary my-3 mx-2\" (click)=\"open(showWorkoutsSetsModal)\">Show Sets per Muscle Group\n        </button>\n\n        <button type=\"link\" class=\"btn btn-primary my-3 mx-2\" routerLink=\"/exercises/all\">Add Exercise</button>\n\n        <button type=\"button\"\n                class=\"btn btn-success my-3 mx-2\" routerLink=\"./\" [queryParams]=\"{'edit': 1}\">Edit\n        </button>\n\n        <button type=\"button\" (click)=\"onWorkoutDeleteHandler(selectedWorkout.id)\" class=\"btn btn-danger my-3 mx-2\">\n            Delete\n        </button>\n    </div>\n\n\n    <div class=\"workout-actions-edit\" *ngIf=\"editMode\">\n        <button type=\"link\" [disabled]=\"editForm.invalid\" class=\"btn btn-success my-3 mx-2\" (click)=\"onSaveHandler()\">Save</button>\n        <button type=\"link\" class=\"btn btn-danger my-3 mx-2\" routerLink=\"./\">Cancel</button>\n    </div>\n\n\n</div>\n\n\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"selected-workout\">\n\n    <ng-template #showWorkoutsSetsModal let-modal>\n        <div class=\"modal-header\">\n            <h4 class=\"modal-title\" id=\"modal-basic-title\">Sets per Muscle Group</h4>\n            <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss('Cross click')\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n        </div>\n\n        <div class=\"modal-body\">\n            <div class=\"row align-middle\">\n                <ngx-charts-bar-horizontal\n                        [view]=\"[800, exercisesSets.length < 8 ? 200 : 400]\"\n                        [animations]=\"true\"\n                        [xAxis]=\"true\"\n                        [yAxis]=\"true\"\n                        [results]=\"exercisesSets\"\n                        legendTitle=\"Muscle Groups\"\n                        [legend]=\"true\"\n                        [showDataLabel]=\"false\"\n                        [showXAxisLabel]=\"false\"\n                        [showGridLines]=\"true\"\n                        [showYAxisLabel]=\"false\"\n                        [gradient]=\"true\"\n                        [noBarWhenZero]=\"true\"\n                        [roundDomains]=\"true\"\n                        [roundEdges]=\"true\"\n                        [tooltipDisabled]=\"false\"\n                        [trimYAxisTicks]=\"false\"\n                        [customColors]=\"customColors\"\n                >\n\n                </ngx-charts-bar-horizontal>\n            </div>\n        </div>\n        <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-outline-dark\" (click)=\"modal.close()\">Close</button>\n        </div>\n    </ng-template>\n\n    <form #editForm=\"ngForm\">\n    <h2 class=\"pt-3 font-weight-light\"  *ngIf=\"!editMode\">{{selectedWorkout.name}}</h2>\n    <div class=\"py-3 mx-auto col-5\"  *ngIf=\"editMode\"><input type=\"text\" value=\"{{editWorkoutBindingModel.name}}\" class=\"form-control form-control-lg text-center\"\n                                                                id=\"inputName\"\n                                                                name=\"inputName\" #inputName=\"ngModel\"\n                                                                required\n                                                                [ngClass]=\"{'is-valid': inputName.valid && inputName.touched,\n                         'is-invalid': inputName.invalid && inputName.touched}\" [(ngModel)]=\"editWorkoutBindingModel.name\"></div>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"!editMode && !selectedWorkout.isCopied\">\n        ({{selectedWorkout.isPublic ? 'Public' : 'Private'}})</h4>\n    <h4 class=\"pb-3 font-weight-light\" *ngIf=\"selectedWorkout.isCopied\">(Copy)</h4>\n    <div *ngIf=\"editMode && !selectedWorkout.isCopied\" class=\"pb-3 col-3 mx-auto\">\n        <select id=\"inputStatus\" name=\"status\" class=\"form-control\" #inputWorkoutStatus\n                [(ngModel)]=\"editWorkoutBindingModel.isPublic\">\n            <option [ngValue]=\"true\">Public</option>\n            <option [ngValue]=\"false\">Private</option>\n        </select>\n    </div>\n    <button *ngIf=\"!editMode\" type=\"button\" routerLink=\"/workouts/details/{{workoutId}}\"\n            class=\"btn btn-dark mb-2\"><i class=\"fas fa-share-alt\"></i></button>\n\n\n        <table class=\"table table-striped table-hover\">\n            <thead>\n            <tr *ngIf=\"selectedWorkout.exercises && !selectedWorkout.exercises.length\">\n                <td colspan=\"5\" class=\"py-auto\"><h5>No added exercises in this workout.</h5></td>\n            </tr>\n            <tr *ngIf=\"selectedWorkout.exercises && selectedWorkout.exercises.length\">\n                <th scope=\"col\" style=\"width: 10%\">Order</th>\n                <th scope=\"col\" style=\"width: 30%\">Exercise name</th>\n                <th scope=\"col\" style=\"width: 20%\">Reps</th>\n                <th scope=\"col\" style=\"width: 20%\">Sets</th>\n                <th scope=\"col\" style=\"width: 20%;\"></th>\n\n            </tr>\n            </thead>\n            <tbody *ngIf=\"!editMode && selectedWorkout.exercises && selectedWorkout.exercises.length\">\n\n            <tr *ngFor=\"let exercise of selectedWorkout.exercises\">\n                <td class=\"align-middle\">{{exercise.orderIndex}}</td>\n                <td class=\"align-middle\">{{exercise.exercise.name}}</td>\n                <td class=\"align-middle\">{{exercise.reps}}</td>\n                <td class=\"align-middle\">{{exercise.sets}}</td>\n                <td>\n                    <button type=\"button\" routerLink=\"/exercises/details/{{exercise.exercise.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                </td>\n            </tr>\n            </tbody>\n            <tbody cdkDropList (cdkDropListDropped)=\"onDrop($event)\" *ngIf=\"editMode\">\n\n            <tr *ngFor=\"let exercise of editWorkoutBindingModel.exercises\" [id]=\"exercise.orderIndex\" cdkDrag>\n                <td class=\"align-middle\">{{exercise.orderIndex}}</td>\n                <td class=\"align-middle\">{{exercise.exercise.name}}</td>\n\n                <td class=\"align-middle\">\n                    <input type=\"number\" value=\"{{exercise.reps}}\" class=\"form-control\" id=\"inputReps\" name=\"inputReps-{{exercise.orderIndex}}\"\n                           #inputReps=\"ngModel\" [(ngModel)]=\"exercise.reps\"\n                           required\n                           pattern=\"^[1-9][0-9]*\"\n                           min=\"1\"\n                           [ngClass]=\"{'is-valid': inputReps.valid && inputReps.touched,\n                         'is-invalid': inputReps.invalid && inputReps.touched}\"></td>\n\n                <td class=\"align-middle\"><input type=\"number\" value=\"{{exercise.sets}}\" class=\"form-control\"\n                                                id=\"inputSets\"\n                                                name=\"inputSets-{{exercise.orderIndex}}\" #inputSets=\"ngModel\"\n                                                required\n                                                pattern=\"^[1-9][0-9]*\"\n                                                min=\"1\"\n                                                [ngClass]=\"{'is-valid': inputSets.valid && inputSets.touched,\n                         'is-invalid': inputSets.invalid && inputSets.touched}\" [(ngModel)]=\"exercise.sets\"></td>\n                <td>\n                    <button type=\"button\" routerLink=\"/exercises/details/{{exercise.exercise.id}}\"\n                            class=\"btn btn-primary mr-2\"><i class=\"far fa-eye\"></i></button>\n                    <button type=\"button\" (click)=\"onWorkoutExerciseDeleteHandler(selectedWorkout.id, exercise.id)\"\n                            class=\"btn btn-danger\"><i class=\"far fa-trash-alt\"></i></button>\n                </td>\n                <div *cdkDragPreview class=\"text-center\">\n                </div>\n\n            </tr>\n            </tbody>\n        </table>\n    </form>\n\n    <div class=\"workout-actions\" *ngIf=\"!editMode\">\n\n        <button *ngIf=\"selectedWorkout.exercises && selectedWorkout.exercises.length\" type=\"button\"\n                class=\"btn btn-secondary my-3 mx-2\" (click)=\"open(showWorkoutsSetsModal)\">Show Sets per Muscle Group\n        </button>\n\n        <button type=\"link\" class=\"btn btn-primary my-3 mx-2\" routerLink=\"/exercises/all\">Add Exercise</button>\n\n        <button type=\"button\"\n                class=\"btn btn-success my-3 mx-2\" routerLink=\"./\" [queryParams]=\"{'edit': 1}\">Edit\n        </button>\n\n        <button type=\"button\" (click)=\"onWorkoutDeleteHandler(selectedWorkout.id)\" class=\"btn btn-danger my-3 mx-2\">\n            Delete\n        </button>\n    </div>\n\n\n    <div class=\"workout-actions-edit\" *ngIf=\"editMode\">\n        <button type=\"link\" [disabled]=\"editForm.invalid\" class=\"btn btn-success my-3 mx-2\" (click)=\"onSaveHandler()\">Save</button>\n        <button type=\"link\" class=\"btn btn-danger my-3 mx-2\" routerLink=\"./\">Cancel</button>\n    </div>\n\n\n</div>\n\n\n");
 
 /***/ }),
 
@@ -890,16 +903,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _admin_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./admin.service */ "./src/main/webapp/app/admin-panel/admin.service.ts");
 /* harmony import */ var _auth_auth_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../auth/auth.service */ "./src/main/webapp/app/auth/auth.service.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
 
 let AdminPanelComponent = class AdminPanelComponent {
-    constructor(adminService, authService) {
+    constructor(adminService, authService, titleService) {
         this.adminService = adminService;
         this.authService = authService;
+        this.titleService = titleService;
         this.page = 1;
         this.pageSize = 6;
+        this.titleService.setTitle('FitBook' + '- Admin Panel');
     }
     ngOnInit() {
         this.loading = true;
@@ -934,7 +951,8 @@ let AdminPanelComponent = class AdminPanelComponent {
 };
 AdminPanelComponent.ctorParameters = () => [
     { type: _admin_service__WEBPACK_IMPORTED_MODULE_2__["AdminService"] },
-    { type: _auth_auth_service__WEBPACK_IMPORTED_MODULE_3__["AuthService"] }
+    { type: _auth_auth_service__WEBPACK_IMPORTED_MODULE_3__["AuthService"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__["Title"] }
 ];
 AdminPanelComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -1045,6 +1063,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _auth_moderator_guard__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./auth/moderator.guard */ "./src/main/webapp/app/auth/moderator.guard.ts");
 /* harmony import */ var _auth_admin_guard__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./auth/admin.guard */ "./src/main/webapp/app/auth/admin.guard.ts");
 /* harmony import */ var _home_fitness_profile_guard__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./home/fitness-profile.guard */ "./src/main/webapp/app/home/fitness-profile.guard.ts");
+/* harmony import */ var _not_found_not_found_component__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./not-found/not-found.component */ "./src/main/webapp/app/not-found/not-found.component.ts");
+
 
 
 
@@ -1128,7 +1148,9 @@ const appRoutes = [
     { path: 'foods/all', component: _food_all_foods_all_foods_component__WEBPACK_IMPORTED_MODULE_25__["AllFoodsComponent"], canActivate: [_auth_auth_guard__WEBPACK_IMPORTED_MODULE_36__["AuthGuard"], _home_fitness_profile_guard__WEBPACK_IMPORTED_MODULE_40__["FitnessProfileGuard"], _home_fitness_profile_guard__WEBPACK_IMPORTED_MODULE_40__["FitnessProfileGuard"]] },
     { path: 'foods/details/:id', component: _food_food_details_food_details_component__WEBPACK_IMPORTED_MODULE_24__["FoodDetailsComponent"], canActivate: [_auth_auth_guard__WEBPACK_IMPORTED_MODULE_36__["AuthGuard"], _home_fitness_profile_guard__WEBPACK_IMPORTED_MODULE_40__["FitnessProfileGuard"]] },
     { path: 'profile/:username', component: _user_user_profile_user_profile_component__WEBPACK_IMPORTED_MODULE_15__["UserProfileComponent"], canActivate: [_auth_auth_guard__WEBPACK_IMPORTED_MODULE_36__["AuthGuard"], _home_fitness_profile_guard__WEBPACK_IMPORTED_MODULE_40__["FitnessProfileGuard"]] },
-    { path: 'admin-panel', component: _admin_panel_admin_panel_component__WEBPACK_IMPORTED_MODULE_23__["AdminPanelComponent"], canActivate: [_auth_admin_guard__WEBPACK_IMPORTED_MODULE_39__["AdminGuard"], _home_fitness_profile_guard__WEBPACK_IMPORTED_MODULE_40__["FitnessProfileGuard"]] }
+    { path: 'admin-panel', component: _admin_panel_admin_panel_component__WEBPACK_IMPORTED_MODULE_23__["AdminPanelComponent"], canActivate: [_auth_admin_guard__WEBPACK_IMPORTED_MODULE_39__["AdminGuard"], _home_fitness_profile_guard__WEBPACK_IMPORTED_MODULE_40__["FitnessProfileGuard"]] },
+    { path: '404', component: _not_found_not_found_component__WEBPACK_IMPORTED_MODULE_41__["NotFoundComponent"] },
+    { path: '**', redirectTo: '/404' }
 ];
 let AppRoutingModule = class AppRoutingModule {
 };
@@ -1157,7 +1179,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class AppSettings {
 }
-AppSettings.API_ENDPOINT = '';
+AppSettings.API_ENDPOINT = 'http://localhost:8000';
 
 
 /***/ }),
@@ -1291,6 +1313,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _diet_plan_my_diet_plans_no_selected_diet_plan_no_selected_diet_plan_component__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./diet-plan/my-diet-plans/no-selected-diet-plan/no-selected-diet-plan.component */ "./src/main/webapp/app/diet-plan/my-diet-plans/no-selected-diet-plan/no-selected-diet-plan.component.ts");
 /* harmony import */ var _diet_plan_my_diet_plans_selected_diet_plan_selected_diet_plan_component__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./diet-plan/my-diet-plans/selected-diet-plan/selected-diet-plan.component */ "./src/main/webapp/app/diet-plan/my-diet-plans/selected-diet-plan/selected-diet-plan.component.ts");
 /* harmony import */ var _comment_comment_date_pipe__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./comment/comment-date.pipe */ "./src/main/webapp/app/comment/comment-date.pipe.ts");
+/* harmony import */ var _not_found_not_found_component__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ./not-found/not-found.component */ "./src/main/webapp/app/not-found/not-found.component.ts");
+
 
 
 
@@ -1408,7 +1432,8 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _diet_plan_diet_plan_card_diet_plan_card_component__WEBPACK_IMPORTED_MODULE_59__["DietPlanCardComponent"],
             _diet_plan_my_diet_plans_no_selected_diet_plan_no_selected_diet_plan_component__WEBPACK_IMPORTED_MODULE_60__["NoSelectedDietPlanComponent"],
             _diet_plan_my_diet_plans_selected_diet_plan_selected_diet_plan_component__WEBPACK_IMPORTED_MODULE_61__["SelectedDietPlanComponent"],
-            _comment_comment_date_pipe__WEBPACK_IMPORTED_MODULE_62__["CommentDatePipe"]
+            _comment_comment_date_pipe__WEBPACK_IMPORTED_MODULE_62__["CommentDatePipe"],
+            _not_found_not_found_component__WEBPACK_IMPORTED_MODULE_63__["NotFoundComponent"]
         ],
         imports: [
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -1990,20 +2015,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _diet_plan_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../diet-plan.service */ "./src/main/webapp/app/diet-plan/diet-plan.service.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm2015/ng-bootstrap.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
 
 
 let AllDietPlansComponent = class AllDietPlansComponent {
-    constructor(dietPlanService, modalService, router) {
+    constructor(dietPlanService, modalService, router, titleService) {
         this.dietPlanService = dietPlanService;
         this.modalService = modalService;
         this.router = router;
+        this.titleService = titleService;
         this.page = 1;
         this.pageSize = 6;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- All Diet Plans');
         this.loading = true;
         this.dietPlanService.getAllPublicDietPlans().subscribe((dietPlans) => {
             if (dietPlans) {
@@ -2028,7 +2057,8 @@ let AllDietPlansComponent = class AllDietPlansComponent {
 AllDietPlansComponent.ctorParameters = () => [
     { type: _diet_plan_service__WEBPACK_IMPORTED_MODULE_2__["DietPlanService"] },
     { type: _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_4__["NgbModal"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__["Title"] }
 ];
 AllDietPlansComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -2179,6 +2209,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _auth_auth_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../auth/auth.service */ "./src/main/webapp/app/auth/auth.service.ts");
 /* harmony import */ var _user_user_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../user/user.service */ "./src/main/webapp/app/user/user.service.ts");
 /* harmony import */ var _comment_comment_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../comment/comment.service */ "./src/main/webapp/app/comment/comment.service.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
@@ -2190,7 +2222,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let DietPlanDetailsComponent = class DietPlanDetailsComponent {
-    constructor(dietPlanService, authService, userService, commentService, route, modalService, router) {
+    constructor(dietPlanService, authService, userService, commentService, route, modalService, router, titleService) {
         this.dietPlanService = dietPlanService;
         this.authService = authService;
         this.userService = userService;
@@ -2198,8 +2230,10 @@ let DietPlanDetailsComponent = class DietPlanDetailsComponent {
         this.route = route;
         this.modalService = modalService;
         this.router = router;
+        this.titleService = titleService;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- Diet Plan Details');
         this.dietPlan = new _diet_plan_model__WEBPACK_IMPORTED_MODULE_4__["DietPlan"]();
         this.commentBindingModel = new _comment_comment_binding_model__WEBPACK_IMPORTED_MODULE_6__["CommentBindingModel"]();
         this.dietPlanComments = [];
@@ -2295,7 +2329,8 @@ DietPlanDetailsComponent.ctorParameters = () => [
     { type: _comment_comment_service__WEBPACK_IMPORTED_MODULE_9__["CommentService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_1__["ActivatedRoute"] },
     { type: _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_2__["NgbModal"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"] }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_10__["Title"] }
 ];
 DietPlanDetailsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Component"])({
@@ -2425,6 +2460,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
 /* harmony import */ var _auth_auth_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../auth/auth.service */ "./src/main/webapp/app/auth/auth.service.ts");
 /* harmony import */ var _diet_plan_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../diet-plan.service */ "./src/main/webapp/app/diet-plan/diet-plan.service.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
@@ -2434,14 +2471,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let MyDietPlansComponent = class MyDietPlansComponent {
-    constructor(modalService, authService, router, route, dietPlanService) {
+    constructor(modalService, authService, router, route, dietPlanService, titleService) {
         this.modalService = modalService;
         this.authService = authService;
         this.router = router;
         this.route = route;
         this.dietPlanService = dietPlanService;
+        this.titleService = titleService;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- My Diet Plans');
         this.router.events.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["filter"])((event) => event instanceof _angular_router__WEBPACK_IMPORTED_MODULE_2__["NavigationEnd"])).subscribe(() => {
             this.fetchDietPlans();
         });
@@ -2459,6 +2498,8 @@ let MyDietPlansComponent = class MyDietPlansComponent {
         this.dietPlanService.getLoggedInUserDietPlans().subscribe((dietPlans) => {
             this.dietPlans = dietPlans;
             this.loading = false;
+        }, (error) => {
+            console.log(error);
         });
     }
     onDietPlanButtonClick(id) {
@@ -2491,7 +2532,8 @@ MyDietPlansComponent.ctorParameters = () => [
     { type: _auth_auth_service__WEBPACK_IMPORTED_MODULE_6__["AuthService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"] },
-    { type: _diet_plan_service__WEBPACK_IMPORTED_MODULE_7__["DietPlanService"] }
+    { type: _diet_plan_service__WEBPACK_IMPORTED_MODULE_7__["DietPlanService"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__["Title"] }
 ];
 MyDietPlansComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_4__["Component"])({
@@ -2666,6 +2708,9 @@ let SelectedDietPlanComponent = class SelectedDietPlanComponent {
         this.dietPlanService.getLoggedInUserDietPlans().subscribe((dietPlans) => {
             if (dietPlans) {
                 this.selectedDietPlan = dietPlans.find(w => w.id === this.dietPlanId);
+                if (!this.selectedDietPlan) {
+                    this.router.navigate(['/404']);
+                }
                 this.makeChartDataForMacroNutrients();
                 this.loading = false;
             }
@@ -2813,6 +2858,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _workout_workout_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../workout/workout.service */ "./src/main/webapp/app/workout/workout.service.ts");
 /* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm2015/ng-bootstrap.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
@@ -2823,7 +2870,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let AllExercisesComponent = class AllExercisesComponent {
-    constructor(exerciseService, workoutService, modalService, router) {
+    constructor(titleService, exerciseService, workoutService, modalService, router) {
+        this.titleService = titleService;
         this.exerciseService = exerciseService;
         this.workoutService = workoutService;
         this.modalService = modalService;
@@ -2834,6 +2882,7 @@ let AllExercisesComponent = class AllExercisesComponent {
         this.pageSize = 6;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- All Exercises');
         this.muscleGroupFilter = new _selected_muscle_groups_model__WEBPACK_IMPORTED_MODULE_4__["SelectedMuscleGroupsModel"]();
         this.workoutExerciseBindingModel = new _workout_exercise_binding_model__WEBPACK_IMPORTED_MODULE_5__["WorkoutExerciseBindingModel"]();
         this.selectedExerciseForModal = new _exercise_model__WEBPACK_IMPORTED_MODULE_2__["Exercise"]();
@@ -2895,6 +2944,7 @@ let AllExercisesComponent = class AllExercisesComponent {
     }
 };
 AllExercisesComponent.ctorParameters = () => [
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_9__["Title"] },
     { type: _exercise_service__WEBPACK_IMPORTED_MODULE_3__["ExerciseService"] },
     { type: _workout_workout_service__WEBPACK_IMPORTED_MODULE_6__["WorkoutService"] },
     { type: _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_7__["NgbModal"] },
@@ -2982,7 +3032,7 @@ let CreateExerciseComponent = class CreateExerciseComponent {
     ngOnInit() {
         this.exerciseBindingModel = new _exercise_binding_model__WEBPACK_IMPORTED_MODULE_2__["ExerciseBindingModel"]();
         this.assistingMuscleGroupsSelected = new _selected_muscle_groups_model__WEBPACK_IMPORTED_MODULE_5__["SelectedMuscleGroupsModel"]();
-        this.titleService.setTitle(this.titleService.getTitle() + '- Create Exercise');
+        this.titleService.setTitle('FitBook' + '- Create Exercise');
     }
     onMuscleClick(muscleType) {
         if (!this.assistingMuscleGroupsSelected[muscleType] && this.exerciseBindingModel.majorMuscleGroup !== muscleType) {
@@ -3173,6 +3223,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _all_exercises_workout_exercise_binding_model__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../all-exercises/workout-exercise-binding.model */ "./src/main/webapp/app/exercise/all-exercises/workout-exercise-binding.model.ts");
 /* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm2015/ng-bootstrap.js");
 /* harmony import */ var _workout_workout_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../workout/workout.service */ "./src/main/webapp/app/workout/workout.service.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
@@ -3182,14 +3234,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let ExerciseDetailsComponent = class ExerciseDetailsComponent {
-    constructor(exerciseService, route, modalService, workoutService, router) {
+    constructor(exerciseService, route, modalService, workoutService, router, titleService) {
         this.exerciseService = exerciseService;
         this.route = route;
         this.modalService = modalService;
         this.workoutService = workoutService;
         this.router = router;
+        this.titleService = titleService;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- Exercise Details');
         this.selectedExercise = new _exercise_model__WEBPACK_IMPORTED_MODULE_3__["Exercise"]();
         this.workoutExerciseBindingModel = new _all_exercises_workout_exercise_binding_model__WEBPACK_IMPORTED_MODULE_5__["WorkoutExerciseBindingModel"]();
         this.route.params.subscribe((params) => {
@@ -3232,7 +3286,8 @@ ExerciseDetailsComponent.ctorParameters = () => [
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"] },
     { type: _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__["NgbModal"] },
     { type: _workout_workout_service__WEBPACK_IMPORTED_MODULE_7__["WorkoutService"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__["Title"] }
 ];
 ExerciseDetailsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -3374,6 +3429,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _meal_meal_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../meal/meal.service */ "./src/main/webapp/app/meal/meal.service.ts");
 /* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm2015/ng-bootstrap.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
@@ -3382,17 +3439,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let AllFoodsComponent = class AllFoodsComponent {
-    constructor(foodService, mealService, modalService, router) {
+    constructor(foodService, mealService, modalService, router, titleService) {
         this.foodService = foodService;
         this.mealService = mealService;
         this.modalService = modalService;
         this.router = router;
+        this.titleService = titleService;
         this.filteredFoods = [];
         this.allFoods = [];
         this.page = 1;
         this.pageSize = 6;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- All Foods');
         this.mealFoodBindingModel = new _meal_meal_food_binding_model__WEBPACK_IMPORTED_MODULE_2__["MealFoodBindingModel"]();
         this.foodService.getAllFoods().subscribe((foods) => {
             this.allFoods = foods;
@@ -3446,7 +3505,8 @@ AllFoodsComponent.ctorParameters = () => [
     { type: _food_service__WEBPACK_IMPORTED_MODULE_3__["FoodService"] },
     { type: _meal_meal_service__WEBPACK_IMPORTED_MODULE_4__["MealService"] },
     { type: _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_5__["NgbModal"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"] }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_7__["Title"] }
 ];
 AllFoodsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -3568,6 +3628,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _food_model__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../food.model */ "./src/main/webapp/app/food/food.model.ts");
 /* harmony import */ var _meal_meal_food_binding_model__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../meal/meal-food-binding-model */ "./src/main/webapp/app/meal/meal-food-binding-model.ts");
 /* harmony import */ var _meal_meal_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../meal/meal.service */ "./src/main/webapp/app/meal/meal.service.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
@@ -3577,14 +3639,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let FoodDetailsComponent = class FoodDetailsComponent {
-    constructor(foodService, route, modalService, mealService, router) {
+    constructor(foodService, route, modalService, mealService, router, titleService) {
         this.foodService = foodService;
         this.route = route;
         this.modalService = modalService;
         this.mealService = mealService;
         this.router = router;
+        this.titleService = titleService;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- Food Details');
         this.router.events.subscribe((evt) => {
             if (!(evt instanceof _angular_router__WEBPACK_IMPORTED_MODULE_2__["NavigationEnd"])) {
                 return;
@@ -3647,7 +3711,8 @@ FoodDetailsComponent.ctorParameters = () => [
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"] },
     { type: _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_3__["NgbModal"] },
     { type: _meal_meal_service__WEBPACK_IMPORTED_MODULE_7__["MealService"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__["Title"] }
 ];
 FoodDetailsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -3810,6 +3875,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm2015/ng-bootstrap.js");
 /* harmony import */ var _food_binding_model__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../food-binding.model */ "./src/main/webapp/app/food/food-binding.model.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
@@ -3818,16 +3885,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let SearchFoodComponent = class SearchFoodComponent {
-    constructor(foodService, modalService, router) {
+    constructor(foodService, modalService, router, titleService) {
         this.foodService = foodService;
         this.modalService = modalService;
         this.router = router;
+        this.titleService = titleService;
         this.foodSearchResults = [];
         this.searchOccurred = false;
         this.page = 1;
         this.pageSize = 6;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- Create Food');
         this.foodBindingModel = new _food_binding_model__WEBPACK_IMPORTED_MODULE_5__["FoodBindingModel"]();
     }
     onSearchHandler() {
@@ -3925,7 +3994,8 @@ let SearchFoodComponent = class SearchFoodComponent {
 SearchFoodComponent.ctorParameters = () => [
     { type: _food_service__WEBPACK_IMPORTED_MODULE_2__["FoodService"] },
     { type: _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_4__["NgbModal"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"] }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_7__["Title"] }
 ];
 SearchFoodComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -4043,15 +4113,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _user_user_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../user/user.service */ "./src/main/webapp/app/user/user.service.ts");
 /* harmony import */ var _fitness_profile_binding_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./fitness-profile-binding.model */ "./src/main/webapp/app/home/create-fitness-profile/fitness-profile-binding.model.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
 
 let CreateFitnessProfileComponent = class CreateFitnessProfileComponent {
-    constructor(userService) {
+    constructor(userService, titleService) {
         this.userService = userService;
+        this.titleService = titleService;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- Create Fitness Profile');
         this.fitnessProfileBindingModel = new _fitness_profile_binding_model__WEBPACK_IMPORTED_MODULE_3__["FitnessProfileBindingModel"]();
         this.userService.getLoggedInUserObservable().subscribe(user => {
             if (user) {
@@ -4076,7 +4150,8 @@ let CreateFitnessProfileComponent = class CreateFitnessProfileComponent {
     }
 };
 CreateFitnessProfileComponent.ctorParameters = () => [
-    { type: _user_user_service__WEBPACK_IMPORTED_MODULE_2__["UserService"] }
+    { type: _user_user_service__WEBPACK_IMPORTED_MODULE_2__["UserService"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__["Title"] }
 ];
 CreateFitnessProfileComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -4142,18 +4217,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _create_fitness_profile_fitness_profile_binding_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../create-fitness-profile/fitness-profile-binding.model */ "./src/main/webapp/app/home/create-fitness-profile/fitness-profile-binding.model.ts");
 /* harmony import */ var _user_user_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../user/user.service */ "./src/main/webapp/app/user/user.service.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
 
 
 let EditFitnessProfileComponent = class EditFitnessProfileComponent {
-    constructor(userService, router) {
+    constructor(userService, router, titleService) {
         this.userService = userService;
         this.router = router;
+        this.titleService = titleService;
         this.formChanged = false;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- Edit Fitness Profile');
         this.fitnessProfileBindingModel = new _create_fitness_profile_fitness_profile_binding_model__WEBPACK_IMPORTED_MODULE_2__["FitnessProfileBindingModel"]();
         this.userService.getLoggedInUserObservable().subscribe(user => {
             if (user) {
@@ -4195,7 +4274,8 @@ let EditFitnessProfileComponent = class EditFitnessProfileComponent {
 };
 EditFitnessProfileComponent.ctorParameters = () => [
     { type: _user_user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__["Title"] }
 ];
 EditFitnessProfileComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -4381,17 +4461,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _user_user_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../user/user.service */ "./src/main/webapp/app/user/user.service.ts");
 /* harmony import */ var _user_user_model__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../user/user.model */ "./src/main/webapp/app/user/user.model.ts");
 /* harmony import */ var _user_fitness_profile_model__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../user/fitness-profile.model */ "./src/main/webapp/app/user/fitness-profile.model.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
 
 
 let MyProfileComponent = class MyProfileComponent {
-    constructor(userService) {
+    constructor(userService, titleService) {
         this.userService = userService;
+        this.titleService = titleService;
         this.loading = true;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- Home');
         this.loading = true;
         this.loggedUser = new _user_user_model__WEBPACK_IMPORTED_MODULE_3__["UserModel"]();
         this.loggedUserFitnessProfile = new _user_fitness_profile_model__WEBPACK_IMPORTED_MODULE_4__["FitnessProfileModel"]();
@@ -4426,7 +4510,8 @@ let MyProfileComponent = class MyProfileComponent {
     }
 };
 MyProfileComponent.ctorParameters = () => [
-    { type: _user_user_service__WEBPACK_IMPORTED_MODULE_2__["UserService"] }
+    { type: _user_user_service__WEBPACK_IMPORTED_MODULE_2__["UserService"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__["Title"] }
 ];
 MyProfileComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -4465,13 +4550,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IndexComponent", function() { return IndexComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 let IndexComponent = class IndexComponent {
-    constructor() { }
+    constructor(titleService) {
+        this.titleService = titleService;
+    }
     ngOnInit() {
+        this.titleService.setTitle('FitBook');
     }
 };
+IndexComponent.ctorParameters = () => [
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["Title"] }
+];
 IndexComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-index',
@@ -4512,20 +4605,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm2015/ng-bootstrap.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var _meal_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../meal.service */ "./src/main/webapp/app/meal/meal.service.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
 
 
 let AllMealsComponent = class AllMealsComponent {
-    constructor(mealService, modalService, router) {
+    constructor(mealService, modalService, router, titleService) {
         this.mealService = mealService;
         this.modalService = modalService;
         this.router = router;
+        this.titleService = titleService;
         this.page = 1;
         this.pageSize = 6;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- All Meals');
         this.mealService.fetchAllPublicMeals().subscribe((meals) => {
             if (meals) {
                 this.meals = meals;
@@ -4546,7 +4643,8 @@ let AllMealsComponent = class AllMealsComponent {
 AllMealsComponent.ctorParameters = () => [
     { type: _meal_service__WEBPACK_IMPORTED_MODULE_4__["MealService"] },
     { type: _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_2__["NgbModal"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__["Title"] }
 ];
 AllMealsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -4697,6 +4795,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _comment_comment_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../comment/comment.service */ "./src/main/webapp/app/comment/comment.service.ts");
 /* harmony import */ var _auth_auth_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../auth/auth.service */ "./src/main/webapp/app/auth/auth.service.ts");
 /* harmony import */ var _user_user_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../user/user.service */ "./src/main/webapp/app/user/user.service.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
@@ -4708,7 +4808,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let MealDetailsComponent = class MealDetailsComponent {
-    constructor(mealService, authService, userService, commentService, route, modalService, router) {
+    constructor(mealService, authService, userService, commentService, route, modalService, router, titleService) {
         this.mealService = mealService;
         this.authService = authService;
         this.userService = userService;
@@ -4716,8 +4816,10 @@ let MealDetailsComponent = class MealDetailsComponent {
         this.route = route;
         this.modalService = modalService;
         this.router = router;
+        this.titleService = titleService;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- Meal Details');
         this.meal = new _meal_model__WEBPACK_IMPORTED_MODULE_2__["Meal"]();
         this.commentBindingModel = new _comment_comment_binding_model__WEBPACK_IMPORTED_MODULE_6__["CommentBindingModel"]();
         this.mealComments = [];
@@ -4800,7 +4902,8 @@ MealDetailsComponent.ctorParameters = () => [
     { type: _comment_comment_service__WEBPACK_IMPORTED_MODULE_7__["CommentService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"] },
     { type: _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_5__["NgbModal"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_10__["Title"] }
 ];
 MealDetailsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -4951,6 +5054,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
 /* harmony import */ var _meal_binding_model__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../meal-binding-model */ "./src/main/webapp/app/meal/meal-binding-model.ts");
 /* harmony import */ var _meal_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../meal.service */ "./src/main/webapp/app/meal/meal.service.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
@@ -4960,14 +5065,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let MyMealsComponent = class MyMealsComponent {
-    constructor(modalService, mealService, authService, router, route) {
+    constructor(modalService, mealService, authService, router, route, titleService) {
         this.modalService = modalService;
         this.mealService = mealService;
         this.authService = authService;
         this.router = router;
         this.route = route;
+        this.titleService = titleService;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- My Meals');
         this.router.events.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["filter"])((event) => event instanceof _angular_router__WEBPACK_IMPORTED_MODULE_4__["NavigationEnd"])).subscribe(() => {
             this.fetchMeals();
         });
@@ -5014,7 +5121,8 @@ MyMealsComponent.ctorParameters = () => [
     { type: _meal_service__WEBPACK_IMPORTED_MODULE_7__["MealService"] },
     { type: _auth_auth_service__WEBPACK_IMPORTED_MODULE_3__["AuthService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"] }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__["Title"] }
 ];
 MyMealsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -5444,6 +5552,58 @@ NavbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 /***/ }),
 
+/***/ "./src/main/webapp/app/not-found/not-found.component.css":
+/*!***************************************************************!*\
+  !*** ./src/main/webapp/app/not-found/not-found.component.css ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvbWFpbi93ZWJhcHAvYXBwL25vdC1mb3VuZC9ub3QtZm91bmQuY29tcG9uZW50LmNzcyJ9 */");
+
+/***/ }),
+
+/***/ "./src/main/webapp/app/not-found/not-found.component.ts":
+/*!**************************************************************!*\
+  !*** ./src/main/webapp/app/not-found/not-found.component.ts ***!
+  \**************************************************************/
+/*! exports provided: NotFoundComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NotFoundComponent", function() { return NotFoundComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
+
+
+let NotFoundComponent = class NotFoundComponent {
+    constructor(titleService) {
+        this.titleService = titleService;
+    }
+    ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- 404');
+    }
+};
+NotFoundComponent.ctorParameters = () => [
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["Title"] }
+];
+NotFoundComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-not-found',
+        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./not-found.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/main/webapp/app/not-found/not-found.component.html")).default,
+        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./not-found.component.css */ "./src/main/webapp/app/not-found/not-found.component.css")).default]
+    })
+], NotFoundComponent);
+
+
+
+/***/ }),
+
 /***/ "./src/main/webapp/app/safe.pipe.ts":
 /*!******************************************!*\
   !*** ./src/main/webapp/app/safe.pipe.ts ***!
@@ -5569,6 +5729,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var _register_binding_model__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./register-binding.model */ "./src/main/webapp/app/user/register/register-binding.model.ts");
 /* harmony import */ var _auth_auth_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../auth/auth.service */ "./src/main/webapp/app/auth/auth.service.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
@@ -5576,16 +5738,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let RegisterComponent = class RegisterComponent {
-    constructor(authService, router, userService) {
+    constructor(authService, router, userService, titleService) {
         this.authService = authService;
         this.router = router;
         this.userService = userService;
+        this.titleService = titleService;
         this.usernameTaken = false;
         this.emailTaken = false;
         this.passwordsMatch = false;
         this.regexPattern = "(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\\])";
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- Register');
         this.registerBindingModel = new _register_binding_model__WEBPACK_IMPORTED_MODULE_4__["RegisterBindingModel"]();
         this.registerBindingModel.gender = "";
     }
@@ -5617,8 +5781,8 @@ let RegisterComponent = class RegisterComponent {
     }
     onUsernameFocusOut(eventTarget) {
         if (eventTarget.value) {
-            this.userService.getUserByUsername(eventTarget.value)
-                .subscribe(user => this.usernameTaken = true, error => this.usernameTaken = false);
+            this.userService.checkIfUserExistsByUsername(eventTarget.value)
+                .subscribe(() => this.usernameTaken = true, error => this.usernameTaken = false);
         }
     }
     onPasswordChange() {
@@ -5628,7 +5792,8 @@ let RegisterComponent = class RegisterComponent {
 RegisterComponent.ctorParameters = () => [
     { type: _auth_auth_service__WEBPACK_IMPORTED_MODULE_5__["AuthService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] },
-    { type: _user_service__WEBPACK_IMPORTED_MODULE_2__["UserService"] }
+    { type: _user_service__WEBPACK_IMPORTED_MODULE_2__["UserService"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_6__["Title"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('chooseFileLabel', { static: false })
@@ -5691,19 +5856,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _signin_binding_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./signin-binding.model */ "./src/main/webapp/app/user/signin/signin-binding.model.ts");
 /* harmony import */ var _auth_auth_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../auth/auth.service */ "./src/main/webapp/app/auth/auth.service.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
 
 
 let SigninComponent = class SigninComponent {
-    constructor(authService, router) {
+    constructor(authService, router, titleService) {
         this.authService = authService;
         this.router = router;
+        this.titleService = titleService;
         this.rememberMe = false;
         this.errorOccurred = false;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- Sign In');
         this.signInBindingModel = new _signin_binding_model__WEBPACK_IMPORTED_MODULE_2__["SigninBindingModel"]();
     }
     onSubmit() {
@@ -5720,7 +5889,8 @@ let SigninComponent = class SigninComponent {
 };
 SigninComponent.ctorParameters = () => [
     { type: _auth_auth_service__WEBPACK_IMPORTED_MODULE_3__["AuthService"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__["Title"] }
 ];
 SigninComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -5761,16 +5931,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var _user_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../user.service */ "./src/main/webapp/app/user/user.service.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
 
 let UserProfileComponent = class UserProfileComponent {
-    constructor(route, userService) {
+    constructor(route, userService, titleService) {
         this.route = route;
         this.userService = userService;
+        this.titleService = titleService;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- User Profile');
         this.route.params.subscribe((params) => {
             if (params['username']) {
                 this.username = params['username'];
@@ -5802,7 +5976,8 @@ let UserProfileComponent = class UserProfileComponent {
 };
 UserProfileComponent.ctorParameters = () => [
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"] },
-    { type: _user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"] }
+    { type: _user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_4__["Title"] }
 ];
 UserProfileComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -5881,6 +6056,9 @@ let UserService = class UserService {
     getUserByUsername(username) {
         return this.http.get(`${_app_settings__WEBPACK_IMPORTED_MODULE_5__["AppSettings"].API_ENDPOINT}/api/users/username/` + username);
     }
+    checkIfUserExistsByUsername(username) {
+        return this.http.get(`${_app_settings__WEBPACK_IMPORTED_MODULE_5__["AppSettings"].API_ENDPOINT}/api/users/exists/` + username);
+    }
     setFitnessProfileToLoggedInUser(fitnessProfileBindingModel) {
         const headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
             'Content-Type': 'application/json',
@@ -5953,20 +6131,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm2015/ng-bootstrap.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var _workout_plan_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../workout-plan.service */ "./src/main/webapp/app/workout-plan/workout-plan.service.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
 
 
 let AllWorkoutPlansComponent = class AllWorkoutPlansComponent {
-    constructor(workoutPlanService, modalService, router) {
+    constructor(workoutPlanService, modalService, router, titleService) {
         this.workoutPlanService = workoutPlanService;
         this.modalService = modalService;
         this.router = router;
+        this.titleService = titleService;
         this.page = 1;
         this.pageSize = 6;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- All Workout Plans');
         this.workoutPlanService.getAllPublicWorkoutPlans().subscribe((workoutPlans) => {
             if (workoutPlans) {
                 this.workoutPlans = workoutPlans;
@@ -5987,7 +6169,8 @@ let AllWorkoutPlansComponent = class AllWorkoutPlansComponent {
 AllWorkoutPlansComponent.ctorParameters = () => [
     { type: _workout_plan_service__WEBPACK_IMPORTED_MODULE_4__["WorkoutPlanService"] },
     { type: _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_2__["NgbModal"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__["Title"] }
 ];
 AllWorkoutPlansComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -6032,6 +6215,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var _workout_plan_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../workout-plan.service */ "./src/main/webapp/app/workout-plan/workout-plan.service.ts");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
@@ -6041,14 +6226,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let MyWorkoutPlansComponent = class MyWorkoutPlansComponent {
-    constructor(modalService, authService, router, route, workoutPlanService) {
+    constructor(modalService, authService, router, route, workoutPlanService, titleService) {
         this.modalService = modalService;
         this.authService = authService;
         this.router = router;
         this.route = route;
         this.workoutPlanService = workoutPlanService;
+        this.titleService = titleService;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- My Workout Plans');
         this.router.events.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["filter"])((event) => event instanceof _angular_router__WEBPACK_IMPORTED_MODULE_5__["NavigationEnd"])).subscribe(() => {
             this.fetchWorkoutsPlans();
         });
@@ -6095,7 +6282,8 @@ MyWorkoutPlansComponent.ctorParameters = () => [
     { type: _auth_auth_service__WEBPACK_IMPORTED_MODULE_4__["AuthService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["ActivatedRoute"] },
-    { type: _workout_plan_service__WEBPACK_IMPORTED_MODULE_6__["WorkoutPlanService"] }
+    { type: _workout_plan_service__WEBPACK_IMPORTED_MODULE_6__["WorkoutPlanService"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__["Title"] }
 ];
 MyWorkoutPlansComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -6533,6 +6721,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _comment_comment_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../comment/comment.service */ "./src/main/webapp/app/comment/comment.service.ts");
 /* harmony import */ var _auth_auth_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../auth/auth.service */ "./src/main/webapp/app/auth/auth.service.ts");
 /* harmony import */ var _user_user_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../user/user.service */ "./src/main/webapp/app/user/user.service.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
@@ -6545,7 +6735,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let WorkoutPlanDetailsComponent = class WorkoutPlanDetailsComponent {
-    constructor(workoutPlanService, authService, userService, commentService, route, modalService, router, constantViewPipe) {
+    constructor(workoutPlanService, authService, userService, commentService, route, modalService, router, constantViewPipe, titleService) {
         this.workoutPlanService = workoutPlanService;
         this.authService = authService;
         this.userService = userService;
@@ -6554,8 +6744,10 @@ let WorkoutPlanDetailsComponent = class WorkoutPlanDetailsComponent {
         this.modalService = modalService;
         this.router = router;
         this.constantViewPipe = constantViewPipe;
+        this.titleService = titleService;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- Workout Plan Details');
         this.workoutPlan = new _workout_plan_model__WEBPACK_IMPORTED_MODULE_5__["WorkoutPlan"]();
         this.commentBindingModel = new _comment_comment_binding_model__WEBPACK_IMPORTED_MODULE_7__["CommentBindingModel"]();
         this.workoutPlanComments = [];
@@ -6675,7 +6867,8 @@ WorkoutPlanDetailsComponent.ctorParameters = () => [
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"] },
     { type: _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_3__["NgbModal"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] },
-    { type: _get_constant_view_name_pipe__WEBPACK_IMPORTED_MODULE_4__["GetConstantViewNamePipe"] }
+    { type: _get_constant_view_name_pipe__WEBPACK_IMPORTED_MODULE_4__["GetConstantViewNamePipe"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_11__["Title"] }
 ];
 WorkoutPlanDetailsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -6802,20 +6995,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _workout_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../workout.service */ "./src/main/webapp/app/workout/workout.service.ts");
 /* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm2015/ng-bootstrap.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
 
 
 let AllWorkoutsComponent = class AllWorkoutsComponent {
-    constructor(workoutService, modalService, router) {
+    constructor(workoutService, modalService, router, titleService) {
         this.workoutService = workoutService;
         this.modalService = modalService;
         this.router = router;
+        this.titleService = titleService;
         this.page = 1;
         this.pageSize = 6;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- All Workouts');
         this.workoutService.fetchAllPublicWorkouts().subscribe((workouts) => {
             if (workouts) {
                 this.workouts = workouts;
@@ -6836,7 +7033,8 @@ let AllWorkoutsComponent = class AllWorkoutsComponent {
 AllWorkoutsComponent.ctorParameters = () => [
     { type: _workout_service__WEBPACK_IMPORTED_MODULE_2__["WorkoutService"] },
     { type: _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_3__["NgbModal"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__["Title"] }
 ];
 AllWorkoutsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -6881,6 +7079,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _auth_auth_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../auth/auth.service */ "./src/main/webapp/app/auth/auth.service.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
@@ -6890,14 +7090,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let MyWorkoutsComponent = class MyWorkoutsComponent {
-    constructor(modalService, workoutService, authService, router, route) {
+    constructor(modalService, workoutService, authService, router, route, titleService) {
         this.modalService = modalService;
         this.workoutService = workoutService;
         this.authService = authService;
         this.router = router;
         this.route = route;
+        this.titleService = titleService;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- My Workouts');
         this.router.events.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["filter"])((event) => event instanceof _angular_router__WEBPACK_IMPORTED_MODULE_6__["NavigationEnd"])).subscribe(() => {
             this.fetchWorkouts();
         });
@@ -6944,7 +7146,8 @@ MyWorkoutsComponent.ctorParameters = () => [
     { type: _workout_service__WEBPACK_IMPORTED_MODULE_4__["WorkoutService"] },
     { type: _auth_auth_service__WEBPACK_IMPORTED_MODULE_5__["AuthService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_6__["ActivatedRoute"] }
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_6__["ActivatedRoute"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_8__["Title"] }
 ];
 MyWorkoutsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -7317,6 +7520,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _comment_comment_binding_model__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../comment/comment-binding.model */ "./src/main/webapp/app/comment/comment-binding.model.ts");
 /* harmony import */ var _auth_auth_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../auth/auth.service */ "./src/main/webapp/app/auth/auth.service.ts");
 /* harmony import */ var _user_user_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../user/user.service */ "./src/main/webapp/app/user/user.service.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+
 
 
 
@@ -7329,7 +7534,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let WorkoutDetailsComponent = class WorkoutDetailsComponent {
-    constructor(workoutService, commentService, userService, authService, route, modalService, router, constantViewPipe) {
+    constructor(workoutService, commentService, userService, authService, route, modalService, router, constantViewPipe, titleService) {
         this.workoutService = workoutService;
         this.commentService = commentService;
         this.userService = userService;
@@ -7338,8 +7543,10 @@ let WorkoutDetailsComponent = class WorkoutDetailsComponent {
         this.modalService = modalService;
         this.router = router;
         this.constantViewPipe = constantViewPipe;
+        this.titleService = titleService;
     }
     ngOnInit() {
+        this.titleService.setTitle('FitBook' + '- Workout Details');
         this.workout = new _workout_model__WEBPACK_IMPORTED_MODULE_2__["Workout"]();
         this.commentBindingModel = new _comment_comment_binding_model__WEBPACK_IMPORTED_MODULE_8__["CommentBindingModel"]();
         this.workoutComments = [];
@@ -7451,7 +7658,8 @@ WorkoutDetailsComponent.ctorParameters = () => [
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"] },
     { type: _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_5__["NgbModal"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] },
-    { type: _get_constant_view_name_pipe__WEBPACK_IMPORTED_MODULE_6__["GetConstantViewNamePipe"] }
+    { type: _get_constant_view_name_pipe__WEBPACK_IMPORTED_MODULE_6__["GetConstantViewNamePipe"] },
+    { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_11__["Title"] }
 ];
 WorkoutDetailsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({

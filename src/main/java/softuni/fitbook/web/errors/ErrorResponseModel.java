@@ -2,13 +2,13 @@ package softuni.fitbook.web.errors;
 
 import java.util.List;
 
-public class CustomError {
+public class ErrorResponseModel {
 
     private int status;
 
     private List<String> errors;
 
-    public CustomError(int status, List<String> errors) {
+    public ErrorResponseModel(int status, List<String> errors) {
         this.status = status;
         this.errors = errors;
     }

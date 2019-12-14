@@ -13,7 +13,7 @@ public abstract class Comment extends BaseEntity {
     private UserProfile userProfile;
     private LocalDateTime postedOn;
 
-    @Column(name = "comment", length = 10000)
+    @Column(name = "comment", nullable = false, length = 10000)
     public String getComment() {
         return comment;
     }
@@ -32,7 +32,7 @@ public abstract class Comment extends BaseEntity {
         this.userProfile = userProfile;
     }
 
-    @Column(name = "posted_on")
+    @Column(name = "posted_on", nullable = false)
     public LocalDateTime getPostedOn() {
         return postedOn;
     }

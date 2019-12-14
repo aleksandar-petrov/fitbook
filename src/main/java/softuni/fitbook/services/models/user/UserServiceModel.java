@@ -2,35 +2,41 @@ package softuni.fitbook.services.models.user;
 
 
 
+import org.springframework.validation.annotation.Validated;
+import softuni.fitbook.common.constants.ValidationConstants;
 import softuni.fitbook.data.models.UserRole;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 public class UserServiceModel {
 
     private String id;
 
-    @NotBlank
+    @NotBlank(message = ValidationConstants.FIRST_NAME_REQUIRED)
+    @Pattern(regexp = ValidationConstants.FIRST_NAME_PATTERN, message = ValidationConstants.FIRST_NAME_VALID)
     private String firstName;
 
-    @NotBlank
+    @NotBlank(message = ValidationConstants.LAST_NAME_REQUIRED)
+    @Pattern(regexp = ValidationConstants.LAST_NAME_PATTERN, message = ValidationConstants.LAST_NAME_VALID)
     private String lastName;
 
-    @NotBlank
+    @NotBlank(message = ValidationConstants.GENDER_REQUIRED)
     private String gender;
 
-    @NotBlank
+    @NotBlank(message = ValidationConstants.USERNAME_REQUIRED)
     private String username;
 
-    @NotBlank
-    @Pattern(regexp = "(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)])")
+    @NotBlank(message = ValidationConstants.EMAIL_REQUIRED)
+    @Pattern(regexp = ValidationConstants.EMAIL_PATTERN, message = ValidationConstants.EMAIL_VALID)
     private String email;
 
     private String profilePictureURL;
 
-    @NotBlank
+    @NotBlank(message = ValidationConstants.PASSWORD_REQUIRED)
+    @Size(min = 6, message = ValidationConstants.PASSWORD_MIN_LENGTH)
     private String password;
 
     private FitnessProfileServiceModel fitnessProfile;

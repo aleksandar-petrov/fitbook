@@ -6,6 +6,7 @@ import {filter} from "rxjs/operators";
 import {AuthService} from "../../auth/auth.service";
 import {DietPlanService} from "../diet-plan.service";
 import {DietPlan} from "../diet-plan.model";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-my-diet-plans',
@@ -25,10 +26,13 @@ export class MyDietPlansComponent implements OnInit {
               private authService: AuthService,
               private router: Router,
               private route: ActivatedRoute,
-              private dietPlanService: DietPlanService) {
+              private dietPlanService: DietPlanService,
+              private titleService: Title) {
   }
 
   ngOnInit() {
+
+    this.titleService.setTitle( 'FitBook' + '- My Diet Plans' );
 
     this.router.events.pipe(
         filter((event: RouterEvent) => event instanceof NavigationEnd)
@@ -54,6 +58,8 @@ export class MyDietPlansComponent implements OnInit {
     this.dietPlanService.getLoggedInUserDietPlans().subscribe((dietPlans: DietPlan[]) => {
       this.dietPlans = dietPlans;
       this.loading = false;
+    }, (error) => {
+      console.log(error);
     })
   }
 

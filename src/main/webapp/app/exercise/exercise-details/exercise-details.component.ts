@@ -6,6 +6,7 @@ import {WorkoutExerciseBindingModel} from "../all-exercises/workout-exercise-bin
 import {Workout} from "../../workout/workout.model";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {WorkoutService} from "../../workout/workout.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-exercise-details',
@@ -25,10 +26,13 @@ export class ExerciseDetailsComponent implements OnInit {
                 private route: ActivatedRoute,
                 private modalService: NgbModal,
                 private workoutService: WorkoutService,
-                private router: Router) {
+                private router: Router,
+                private titleService: Title) {
     }
 
     ngOnInit() {
+
+        this.titleService.setTitle( 'FitBook' + '- Exercise Details' );
 
         this.selectedExercise = new Exercise();
         this.workoutExerciseBindingModel = new WorkoutExerciseBindingModel();

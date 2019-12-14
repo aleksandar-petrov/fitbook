@@ -15,7 +15,7 @@ public class NutritionGoal extends BaseEntity {
     private Integer gramsOfCarbohydrates;
     private Integer gramsOfFats;
 
-    @Column(name = "calories")
+    @Column(name = "calories", nullable = false)
     public Integer getCalories() {
         return calories;
     }
@@ -24,7 +24,7 @@ public class NutritionGoal extends BaseEntity {
         this.calories = calories;
     }
 
-    @Column(name = "protein_grams")
+    @Column(name = "protein_grams", nullable = false)
     public Integer getGramsOfProtein() {
         return gramsOfProtein;
     }
@@ -33,7 +33,7 @@ public class NutritionGoal extends BaseEntity {
         this.gramsOfProtein = gramsOfProtein;
     }
 
-    @Column(name = "carbohydrates_grams")
+    @Column(name = "carbohydrates_grams", nullable = false)
     public Integer getGramsOfCarbohydrates() {
         return gramsOfCarbohydrates;
     }
@@ -42,7 +42,7 @@ public class NutritionGoal extends BaseEntity {
         this.gramsOfCarbohydrates = gramsOfCarbohydrates;
     }
 
-    @Column(name = "fats_grams")
+    @Column(name = "fats_grams", nullable = false)
     public Integer getGramsOfFats() {
         return gramsOfFats;
     }

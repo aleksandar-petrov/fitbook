@@ -17,7 +17,7 @@ public class WorkoutPlan extends BaseEntity {
     private List<WorkoutPlanLike> likes;
     private List<WorkoutPlanComment> comments;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }
@@ -26,7 +26,7 @@ public class WorkoutPlan extends BaseEntity {
         this.name = name;
     }
 
-    @Column(name = "is_public")
+    @Column(name = "is_public", nullable = false)
     public Boolean getIsPublic() {
         return isPublic;
     }

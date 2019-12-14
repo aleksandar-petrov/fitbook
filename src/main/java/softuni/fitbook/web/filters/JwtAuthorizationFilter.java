@@ -6,6 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import softuni.fitbook.common.constants.AuthConstants;
 import softuni.fitbook.services.UserService;
 
 import javax.servlet.FilterChain;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
+
+
     private UserService userService;
 
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserService userService) {
@@ -24,9 +27,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String header = request.getHeader("Authorization");
+        String header = request.getHeader(AuthConstants.AUTHORIZATION_HEADER);
 
-        if(header == null || !header.startsWith("Bearer ")) {
+        if(header == null || !header.startsWith(AuthConstants.AUTHORIZATION_HEADER_BEGINNING)) {
             chain.doFilter(request, response);
             return;
         }
@@ -39,13 +42,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader(AuthConstants.AUTHORIZATION_HEADER);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = null;
 
         if (token != null) {
             String username = Jwts.parser()
-                    .setSigningKey("Secret".getBytes())
-                    .parseClaimsJws(token.replace("Bearer ", ""))
+                    .setSigningKey(AuthConstants.SIGNING_KEY.getBytes())
+                    .parseClaimsJws(token.replace(AuthConstants.AUTHORIZATION_HEADER_BEGINNING, ""))
                     .getBody()
                     .getSubject();
 

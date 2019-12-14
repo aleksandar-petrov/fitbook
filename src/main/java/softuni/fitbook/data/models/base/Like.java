@@ -13,7 +13,7 @@ public abstract class Like extends BaseEntity {
     private UserProfile userProfile;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_profile_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_profile_id", nullable = false, referencedColumnName = "id")
     public UserProfile getUserProfile() {
         return userProfile;
     }

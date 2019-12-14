@@ -11,6 +11,7 @@ import {UserAuthModel} from "../../auth/user-auth.model";
 import {AuthService} from "../../auth/auth.service";
 import {UserService} from "../../user/user.service";
 import {UserModel} from "../../user/user.model";
+import {Title} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-workout-details',
@@ -37,10 +38,13 @@ export class WorkoutDetailsComponent implements OnInit {
                 private route: ActivatedRoute,
                 private modalService: NgbModal,
                 private router: Router,
-                private constantViewPipe: GetConstantViewNamePipe) {
+                private constantViewPipe: GetConstantViewNamePipe,
+                private titleService: Title) {
     }
 
     ngOnInit() {
+
+        this.titleService.setTitle( 'FitBook' + '- Workout Details' );
 
         this.workout = new Workout();
 

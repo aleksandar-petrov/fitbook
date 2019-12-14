@@ -59,6 +59,7 @@
 
 
     <h2 class="pt-3 font-weight-light" *ngIf="!editMode">{{selectedMeal.name}}</h2>
+    <form #editForm="ngForm">
     <div class="py-3 mx-auto col-5" *ngIf="editMode"><input type="text" value="{{editMealBindingModel.name}}"
                                                             class="form-control form-control-lg text-center"
                                                             id="inputName"
@@ -80,7 +81,7 @@
     <button *ngIf="!editMode" type="button" routerLink="/meals/details/{{mealId}}"
             class="btn btn-dark mb-2"><i class="fas fa-share-alt"></i></button>
 
-    <form #editForm="ngForm">
+
         <table class="table table-striped table-hover">
             <thead>
             <tr *ngIf="selectedMeal.foods && !selectedMeal.foods.length">

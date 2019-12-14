@@ -43,7 +43,7 @@ public class User extends BaseEntity implements UserDetails {
     this.username = username;
   }
 
-  @Column(name = "email")
+  @Column(name = "email", nullable = false)
   public String getEmail() {
     return email;
   }

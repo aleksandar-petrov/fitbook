@@ -3,6 +3,7 @@ import {UserService} from '../user.service';
 import {Router} from '@angular/router';
 import {RegisterBindingModel} from './register-binding.model';
 import {AuthService} from '../../auth/auth.service';
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-register',
@@ -22,10 +23,12 @@ export class RegisterComponent implements OnInit {
   @ViewChild('chooseFileLabel', {static: false}) chooseFileLabelRef: ElementRef;
   file: any;
 
-  constructor(private authService: AuthService, private router: Router, private userService: UserService) {
+  constructor(private authService: AuthService, private router: Router, private userService: UserService, private titleService: Title) {
   }
 
   ngOnInit() {
+
+    this.titleService.setTitle( 'FitBook' + '- Register' );
 
     this.registerBindingModel = new RegisterBindingModel();
     this.registerBindingModel.gender = "";
@@ -67,8 +70,8 @@ export class RegisterComponent implements OnInit {
   onUsernameFocusOut(eventTarget: any) {
 
     if (eventTarget.value) {
-      this.userService.getUserByUsername(eventTarget.value)
-        .subscribe(user => this.usernameTaken = true, error => this.usernameTaken = false)
+      this.userService.checkIfUserExistsByUsername(eventTarget.value)
+        .subscribe(() => this.usernameTaken = true, error => this.usernameTaken = false)
     }
   }
 
