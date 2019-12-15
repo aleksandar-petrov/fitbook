@@ -12,6 +12,8 @@ import {Title} from "@angular/platform-browser";
 })
 export class AllWorkoutsComponent implements OnInit {
 
+    loading:boolean;
+
     workouts: Workout[];
     filteredWorkouts: Workout[];
     page: number = 1;
@@ -27,10 +29,13 @@ export class AllWorkoutsComponent implements OnInit {
 
         this.titleService.setTitle( 'FitBook' + '- All Workouts' );
 
+        this.loading = true;
+
         this.workoutService.fetchAllPublicWorkouts().subscribe((workouts: Workout[]) => {
             if (workouts) {
                 this.workouts = workouts;
                 this.filteredWorkouts = [...workouts];
+                this.loading = false;
             }
         });
 
@@ -43,7 +48,10 @@ export class AllWorkoutsComponent implements OnInit {
 
         this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
 
+            this.loading = true;
+
             this.workoutService.copyWorkoutToLoggedUserWorkouts(workoutId).subscribe((workout: Workout) => {
+                this.loading = false;
                 this.router.navigate(['my-workouts', workout.id])
             });
         }, (reason) => {

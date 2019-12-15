@@ -18,6 +18,8 @@ import {Title} from "@angular/platform-browser";
 
 export class AllExercisesComponent implements OnInit {
 
+  loading:boolean;
+
   filteredExercises: Exercise[] = [];
   allExercises: Exercise[] = [];
   page: number = 1;
@@ -43,11 +45,13 @@ export class AllExercisesComponent implements OnInit {
     this.workoutExerciseBindingModel = new WorkoutExerciseBindingModel();
     this.selectedExerciseForModal = new Exercise();
 
+    this.loading = true;
 
     this.exerciseService.fetchAllExercises()
       .subscribe((data: Exercise[]) => {
         this.allExercises = data;
         this.filteredExercises = this.allExercises.slice();
+        this.loading = false;
       });
 
     this.fetchUserWorkouts();

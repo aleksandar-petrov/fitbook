@@ -1,5 +1,9 @@
 <div class="container-fluid">
 
+    <div *ngIf="loading" class="loader-container">
+        <img src="assets/static/images/global-loader.gif" alt="Loader">
+    </div>
+
     <ng-template #createWorkoutExerciseModal let-modal>
         <div class="modal-header">
             <h4 class="modal-title" id="modal-basic-title">Copy Workout To My Workouts</h4>

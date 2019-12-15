@@ -13,6 +13,8 @@ import {Title} from "@angular/platform-browser";
 })
 export class AllMealsComponent implements OnInit {
 
+  loading: boolean;
+
   meals: Meal[];
   filteredMeals: Meal[];
   page: number = 1;
@@ -28,10 +30,13 @@ export class AllMealsComponent implements OnInit {
 
     this.titleService.setTitle( 'FitBook' + '- All Meals' );
 
+    this.loading = true;
+
     this.mealService.fetchAllPublicMeals().subscribe((meals: Meal[]) => {
       if (meals) {
         this.meals = meals;
         this.filteredMeals = [...meals];
+        this.loading = false;
       }
     });
 

@@ -43,7 +43,7 @@ public class FoodServiceImpl implements FoodService {
 
         List<Meal> allMeals = mealRepository.findAll();
 
-        return foodRepository.findAll()
+        return foodRepository.findAllByOrderByName()
                 .stream()
                 .map(f -> {
                     FoodServiceModel model = modelMapper.map(f, FoodServiceModel.class);

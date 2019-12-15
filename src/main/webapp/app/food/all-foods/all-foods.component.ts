@@ -15,6 +15,8 @@ import {Title} from "@angular/platform-browser";
 })
 export class AllFoodsComponent implements OnInit {
 
+    loading: boolean;
+
     filteredFoods: Food[] = [];
     allFoods: Food[] = [];
     page: number = 1;
@@ -44,9 +46,12 @@ export class AllFoodsComponent implements OnInit {
 
         this.mealFoodBindingModel = new MealFoodBindingModel();
 
+        this.loading = true;
+
         this.foodService.getAllFoods().subscribe((foods: Food[]) => {
             this.allFoods = foods;
             this.filteredFoods = [...foods];
+            this.loading = false;
         });
 
         this.fetchUserMeals();

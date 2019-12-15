@@ -1,5 +1,9 @@
 <div class="container-fluid">
 
+    <div *ngIf="loading" class="loader-container">
+        <img src="assets/static/images/global-loader.gif" alt="Loader">
+    </div>
+
     <div class="jumbotron">
         <div class="col-lg-10 col-xl-9 mx-auto">
             <img src="assets/static/images/logo.png" height="300px" class="d-inline-block align-center" alt="">

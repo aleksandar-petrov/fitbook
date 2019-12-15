@@ -12,6 +12,8 @@ import {Title} from "@angular/platform-browser";
 })
 export class AllWorkoutPlansComponent implements OnInit {
 
+  loading: boolean;
+
   workoutPlans: WorkoutPlan[];
   filteredWorkoutPlans: WorkoutPlan[];
   page: number = 1;
@@ -25,12 +27,15 @@ export class AllWorkoutPlansComponent implements OnInit {
 
   ngOnInit() {
 
+    this.loading = true;
+
     this.titleService.setTitle( 'FitBook' + '- All Workout Plans' );
 
     this.workoutPlanService.getAllPublicWorkoutPlans().subscribe((workoutPlans: WorkoutPlan[]) => {
       if (workoutPlans) {
         this.workoutPlans = workoutPlans;
         this.filteredWorkoutPlans = [...workoutPlans];
+        this.loading = false;
       }
     });
 

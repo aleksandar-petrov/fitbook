@@ -13,6 +13,8 @@ import {Title} from "@angular/platform-browser";
 })
 export class SearchFoodComponent implements OnInit {
 
+    loading: boolean;
+
     foodSearchResults: Food[] = [];
     searchFoodName: string;
 
@@ -39,8 +41,10 @@ export class SearchFoodComponent implements OnInit {
     }
 
     onSearchHandler() {
-        this.foodService.fetchFoodsFromDataCentralByFoodName(this.searchFoodName).subscribe((resp: any) => {
 
+        this.loading = true;
+
+        this.foodService.fetchFoodsFromDataCentralByFoodName(this.searchFoodName).subscribe((resp: any) => {
 
             this.foodSearchResults = [];
             this.page = 1;
@@ -54,6 +58,8 @@ export class SearchFoodComponent implements OnInit {
 
             });
             this.searchOccurred = true;
+
+            this.loading = false;
 
         })
     }
@@ -141,6 +147,10 @@ export class SearchFoodComponent implements OnInit {
 
     onSubmit() {
 
+        this.modalService.dismissAll();
+
+        this.loading = true;
+
         const formData = new FormData();
         const foodBlob = new Blob([JSON.stringify(this.foodBindingModel)], {type: 'application/json'});
 
@@ -149,8 +159,9 @@ export class SearchFoodComponent implements OnInit {
 
         this.foodService.createFood(formData)
             .subscribe((food: Food) => {
-                this.modalService.dismissAll();
-                this.router.navigate(['/foods/details/' + food.id])});
+                this.loading = false;
+                this.router.navigate(['/foods/details/' + food.id])
+            });
     }
 
 }
