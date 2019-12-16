@@ -95,6 +95,7 @@ public class WorkoutServiceImpl implements WorkoutService {
                 .orElseThrow(() -> new NotFoundException(ErrorConstants.NO_SUCH_EXERCISE_WITH_GIVEN_ID));
 
         workoutExercise.setExercise(exercise);
+        workoutExercise.setOrderIndex(workout.getExercises().size());
 
         workoutExercise = workoutExerciseRepository.save(workoutExercise);
 
